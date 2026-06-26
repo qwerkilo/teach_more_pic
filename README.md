@@ -10,7 +10,7 @@
 
 本技能需要 [opencode](https://opencode.ai) 环境。已安装了以下 base skill：
 - [teach](https://github.com/mattpocock/skills/tree/main/teach) — 基础课程制作技能（必装）
-- [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) — SVG 流程图创建（可选，用于自动生成流程图）
+- [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) — SVG 流程图创建（**必备**，本技能所有 SVG 流程图依赖此 skill）
 
 ### 手动安装
 
@@ -22,13 +22,6 @@ git clone https://github.com/qwerkilo/teach_more_pic
 # 同时安装 base teach skill（位于 mattpocock/skills 仓库中）
 git clone https://github.com/mattpocock/skills
 # 然后复制或链接 skills/teach 到 .agents/skills/teach
-```
-
-### 可选安装
-
-```bash
-# fireworks-tech-graph（SVG 流程图创建）
-git clone https://github.com/yizhiyanhua-ai/fireworks-tech-graph
 ```
 
 ### 通过 AGENTS.md 配置
@@ -85,5 +78,5 @@ python scripts/validate-lesson.py lessons/NNNN-slug.html
 
 ## 前置依赖
 
-- [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) skill（SVG 流程图创建）
+- [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) skill（**必备**，所有 SVG 流程图依赖此 skill）
 - `cairosvg`（`pip install cairosvg`，SVG → PNG 导出）
