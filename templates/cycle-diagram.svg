@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 580" width="700" height="580">
+  <defs><filter id="s"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/></filter></defs>
+  <style>text{font-family:"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;}.t{font-size:18px;font-weight:700;fill:#1e293b;}.l{font-size:13px;font-weight:500;}.d{font-size:11px;font-weight:400;fill:#475569;}</style>
+  <rect width="700" height="580" fill="#ffffff" rx="12"/>
+  <text x="350" y="30" text-anchor="middle" class="t">{TITLE}</text>
+  <!-- Center -->
+  <circle cx="350" cy="290" r="40" fill="#f0f4f8" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="350" y="286" text-anchor="middle" class="l" fill="#475569">{CENTER}</text>
+  <text x="350" y="300" text-anchor="middle" class="d">{CENTER_SUB}</text>
+  <!-- === NODE i (polar coords around center, radius 180, angle = 360/N*(i-1)) === -->
+  <!-- <g filter="url(#s)">
+    <rect x="X-100" y="Y-30" width="200" height="60" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+    <text x="X" y="Y+6" text-anchor="middle" class="l" fill="#1e40af">{LABEL}</text>
+    <text x="X" y="Y+22" text-anchor="middle" class="d">{DESC}</text>
+  </g> -->
+  <!-- Arrow: <path d="M ... " stroke="#2563eb" fill="none" marker-end="url(#ab)"/> -->
+</svg>

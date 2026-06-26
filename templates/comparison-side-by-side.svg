@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 {HEIGHT}" width="700" height="{HEIGHT}">
+  <defs><filter id="s"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/></filter></defs>
+  <style>text{font-family:"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;}.t{font-size:18px;font-weight:700;fill:#1e293b;}.h{font-size:15px;font-weight:600;fill:#fff;}.l{font-size:13px;font-weight:500;}.d{font-size:11px;font-weight:400;fill:#475569;}</style>
+  <rect width="700" height="{HEIGHT}" fill="#ffffff" rx="12"/>
+  <text x="350" y="30" text-anchor="middle" class="t">{TITLE}</text>
+  <!-- Left column header -->
+  <!-- <rect x="40" y="55" width="290" height="36" rx="8" fill="#2563eb"/>
+  <text x="185" y="78" text-anchor="middle" class="h">{LEFT_TITLE}</text> -->
+  <!-- Right column header -->
+  <!-- <rect x="370" y="55" width="290" height="36" rx="8" fill="#d97706"/>
+  <text x="515" y="78" text-anchor="middle" class="h">{RIGHT_TITLE}</text> -->
+  <!-- Row i: (left) rect x=40, y=106+(i-1)*56, w=290, h=44 -->
+  <!--       <text x="185" y=MID class="l" fill="#1e40af">{LEFT_TEXT}</text> -->
+  <!--       (right) rect x=370, y=106+(i-1)*56, w=290, h=44 -->
+  <!--       <text x="515" y=MID class="l" fill="#9a3412">{RIGHT_TEXT}</text> -->
+</svg>
