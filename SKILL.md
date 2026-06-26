@@ -186,6 +186,7 @@ Step 2: 设计视觉组件
   - 从上方索引表按需选择 2-3 个组件
   - 打开对应的 components/NN-name.md 读取完整 HTML/CSS/JS
   - 🔴 每个 SVG 创建后立即验证：`python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"`
+  - **SVG 需同时保存为磁盘文件和内联到 HTML**：`lessons/NNNN-slug.svg` 保留为独立文件，同时将 SVG 内容复制到 HTML 中用 `<figure class="svg-fig">` 包裹内联
 
 Step 3: 写 HTML
   - 复制 `templates/lesson-starter.html` 作为新课程骨架，填入标题/内容
@@ -217,7 +218,7 @@ Step 5: 配套产出
 | 触发条件 | 一线修复 | 仍失败兜底 |
 |---|---|---|
 | SVG 无法正确显示（浏览器空白） | 检查 SVG XML 语法；检查 viewBox 与 width/height 比例一致 | 降级为纯 CSS 流程图或外部链接 |
-| HTML 嵌入 SVG 后排版错乱 | 加 `.svg-figure { max-width: 100%; overflow-x: auto; }` | 改为 `<a href="NNNN-slug.svg" target="_blank">点击查看大图</a>` |
+| SVG 内联到 HTML 后排版错乱 | 检查 `<figure class="svg-fig">` 容器：`svg { max-width: 100%; height: auto; }` | 降级为 `<img src="NNNN-slug.svg">` 外部引用 |
 | 条形图 width 导致数据溢出容器 | 检查所有 `bar-fill` 的 width 值 ≤ 100% | 改用 `text-overflow: ellipsis` |
 | CSS 时间线在窄屏上跑偏 | 确保 `.tl-dot` 使用 `position: absolute` + `left` 固定 | 转为水平折叠式 |
 | 角色卡片中文显示乱码 | 确认 SVG 中 font-family 包含中文字体 | 用内联 font-family |

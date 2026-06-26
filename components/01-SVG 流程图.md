@@ -11,9 +11,17 @@
    - 橙色 (#d97706 / #fff7ed): 触发因素、转折点
    - 红色 (#dc2626 / #fef2f2): 崩溃、负面循环
    - 绿色 (#16a34a / #f0fdf4): 救助、恢复
-4. 保存为 lessons/NNNN-slug.svg
+4. 保存为 lessons/NNNN-slug.svg（保留磁盘文件，便于复用/下载）
 5. 验证: python -c "import xml.etree.ElementTree as ET; ET.parse('lessons/NNNN-slug.svg')"
-6. HTML 中引用: <img src="NNNN-slug.svg" alt="..." class="svg-fig">
+6. SVG 内容**内联**到 HTML 中（而非 `<img>` 引用），用 `<figure class="svg-fig">` 包裹：
+```html
+<figure class="svg-fig">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 900">
+    <!-- 完整 SVG 内容 -->
+  </svg>
+</figure>
+```
+内联优势：支持 CSS 变量继承、响应式缩放（viewBox 自动适配）、可被 `<use>` 引用。
 ```
 
 SVG 模板结构：

@@ -81,7 +81,8 @@ python scripts/validate-lesson.py lessons/NNNN-slug.html
 1. 复制 `templates/lesson-starter.html` 作为新课程骨架
 2. 从 SKILL.md 组件索引表选 2-3 个组件
 3. 打开对应 `components/NN-name.md`，复制 HTML/CSS/JS 合并到模板中
-4. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
+4. SVG 保存为 `lessons/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
+5. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
 
 ## 项目结构
 
