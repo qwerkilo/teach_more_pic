@@ -412,11 +412,12 @@ Step 3: 写 HTML
   - 从已有课程复制 CSS（保持一致性）
   - 只引入本课需要的视觉组件 CSS（不需要 timeline 就不用加）
   - 每幕之间的"视觉停顿"法则：每 2-3 段文本后插入一个视觉元素
+  - **课程间互相链接使用相对路径**：如 `<a href="NNNN-slug.html">`，不要加前导 `/` 或完整 URL，确保 GitHub 仓库内跳转正常
 
 Step 4: 验证
   - 浏览器打开 .html 检查渲染
   - SVG 验证：python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
-  - 交叉链接检查（glossary 路径、课程链接）
+  - 交叉链接检查（glossary 路径、课程链接）——确认所有跨课链接为相对路径（不以 `/` 或 `http` 开头）
   - 测验 5 题，每题 3 个选项
   - 🔴 任一验证失败 → 定位问题（SVG 坐标偏移/HTML 标签闭合/路径有误）→ 修复后重跑验证 → 全部通过后再继续
 
@@ -477,5 +478,6 @@ Step 5: 配套产出
 - [ ] 对比表在窄屏（<600px）下折叠为堆叠布局
 - [ ] Quiz 数据属性正确（`data-correct="true"` v.s. `"false"`）
 - [ ] 外部链接的 SVG src 路径正确
+- [ ] 课程间链接使用相对路径（不以 `/` 或 `http` 开头），兼容 GitHub 仓库内跳转
 
 验证自动化：`python scripts/validate-lesson.py lessons/NNNN-slug.html` — 自动检查 SVG 路径、XML 有效性、quiz 正确数、h1 数量、data-anim 语法、容器宽度。
