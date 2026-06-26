@@ -162,9 +162,11 @@ HTML 结构（width 反映比例，颜色区分类别）：
 </div>
 ```
 
-### 5. 对比表（保留现有样式）
+### 5. 对比表（增强版）
 
-复用 `comp-table` flex 组件。仅当对比维度 ≥ 3 且对比内容较为复杂时使用。
+当需要对比多个选项/方案的多个维度时，使用增强版 HTML 表格。支持固定表头（滚动时保持可见）、斑马纹交替行、鼠标悬停高亮、点击列头排序（数字和文本均支持）。
+
+详见增强版说明（### 22. 对比表 增强版）。
 
 ### 6. SVG Figure 包裹（标准容器）
 
@@ -326,6 +328,1072 @@ var n=e.key==='ArrowRight'?Math.min(c+1,s.length-1):Math.max(c-1,0);if(n>=0&&s[n
 - **T 键切主题不支持**：静默失败，用户停留在默认主题
 - 降级设计的核心原则：**JS 增强不影响基本可用性**——所有降级情况下，课程内容仍然是完整可读的
 
+### 8. 折叠式分步详解（替换平铺的长篇分步文本）
+
+当需要拆解一个复杂概念（3-5 步）时，用折叠组件替代平铺的长段落。每步默认折叠，读者按需展开，避免一下子看到太多文字压力。
+
+颜色语义：
+- 每步的圆形数字徽章使用 `var(--accent)`，与课程主色一致
+- 分隔线和边框用 `#e2e8f0` 浅灰，不抢眼
+
+HTML 结构：
+```html
+<div class="step-detail">
+  <div class="sd-item" data-expanded="true">
+    <button class="sd-trigger" aria-expanded="true">
+      <span class="sd-num">1</span>
+      <span class="sd-title">步骤标题</span>
+      <span class="sd-icon">+</span>
+    </button>
+    <div class="sd-content">
+      <div class="sd-inner"><p>展开的内容...</p></div>
+    </div>
+  </div>
+  <div class="sd-item" data-expanded="false">
+    <button class="sd-trigger" aria-expanded="false">
+      <span class="sd-num">2</span>
+      <span class="sd-title">步骤标题</span>
+      <span class="sd-icon">+</span>
+    </button>
+    <div class="sd-content">
+      <div class="sd-inner"><p>折叠的内容...</p></div>
+    </div>
+  </div>
+</div>
+```
+
+使用规则：
+- 每组分步 3-5 步，超过 5 步拆成两组
+- 默认第一项展开（`data-expanded="true"`），其余折叠
+- 每步内容控制在 1-3 段，不宜过长
+
+CSS：
+```css
+.step-detail {
+  border: 1px solid #e2e8f0; border-radius: var(--radius, 8px);
+  overflow: hidden; margin: 1.5rem 0; background: var(--bg);
+}
+.sd-item + .sd-item { border-top: 1px solid #e2e8f0; }
+.sd-trigger {
+  display: flex; align-items: center; width: 100%; padding: 0.8em 1em;
+  background: transparent; border: none; cursor: pointer; text-align: left;
+  font-size: 0.95rem; color: var(--text);
+  transition: background var(--anim-dur, 0.3s) ease;
+}
+.sd-trigger:hover { background: rgba(0,0,0,0.03); }
+.sd-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.sd-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 700;
+  margin-right: 0.7em; flex-shrink: 0;
+}
+.sd-title { flex: 1; font-weight: 500; }
+.sd-icon {
+  font-size: 1.2rem; color: var(--accent); font-weight: 300;
+  transition: transform var(--anim-dur, 0.3s) ease;
+}
+.sd-item[data-expanded="true"] .sd-icon { transform: rotate(45deg); }
+.sd-content { overflow: hidden; transition: height var(--anim-dur, 0.3s) ease; }
+.sd-item[data-expanded="false"] .sd-content { height: 0; }
+.sd-item[data-expanded="true"] .sd-content { height: auto; }
+.sd-inner { padding: 0 1.2em 1.2em 3.4em; }
+```
+
+JS（与其他 PPT 增强 JS 一起放在课程末尾 `<script>` 中）：
+```html
+<script>
+// 折叠式分步详解
+(function(){document.querySelectorAll('.sd-trigger').forEach(function(b){b.addEventListener('click',function(){
+var i=this.closest('.sd-item'),c=i.querySelector('.sd-content'),o=i.dataset.expanded==='true';
+if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});
+i.dataset.expanded='false';this.setAttribute('aria-expanded','false');}else{
+c.style.height='0px';requestAnimationFrame(function(){var h=c.scrollHeight;
+c.style.height=h+'px';});i.dataset.expanded='true';this.setAttribute('aria-expanded','true');
+c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);
+c.style.height='auto';});}});});})();
+</script>
+```
+
+降级说明：
+- **不支持 CSS transition 的旧浏览器**：`height: auto` 和 `height: 0` 直接生效，组件仍可正常开关（只是无动画）
+- **JS 未加载**：默认状态下第一项展开可见，其余项折叠（`height: 0`），内容完整但不可交互——降级后读者只能看到首步内容
+- **键盘导航**：`<button>` 元素原生支持 Tab 聚焦和 Enter/Space 触发，无额外依赖
+
+### 9. Tab 切换面板（替换平铺的多视角罗列）
+
+当需要呈现同一主题的多个视角/维度时，用 Tab 面板替代一次性全部罗列。读者点击左侧 Tab 切换内容，每次只看一个视角。
+
+布局：左侧纵向药丸 Tab + 右侧内容区。窄屏（<600px）自动折叠为顶部横向 Tab。
+
+颜色语义：
+- 选中 Tab 使用 `var(--accent)` 填充 + 白色文字
+- 未选中 Tab 灰色边框 + 正文色文字
+- 悬停时浅灰背景
+
+HTML 结构：
+```html
+<div class="tab-panel">
+  <div class="tab-nav">
+    <button class="tab-btn" data-tab="1" aria-selected="true">视角一</button>
+    <button class="tab-btn" data-tab="2" aria-selected="false">视角二</button>
+    <button class="tab-btn" data-tab="3" aria-selected="false">视角三</button>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane active" data-tab="1" role="tabpanel">
+      <p>视角一的内容...</p>
+    </div>
+    <div class="tab-pane" data-tab="2" role="tabpanel">
+      <p>视角二的内容...</p>
+    </div>
+    <div class="tab-pane" data-tab="3" role="tabpanel">
+      <p>视角三的内容...</p>
+    </div>
+  </div>
+</div>
+```
+
+使用规则：
+- Tab 数量 2-4 个，超过 4 个考虑改用其他组件
+- 每个 Tab 的内容控制在 1-3 段，不宜过长
+- 默认第一个 Tab 选中（`aria-selected="true"` + `class="active"`）
+
+CSS：
+```css
+.tab-panel { display: flex; gap: 0; margin: 1.5rem 0; border: 1px solid #e2e8f0; border-radius: var(--radius, 8px); overflow: hidden; }
+.tab-nav { display: flex; flex-direction: column; gap: 4px; padding: 0.8em; background: var(--bg); border-right: 1px solid #e2e8f0; min-width: 100px; }
+.tab-btn {
+  display: block; width: 100%; padding: 0.55em 1em; border: 1px solid #e2e8f0; border-radius: 6px;
+  background: transparent; color: var(--text); cursor: pointer; text-align: left;
+  font-size: 0.88rem; font-weight: 500; transition: all var(--anim-dur, 0.2s) ease;
+}
+.tab-btn:hover { background: rgba(0,0,0,0.03); }
+.tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tab-btn[aria-selected="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tab-content { flex: 1; padding: 1em 1.2em; background: var(--bg); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: tabFadeIn var(--anim-dur, 0.3s) ease; }
+@keyframes tabFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+@media (max-width: 600px) {
+  .tab-panel { flex-direction: column; }
+  .tab-nav { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid #e2e8f0; padding: 0.5em; }
+  .tab-btn { white-space: nowrap; flex-shrink: 0; }
+}
+```
+
+JS（与其他 PPT 增强 JS 一起放在课程末尾 `<script>` 中）：
+```html
+<script>
+// Tab 切换面板
+(function(){document.querySelectorAll('.tab-panel').forEach(function(p){var btns=p.querySelectorAll('.tab-btn');
+btns.forEach(function(b){b.addEventListener('click',function(){var t=this.dataset.tab;
+btns.forEach(function(x){x.setAttribute('aria-selected','false');});
+this.setAttribute('aria-selected','true');
+p.querySelectorAll('.tab-pane').forEach(function(x){x.classList.remove('active');});
+var a=p.querySelector('.tab-pane[data-tab="'+t+'"]');if(a)a.classList.add('active');});});});})();
+</script>
+```
+
+降级说明：
+- **JS 未加载**：第一个 `tab-pane.active` 可见，其余隐藏（`display: none`），读者能看到首视角内容
+- **不支持 CSS animation**：内容直接显示，无淡入效果但不影响可读性
+- **键盘导航**：Tab 键在按钮间切换，Enter/Space 激活
+
+### 10. 图片前后对比滑块（替换静态对比图）
+
+当需要展示 before/after 效果对比（如政策实施前后、修复前后、周期对比）时，用可拖拽的滑块替代两张静态图片。读者拖拽中间手柄查看变化。
+
+布局：两张图片叠放，默认各占 50%。用户左右拖拽手柄调整分割线位置。支持鼠标拖拽和触摸拖拽。
+
+HTML 结构：
+```html
+<div class="compare-slider">
+  <div class="compare-images">
+    <img src="after-image.png" alt="之后" class="compare-after">
+    <div class="compare-before-wrap" style="width: 50%;">
+      <img src="before-image.png" alt="之前" class="compare-before">
+    </div>
+    <div class="compare-handle" style="left: 50%;">
+      <span class="cmp-arrow">&#8592;</span>
+      <span class="cmp-arrow">&#8594;</span>
+    </div>
+  </div>
+  <div class="compare-labels">
+    <span class="cmp-label-before">之前</span>
+    <span class="cmp-label-after">之后</span>
+  </div>
+</div>
+```
+
+使用规则：
+- 两张图片宽高比必须一致（推荐使用同一张图片的不同版本）
+- 图片建议宽度 600-800px，过小则对比效果不明显
+- 默认分割线在 50% 位置
+
+CSS：
+```css
+.compare-slider { position: relative; margin: 1.5rem 0; overflow: hidden; }
+.compare-images { position: relative; width: 100%; cursor: col-resize; user-select: none; -webkit-user-select: none; }
+.compare-after, .compare-before { display: block; width: 100%; height: auto; pointer-events: none; }
+.compare-before-wrap { position: absolute; top: 0; left: 0; height: 100%; overflow: hidden; }
+.compare-handle {
+  position: absolute; top: 0; bottom: 0; width: 3px; background: #fff;
+  cursor: col-resize; box-shadow: -1px 0 4px rgba(0,0,0,0.15), 1px 0 4px rgba(0,0,0,0.15);
+  transform: translateX(-1px); z-index: 2;
+}
+.compare-handle::before {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 36px; height: 36px; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25); z-index: 1;
+}
+.cmp-arrow { position: absolute; top: 50%; z-index: 3; font-size: 14px; color: #333; transform: translateY(-50%); }
+.cmp-arrow:first-child { left: 3px; }
+.cmp-arrow:last-child { right: 3px; }
+.compare-labels { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: space-between; pointer-events: none; padding: 0 8px; z-index: 2; }
+.cmp-label-before, .cmp-label-after {
+  background: rgba(0,0,0,0.55); color: #fff; padding: 0.2em 0.7em;
+  border-radius: 4px; font-size: 0.78rem; font-weight: 600;
+}
+```
+
+JS（与其他 PPT 增强 JS 一起放在课程末尾 `<script>` 中）：
+```html
+<script>
+// 图片前后对比滑块
+(function(){document.querySelectorAll('.compare-slider').forEach(function(s){
+var c=s.querySelector('.compare-images'),b=s.querySelector('.compare-before-wrap'),h=s.querySelector('.compare-handle'),d=false;
+function p(x){var r=c.getBoundingClientRect(),pct=Math.max(0,Math.min(100,((x-r.left)/r.width)*100));
+b.style.width=pct+'%';h.style.left=pct+'%';}
+function ms(e){d=true;e.preventDefault();}
+function me(){d=false;}
+function mv(e){if(!d)return;e.preventDefault();p(e.touches?e.touches[0].clientX:e.clientX);}
+h.addEventListener('mousedown',ms);
+document.addEventListener('mousemove',mv);document.addEventListener('mouseup',me);
+h.addEventListener('touchstart',ms,{passive:false});
+document.addEventListener('touchmove',mv,{passive:false});document.addEventListener('touchend',me);
+});})();
+</script>
+```
+
+降级说明：
+- **JS 未加载**：两张图片各占 50%，读者看到的是"半之前半之后"的静态画面，可读但不交互
+- **不支持 touch**：鼠标拖拽仍正常工作
+- **图片加载慢**：先加载 after 图（底层），before 图在上层覆盖，不影响视觉
+
+### 11. 交互式时间线（替换静态时间线 / 事件表格）
+
+当事件数量较多（5-10 个）且每个事件有详细说明时，用交互式时间线替代一次性全部展示。默认只显示日期和标题，点击圆点/标题展开详情，保持时间线概览的整洁。
+
+布局：继承现有 CSS 时间线的竖线 + 圆点视觉风格，增加点击展开/收起的交互能力。
+
+视觉规则：
+- 左侧竖线 + 彩色圆点（`var(--accent)`）
+- 日期使用强调色加粗，标题居左
+- 展开图标 `+` 在展开时旋转 45° 变为 `×`
+
+HTML 结构：
+```html
+<div class="tl-interactive">
+  <div class="tli-item" data-expanded="false">
+    <button class="tli-dot" aria-expanded="false">
+      <span class="tli-date">2008</span>
+      <span class="tli-title">事件标题</span>
+      <span class="tli-icon">+</span>
+    </button>
+    <div class="tli-content">
+      <div class="tli-inner"><p>事件详情...</p></div>
+    </div>
+  </div>
+  <div class="tli-item" data-expanded="false">
+    <button class="tli-dot" aria-expanded="false">
+      <span class="tli-date">2010</span>
+      <span class="tli-title">事件标题</span>
+      <span class="tli-icon">+</span>
+    </button>
+    <div class="tli-content">
+      <div class="tli-inner"><p>事件详情...</p></div>
+    </div>
+  </div>
+</div>
+```
+
+使用规则：
+- 适合 5-10 个事件，少于 5 个用静态时间线或列表
+- 默认全部折叠，读者按需展开
+- 每个事件详情控制在 1-3 段
+
+CSS：
+```css
+.tl-interactive { position: relative; margin: 1.5rem 0; }
+.tl-interactive::before {
+  content: ''; position: absolute; left: 18px; top: 8px; bottom: 8px;
+  width: 2px; background: #d0d0d0;
+}
+.tli-item { position: relative; }
+.tli-dot {
+  display: flex; align-items: center; gap: 0.6em; width: 100%;
+  padding: 0.6em 0 0.6em 3em; border: none; background: none; text-align: left;
+  cursor: pointer; color: var(--text); font-family: inherit; font-size: inherit;
+}
+.tli-dot::before {
+  content: ''; position: absolute; left: 10px; top: 0.6em;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent); border: 3px solid var(--bg); z-index: 1;
+  transition: box-shadow var(--anim-dur, 0.2s) ease;
+}
+.tli-dot:hover::before { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.tli-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.tli-date { font-size: 0.8rem; font-weight: 700; color: var(--accent); white-space: nowrap; min-width: 3.5em; }
+.tli-title { flex: 1; font-size: 0.92rem; font-weight: 500; }
+.tli-icon {
+  font-size: 1.1rem; color: var(--accent); font-weight: 300; margin-right: 0.3em;
+  transition: transform var(--anim-dur, 0.3s) ease;
+}
+.tli-item[data-expanded="true"] .tli-icon { transform: rotate(45deg); }
+.tli-content { overflow: hidden; transition: height var(--anim-dur, 0.3s) ease; }
+.tli-item[data-expanded="false"] .tli-content { height: 0; }
+.tli-item[data-expanded="true"] .tli-content { height: auto; }
+.tli-inner { padding: 0.2em 0 1em 3em; font-size: 0.92rem; }
+```
+
+JS（与折叠分步组件模式一致，可复用同一逻辑结构）：
+```html
+<script>
+// 交互式时间线
+(function(){document.querySelectorAll('.tli-dot').forEach(function(b){b.addEventListener('click',function(){
+var i=this.closest('.tli-item'),c=i.querySelector('.tli-content'),o=i.dataset.expanded==='true';
+if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});
+i.dataset.expanded='false';this.setAttribute('aria-expanded','false');}else{
+c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});
+i.dataset.expanded='true';this.setAttribute('aria-expanded','true');
+c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}});});})();
+</script>
+```
+
+降级说明：
+- **JS 未加载**：所有事件标题可见（圆点+日期+标题），详情不可展开——读者至少能看到完整事件列表
+- **不支持 CSS transition**：展开/收起瞬间切换，无动画但不影响功能
+
+### 12. 数据卡片网格（替换文本数据段）
+
+当需要展示一组关键统计数据时，用卡片网格替代散落在段落中的数字。每张卡片包含图标 + 大号数值 + 标签 + 简短说明，让核心数据一目了然。
+
+布局：CSS Grid 自适应列宽（最小 180px），窄屏自动折叠为 2 列 → 1 列。
+
+颜色语义：
+- 数值使用 `var(--accent)` 强调色加粗
+- 标签用 `#64748b` 灰色弱化，制造视觉层次
+
+HTML 结构：
+```html
+<div class="data-grid">
+  <div class="dg-card" data-anim="fade-up">
+    <div class="dg-icon">📉</div>
+    <div class="dg-value">8.8</div>
+    <div class="dg-unit">万亿美元</div>
+    <div class="dg-label">全球财富蒸发</div>
+  </div>
+  <div class="dg-card" data-anim="fade-up">
+    <div class="dg-icon">🏦</div>
+    <div class="dg-value">127</div>
+    <div class="dg-unit">家</div>
+    <div class="dg-label">倒闭银行数</div>
+  </div>
+  <div class="dg-card" data-anim="fade-up">
+    <div class="dg-icon">🌍</div>
+    <div class="dg-value">0.1</div>
+    <div class="dg-unit">%</div>
+    <div class="dg-label">全球 GDP 萎缩</div>
+  </div>
+</div>
+```
+
+使用规则：
+- 适合 3-8 张卡片，超过 8 张考虑拆分
+- `dg-icon` 使用 emoji 或短标签，不要用图片
+- 每张卡片内容精炼：数值一般不超过 5 位数字，标签不超过 10 字
+
+CSS：
+```css
+.data-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem; margin: 1.5rem 0;
+}
+.dg-card {
+  background: var(--bg); border: 1px solid #e2e8f0; border-radius: var(--radius, 8px);
+  padding: 1.2em 0.8em; text-align: center;
+  transition: box-shadow var(--anim-dur, 0.2s) ease;
+}
+.dg-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.dg-icon { font-size: 2rem; margin-bottom: 0.25em; line-height: 1; }
+.dg-value { font-size: 1.8rem; font-weight: 800; color: var(--accent); line-height: 1.1; }
+.dg-unit { font-size: 0.8rem; color: var(--accent); font-weight: 500; margin-bottom: 0.5em; }
+.dg-label { font-size: 0.85rem; color: #64748b; line-height: 1.3; }
+```
+
+JS：不需要，入场动画复用现有 IntersectionObserver（`data-anim="fade-up"`）。
+
+降级说明：
+- **不支持 CSS Grid**（IE11）：卡片退化为全宽堆叠显示，不影响阅读
+- **不支持 IntersectionObserver**：卡片直接可见，无动画但不影响内容
+
+### 13. 引用/引文卡片（替换普通 `<blockquote>`）
+
+当需要突出人物引言或重要文献引用时，用引文卡片替代普通的 `<blockquote>` 标签。左侧强调色竖条 + 装饰性引号 + 署名信息，视觉上比默认引用更突出。
+
+布局：flex 行，左侧 4px 强调色竖条 + 右侧引文主体。主体内为引文文本 + 底部署名。
+
+HTML 结构：
+```html
+<div class="quote-card" data-anim="fade-up">
+  <div class="qc-bar"></div>
+  <div class="qc-body">
+    <p class="qc-text">这不仅仅是一场金融危机，更是一次全球经济的结构性转型。旧有的增长模式已经走到了尽头，未来的繁荣需要建立在全新的基础之上。</p>
+    <div class="qc-source">
+      <span class="qc-name">约瑟夫·斯蒂格利茨</span>
+      <span class="qc-title">《全球化及其不满》，2002</span>
+    </div>
+  </div>
+</div>
+```
+
+使用规则：
+- 每段引文控制在 30-80 字，不宜过长
+- 署名行包含人名 + 来源（书籍/演讲/年份）
+- 引文应当是对课程核心观点的精炼概括
+
+CSS：
+```css
+.quote-card {
+  display: flex; gap: 1em; margin: 1.5rem 0;
+  background: var(--bg); border-radius: var(--radius, 8px);
+  padding: 1.2em;
+}
+.qc-bar { width: 4px; flex-shrink: 0; background: var(--accent); border-radius: 2px; }
+.qc-body { flex: 1; }
+.qc-text {
+  font-size: 1rem; font-style: italic; line-height: 1.7;
+  color: var(--text); margin: 0;
+}
+.qc-text::before { content: '\201C'; font-size: 1.5em; line-height: 0; vertical-align: -0.3em; color: var(--accent); font-style: normal; padding-right: 0.1em; }
+.qc-text::after { content: '\201D'; font-size: 1.5em; line-height: 0; vertical-align: -0.15em; color: var(--accent); font-style: normal; padding-left: 0.1em; }
+.qc-source { margin-top: 0.8em; display: flex; flex-direction: column; }
+.qc-name { font-weight: 600; font-size: 0.9rem; color: var(--text); font-style: normal; }
+.qc-title { font-size: 0.8rem; color: #64748b; font-style: normal; }
+```
+
+JS：不需要，入场动画复用现有 IntersectionObserver（`data-anim="fade-up"`）。
+
+降级说明：
+- **不支持 `::before`/`::after`**（极旧浏览器）：引文缺少装饰引号，其余内容正常显示
+
+### 14. 标注式图片（替换纯文本图注说明）
+
+当需要详解一张复杂图表/示意图/地图时，在图片上叠加数字标注点，点击标注点在图片下方显示对应的说明面板。避免把大量图注文字挤在图片周围或写成长段说明。
+
+布局：图片容器 `position: relative`，标注点用百分比坐标 `left`/`top` 绝对定位（随图片缩放自适应）。点击后下方动态显示说明面板。
+
+HTML 结构：
+```html
+<div class="annotated-img" data-anim="fade-up">
+  <div class="ai-wrapper">
+    <img src="diagram.png" alt="图表说明" class="ai-img">
+    <button class="ai-dot" style="left: 25%; top: 30%;" data-point="1" aria-expanded="false">
+      <span class="ai-num">1</span>
+    </button>
+    <button class="ai-dot" style="left: 60%; top: 55%;" data-point="2" aria-expanded="false">
+      <span class="ai-num">2</span>
+    </button>
+    <button class="ai-dot" style="left: 80%; top: 20%;" data-point="3" aria-expanded="false">
+      <span class="ai-num">3</span>
+    </button>
+  </div>
+  <div class="ai-panels">
+    <div class="ai-panel" data-point="1">
+      <strong>节点 1：</strong>说明文字...
+    </div>
+    <div class="ai-panel" data-point="2">
+      <strong>节点 2：</strong>说明文字...
+    </div>
+    <div class="ai-panel" data-point="3">
+      <strong>节点 3：</strong>说明文字...
+    </div>
+  </div>
+</div>
+```
+
+使用规则：
+- 标注点 3-6 个为宜，超过 6 个则图片过于拥挤
+- 标注点坐标用百分比（`left`/`top`）而非像素，确保响应式缩放
+- 每个说明面板控制在 1-2 段
+
+CSS：
+```css
+.annotated-img { margin: 1.5rem 0; }
+.ai-wrapper { position: relative; display: inline-block; max-width: 100%; }
+.ai-img { display: block; max-width: 100%; height: auto; border-radius: var(--radius, 8px); }
+.ai-dot {
+  position: absolute; width: 32px; height: 32px; border-radius: 50%; border: 2px solid #fff;
+  background: rgba(0,0,0,0.45); cursor: pointer; padding: 0; transform: translate(-50%, -50%);
+  transition: background var(--anim-dur, 0.2s) ease, transform var(--anim-dur, 0.2s) ease;
+  z-index: 2;
+}
+.ai-dot:hover { background: rgba(0,0,0,0.65); transform: translate(-50%, -50%) scale(1.15); }
+.ai-dot.active { background: var(--accent); transform: translate(-50%, -50%) scale(1.15); }
+.ai-num {
+  font-size: 0.85rem; font-weight: 700; color: #fff;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.ai-panels { margin-top: 1em; display: flex; flex-direction: column; gap: 0.5em; }
+.ai-panel { display: none; background: var(--bg); border: 1px solid #e2e8f0; border-radius: var(--radius, 8px); padding: 0.8em 1em; font-size: 0.9rem; }
+.ai-panel.active { display: block; }
+```
+
+JS：
+```html
+<script>
+// 标注式图片
+(function(){document.querySelectorAll('.annotated-img').forEach(function(c){
+var dots=c.querySelectorAll('.ai-dot'),ps=c.querySelectorAll('.ai-panel');
+dots.forEach(function(d){d.addEventListener('click',function(){
+var p=this.dataset.point,a=this.classList.contains('active');
+dots.forEach(function(x){x.classList.remove('active');x.setAttribute('aria-expanded','false');});
+ps.forEach(function(x){x.classList.remove('active');});
+if(!a){this.classList.add('active');this.setAttribute('aria-expanded','true');
+var tp=c.querySelector('.ai-panel[data-point="'+p+'"]');if(tp)tp.classList.add('active');}});});})();
+</script>
+```
+
+降级说明：
+- **JS 未加载**：标注点可见但不可点击，下方面板全隐藏——读者看到的是纯图片，标注点作为视觉标记
+- **不支持 touch**：鼠标点击正常工作
+
+### 15. 状态链/进度里程碑（替换纯文本阶段列表）
+
+当需要展示一个过程的多个阶段及各阶段状态（如危机演变阶段、政策实施步骤）时，用水平连接线 + 圆点里程碑替代编号列表。三种状态（完成/进行中/待办）用不同颜色区分。
+
+布局：水平 flex 行，每个阶段等宽。连接线在圆点后方贯通。窄屏自动换行或横向滚动。
+
+颜色语义：
+- `done`（已完成）：实心强调色圆点
+- `current`（进行中）：强调色描边 + 加粗阴影环
+- `pending`（待办）：灰色描边
+
+HTML 结构：
+```html
+<div class="status-chain" data-anim="fade-up">
+  <div class="sc-step done">
+    <div class="sc-dot"></div>
+    <div class="sc-label">需求分析</div>
+    <div class="sc-status">已完成</div>
+  </div>
+  <div class="sc-step current">
+    <div class="sc-dot"></div>
+    <div class="sc-label">系统设计</div>
+    <div class="sc-status">进行中</div>
+  </div>
+  <div class="sc-step pending">
+    <div class="sc-dot"></div>
+    <div class="sc-label">开发实施</div>
+    <div class="sc-status">待开始</div>
+  </div>
+  <div class="sc-step pending">
+    <div class="sc-dot"></div>
+    <div class="sc-label">测试部署</div>
+    <div class="sc-status">待开始</div>
+  </div>
+</div>
+```
+
+使用规则：
+- 每链 3-5 步，超过 5 步拆成两条或使用交互式时间线
+- 至少有一个 `done` 或 `current`，全部 `pending` 无意义
+- `sc-label` 控制在 4 字以内，过长则窄屏溢出
+
+CSS：
+```css
+.status-chain { display: flex; justify-content: space-between; margin: 1.5rem 0; position: relative; padding: 0.5em 0; }
+.status-chain::before {
+  content: ''; position: absolute; top: 22px; left: 15%; right: 15%;
+  height: 2px; background: #d0d0d0; z-index: 0;
+}
+.sc-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; flex: 1; text-align: center; min-width: 0; }
+.sc-dot { width: 28px; height: 28px; border-radius: 50%; margin-bottom: 0.4em; position: relative; background: #fff; transition: all var(--anim-dur, 0.2s) ease; }
+.sc-step.done .sc-dot { background: var(--accent); border: 3px solid var(--accent); }
+.sc-step.current .sc-dot { background: #fff; border: 3px solid var(--accent); box-shadow: 0 0 0 4px rgba(192,57,43,0.15); }
+.sc-step.pending .sc-dot { background: #fff; border: 3px solid #d0d0d0; }
+.sc-label { font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; padding: 0 0.3em; }
+.sc-status { font-size: 0.72rem; color: #94a3b8; margin-top: 0.15em; }
+
+@media (max-width: 500px) {
+  .status-chain { gap: 0.5em; overflow-x: auto; justify-content: flex-start; }
+  .status-chain::before { display: none; }
+  .sc-step { flex: 0 0 auto; min-width: 70px; }
+}
+```
+
+JS：不需要，纯 CSS 组件。
+
+降级说明：
+- **窄屏（<500px）**：连接线隐藏，步骤变为横向可滚动卡片
+- **不支持 `::before`**：连接线消失，各阶段圆点独立展示
+
+### 16. 数值滚动动画（替换静态数字）
+
+当页面中的关键数字（在数据卡片或其他位置）需要吸引注意时，使用数值滚动动画：数字从 0 开始滚动到目标值，进入视口时触发，2 秒内完成（ease-out 缓动）。
+
+核心用法：在 `.dg-value` 或任意 `<span>` 上添加 `data-countup` 属性，JS 自动处理动画。
+
+HTML 结构（数据卡片中的用法）：
+```html
+<div class="dg-card" data-anim="fade-up">
+  <div class="dg-icon">📉</div>
+  <div class="dg-value" data-countup="8848">0</div>
+  <div class="dg-unit">亿美元</div>
+  <div class="dg-label">全球财富蒸发</div>
+</div>
+```
+
+独立用法：
+```html
+<div class="countup" data-countup="127" style="text-align:center;">
+  <span class="cu-value">0</span>
+  <span class="cu-unit">家</span>
+  <div class="cu-label">倒闭银行数</div>
+</div>
+```
+
+使用规则：
+- 配合数据卡片（#12）使用时，将 `.dg-value` 的文本数字替换为 `data-countup` 属性
+- 数值不超过 999999，超过用万/亿等单位缩写
+- 一个页面中动画数字不超过 8 个，过多分散注意力
+
+CSS：
+```css
+.countup { margin: 0.5em 0; }
+.cu-value { font-size: 1.8rem; font-weight: 800; color: var(--accent); line-height: 1.1; }
+.cu-unit { font-size: 0.8rem; color: var(--accent); font-weight: 500; margin-left: 0.2em; }
+.cu-label { font-size: 0.85rem; color: #64748b; margin-top: 0.2em; }
+```
+
+JS（与其他 PPT 增强 JS 一起放在课程末尾 `<script>` 中）：
+```html
+<script>
+// 数值滚动动画
+(function(){if(!window.IntersectionObserver)return;
+document.querySelectorAll('[data-countup]').forEach(function(el){var v=parseFloat(el.dataset.countup)||0,d=2000;
+function a(t){var r;return function(n){if(!r)r=n;var p=Math.min((n-r)/d,1),e=1-Math.pow(1-p,3);
+el.textContent=Math.round(e*v).toLocaleString();if(p<1)requestAnimationFrame(a);}}();
+var o=new IntersectionObserver(function(e){
+if(e[0].isIntersecting){requestAnimationFrame(a);o.unobserve(el);}},{threshold:0.5});o.observe(el);});})();
+</script>
+```
+
+降级说明：
+- **不支持 IntersectionObserver**：数字直接显示目标值，无动画
+- **JS 未加载**：`data-countup` 元素显示 `0`（初始值）——确保 `data-countup` 元素的初始文本对应一个合理回退值
+
+### 17. 标签/徽章组（替换纯文本关键词列表）
+
+当需要展示一组关键词、分类标签或技术栈时，用彩色药丸标签替代逗号分隔的文本列表。5 种预定义颜色对应不同类别。
+
+颜色语义：
+- `tag-blue`（蓝）：经济/宏观主题
+- `tag-red`（红）：危机/事件
+- `tag-green`（绿）：政策/救助/恢复
+- `tag-orange`（橙）：监管/改革
+- `tag-purple`（紫）：理论/概念/全球化
+
+HTML 结构：
+```html
+<div class="tag-group" data-anim="fade-up">
+  <span class="tag tag-blue"># 宏观经济</span>
+  <span class="tag tag-red"># 金融危机</span>
+  <span class="tag tag-green"># 政策应对</span>
+  <span class="tag tag-orange"># 监管改革</span>
+  <span class="tag tag-purple"># 全球化</span>
+</div>
+```
+
+使用规则：
+- 每组 3-8 个标签，超过 8 个则精选去掉最不重要的
+- 每个标签控制在 6 字以内
+- 颜色按内容语义选择，不要随机分配
+
+CSS：
+```css
+.tag-group { display: flex; flex-wrap: wrap; gap: 0.5em; margin: 1.5rem 0; }
+.tag { display: inline-block; padding: 0.25em 0.7em; border-radius: 999px; font-size: 0.8rem; font-weight: 500; white-space: nowrap; }
+.tag-blue { background: #dbeafe; color: #1e40af; }
+.tag-red { background: #fee2e2; color: #b91c1c; }
+.tag-green { background: #dcfce7; color: #166534; }
+.tag-orange { background: #ffedd5; color: #9a3412; }
+.tag-purple { background: #f3e8ff; color: #6d28d9; }
+```
+
+JS：不需要，纯 CSS 组件。
+
+降级说明：
+- **不支持 `flex-wrap`**（IE11）：标签不换行，溢出截断——一般在标签数量不大时不明显
+
+### 18. 提示框/告警条（替换普通强调段落）
+
+当需要突出提示、警告、错误或成功信息时，用彩色提示框替代普通段落或 `<blockquote>`。左侧 4px 强调色竖条 + 浅色背景 + emoji 图标，4 种类型按语义选用。
+
+颜色语义：
+- `callout-info`（蓝 `#2563eb`）：一般信息/背景说明
+- `callout-warning`（橙 `#d97706`）：注意/潜在风险
+- `callout-error`（红 `#dc2626`）：重大错误/崩溃
+- `callout-success`（绿 `#16a34a`）：成功/救助/好消息
+
+HTML 结构：
+```html
+<div class="callout callout-info" data-anim="fade-up">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body">
+    <p>一般提示信息，补充课程背景。</p>
+  </div>
+</div>
+
+<div class="callout callout-warning" data-anim="fade-up">
+  <div class="callout-icon">⚠️</div>
+  <div class="callout-body">
+    <p>需要注意的风险或陷阱。</p>
+  </div>
+</div>
+
+<div class="callout callout-error" data-anim="fade-up">
+  <div class="callout-icon">❌</div>
+  <div class="callout-body">
+    <p>错误信息或负面结果。</p>
+  </div>
+</div>
+
+<div class="callout callout-success" data-anim="fade-up">
+  <div class="callout-icon">✅</div>
+  <div class="callout-body">
+    <p>成功结果或正面发展。</p>
+  </div>
+</div>
+```
+
+使用规则：
+- 每课每种类型最多用 1 次，过量使用降低冲击力
+- 提示框之间至少隔 1 段正文（不要在失败模式表中连续使用）
+- 内容控制在 1-2 段
+
+CSS：
+```css
+.callout {
+  display: flex; gap: 0.8em; padding: 0.8em 1em;
+  border-radius: var(--radius, 8px); border-left: 4px solid; margin: 1.5rem 0;
+}
+.callout-info { background: #eff6ff; border-left-color: #2563eb; }
+.callout-warning { background: #fff7ed; border-left-color: #d97706; }
+.callout-error { background: #fef2f2; border-left-color: #dc2626; }
+.callout-success { background: #f0fdf4; border-left-color: #16a34a; }
+.callout-icon { font-size: 1.2rem; line-height: 1.5; flex-shrink: 0; }
+.callout-body { flex: 1; }
+.callout-body p { margin: 0; }
+.callout-body p + p { margin-top: 0.5em; }
+```
+
+JS：不需要，纯 CSS 组件。
+
+降级说明：
+- **不支持 flex**（IE11）：图标和文字垂直堆叠，可读性略降但不影响信息传递
+
+### 19. 热力图/密度图（替换纯数字表格）
+
+当需要展示二维数据的分布密度或强度时，用彩色矩阵替代枯燥的数字表格。单元格颜色按数值从低到高渐变（绿→黄→红），数值保留在单元格内。
+
+布局：CSS Grid 表格。每行第一个单元格为行标签（灰色背景），其余为数据单元格。5 级强度（`data-l="0"~"4"`）。
+
+颜色语义（绿→黄→红信号灯）：
+- `data-l="0"`（极低）：浅绿
+- `data-l="1"`（低）：绿
+- `data-l="2"`（中）：黄
+- `data-l="3"`（高）：橙
+- `data-l="4"`（极高）：红
+
+HTML 结构：
+```html
+<div class="heatmap" data-anim="fade-up">
+  <div class="hm-row">
+    <div class="hm-label"></div>
+    <div class="hm-hdr">2007</div>
+    <div class="hm-hdr">2008</div>
+    <div class="hm-hdr">2009</div>
+  </div>
+  <div class="hm-row">
+    <div class="hm-label">美国</div>
+    <div class="hm-cell" data-l="1">低</div>
+    <div class="hm-cell" data-l="4">极高</div>
+    <div class="hm-cell" data-l="2">中</div>
+  </div>
+  <div class="hm-row">
+    <div class="hm-label">欧洲</div>
+    <div class="hm-cell" data-l="0">极低</div>
+    <div class="hm-cell" data-l="3">高</div>
+    <div class="hm-cell" data-l="3">高</div>
+  </div>
+  <div class="hm-row">
+    <div class="hm-label">亚洲</div>
+    <div class="hm-cell" data-l="0">极低</div>
+    <div class="hm-cell" data-l="1">低</div>
+    <div class="hm-cell" data-l="2">中</div>
+  </div>
+</div>
+```
+
+使用规则：
+- 行数 3-8，列数 3-6（不含标签列和表头行）
+- 数据级 0-4，避免全是 0 或全是 4（那样无对比意义）
+- 行标签控制在 4 字以内
+
+CSS：
+```css
+.heatmap { display: grid; margin: 1.5rem 0; border: 1px solid #e2e8f0; border-radius: var(--radius, 8px); overflow: hidden; }
+.hm-row { display: contents; }
+.hm-label, .hm-hdr, .hm-cell { padding: 0.5em 0.7em; text-align: center; font-size: 0.85rem; font-weight: 500; border-bottom: 1px solid #e2e8f0; }
+.hm-row:last-child .hm-label,
+.hm-row:last-child .hm-cell { border-bottom: none; }
+.hm-label { background: #f8fafc; font-weight: 600; color: var(--text); text-align: left; }
+.hm-hdr { background: #f8fafc; font-weight: 700; color: var(--text); font-size: 0.82rem; border-bottom: 2px solid #e2e8f0; }
+.hm-cell[data-l="0"] { background: #f0fdf4; color: #166534; }
+.hm-cell[data-l="1"] { background: #dcfce7; color: #166534; }
+.hm-cell[data-l="2"] { background: #fef9c3; color: #854d0e; }
+.hm-cell[data-l="3"] { background: #fed7aa; color: #9a3412; }
+.hm-cell[data-l="4"] { background: #fca5a5; color: #b91c1c; }
+```
+
+JS：不需要，纯 CSS 组件。
+
+降级说明：
+- **不支持 CSS Grid**（IE11）：退化为普通表格布局，颜色属性仍在
+
+### 20. 步骤指示器（替换"第 X 步"文字）
+
+当需要在课程中引导读者了解流程进度时，用水平步骤条替代"第一步/第二步/第三步"的文字表述。已完成步骤用强调色实心圆，当前步骤用描边高亮，待办步骤灰色。
+
+布局：水平 flex，圆点 + 底部标签。步骤之间用灰色连接线贯通。
+
+状态语义：
+- `done`（已完成）：强调色实心圆 + 白色数字
+- `current`（进行中）：白色描边圆 + 强调色数字 + 外围光晕
+- 无 class（待办）：灰色描边圆 + 灰色数字
+
+HTML 结构：
+```html
+<div class="step-indicator" data-anim="fade-up">
+  <div class="si-step done">
+    <div class="si-num">1</div>
+    <div class="si-label">需求分析</div>
+  </div>
+  <div class="si-step done">
+    <div class="si-num">2</div>
+    <div class="si-label">系统设计</div>
+  </div>
+  <div class="si-step current">
+    <div class="si-num">3</div>
+    <div class="si-label">开发实施</div>
+  </div>
+  <div class="si-step">
+    <div class="si-num">4</div>
+    <div class="si-label">测试验收</div>
+  </div>
+  <div class="si-step">
+    <div class="si-num">5</div>
+    <div class="si-label">部署上线</div>
+  </div>
+</div>
+```
+
+使用规则：
+- 每链 3-6 步，超过 6 步拆分为多个
+- 标签控制在 4 字以内
+- 至少有一个 `done` 或 `current`，全部待办无意义
+
+CSS：
+```css
+.step-indicator { display: flex; align-items: center; justify-content: space-between; margin: 1.5rem 0; position: relative; }
+.step-indicator::before {
+  content: ''; position: absolute; left: 10%; right: 10%; top: 16px;
+  height: 2px; background: #d0d0d0; z-index: 0;
+}
+.si-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+.si-num {
+  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3em; border: 2px solid #e2e8f0;
+  background: #fff; color: #94a3b8;
+}
+.si-step.done .si-num { background: var(--accent); color: #fff; border-color: var(--accent); }
+.si-step.current .si-num { background: #fff; color: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px rgba(192,57,43,0.12); }
+.si-label { font-size: 0.78rem; color: #94a3b8; font-weight: 500; }
+.si-step.done .si-label, .si-step.current .si-label { color: var(--text); }
+
+@media (max-width: 500px) {
+  .step-indicator { gap: 0.3em; overflow-x: auto; justify-content: flex-start; }
+  .step-indicator::before { display: none; }
+  .si-step { flex: 0 0 auto; min-width: 60px; }
+}
+```
+
+JS：不需要，纯 CSS 组件。
+
+降级说明：
+- **窄屏（<500px）**：连接线隐藏，步骤变为横向可滚动
+- **不支持 `::before`**：连接线消失，各步骤独立展示
+
+### 21. 信息面板/侧边栏（替换脚注/附录）
+
+当正文中需要提供扩展阅读、人物简介、术语详解等补充信息时，用从右侧滑入的面板替代脚注或附录跳转。读者点击按钮打开面板，阅读完毕关闭后回到原位，不丢失阅读进度。
+
+布局：固定定位右侧抽屉（380px）。打开时左侧有半透明遮罩层。支持 ESC 关闭。
+
+HTML 结构（触发按钮 + 面板）：
+```html
+<p>正文内容……<button class="ip-btn" data-panel="glossary-mmt">📖 MMT 详解</button></p>
+
+<div class="info-panel" id="panel-glossary-mmt">
+  <div class="ip-overlay"></div>
+  <div class="ip-drawer">
+    <div class="ip-header">
+      <h4>现代货币理论（MMT）</h4>
+      <button class="ip-close">✕</button>
+    </div>
+    <div class="ip-body">
+      <p>详细说明内容……</p>
+    </div>
+  </div>
+</div>
+```
+
+使用规则：
+- 一课最多 3 个信息面板，过多则读者频繁开关影响流畅度
+- 面板内内容控制在屏幕 70% 高度以内（超出可滚动）
+- 面板标题简明，触发按钮文字控制在 10 字以内
+
+CSS：
+```css
+.ip-btn {
+  display: inline; padding: 0.1em 0.4em; border: 1px dashed var(--accent); border-radius: 4px;
+  background: transparent; color: var(--accent); cursor: pointer; font-size: inherit; font-family: inherit;
+  transition: background var(--anim-dur, 0.2s) ease;
+}
+.ip-btn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+.info-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; visibility: hidden; }
+.info-panel.open { visibility: visible; }
+.ip-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s ease; }
+.info-panel.open .ip-overlay { opacity: 1; }
+.ip-drawer {
+  position: absolute; top: 0; right: 0; width: 380px; max-width: 90vw; height: 100%;
+  background: var(--bg); box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+  transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto;
+}
+.info-panel.open .ip-drawer { transform: translateX(0); }
+.ip-header { display: flex; align-items: center; justify-content: space-between; padding: 1em 1.2em; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; background: var(--bg); z-index: 1; }
+.ip-header h4 { margin: 0; font-size: 1rem; }
+.ip-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #94a3b8; padding: 0.2em; line-height: 1; }
+.ip-close:hover { color: var(--text); }
+.ip-body { padding: 1.2em; }
+```
+
+JS：
+```html
+<script>
+// 信息面板
+(function(){document.querySelectorAll('.ip-btn').forEach(function(b){b.addEventListener('click',function(){
+var p=document.getElementById('panel-'+this.dataset.panel);if(p){p.classList.add('open');document.body.style.overflow='hidden';}});});
+document.querySelectorAll('.ip-close,.ip-overlay').forEach(function(e){e.addEventListener('click',function(){
+var p=this.closest('.info-panel');p.classList.remove('open');document.body.style.overflow='';});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.info-panel.open').forEach(function(p){p.classList.remove('open');document.body.style.overflow='';});}});})();
+</script>
+```
+
+降级说明：
+- **JS 未加载**：面板不可用，触发按钮显示但无交互——补充信息完全不可见，需确保面板内容不是理解正文的必要前提
+- **不支持 `position: fixed`**（极旧浏览器）：面板退化为页面底部块级显示
+- **窄屏（<480px）**：面板宽度自动设为 90vw
+
+### 22. 对比表 增强版（替换普通 HTML 表格）
+
+当需要多维度对比多个方案/选项时，用增强表格替代普通 `<table>`。支持粘性表头（滚动不消失）、斑马纹交替行、鼠标悬停高亮、点击列头排序（智能识别数值 vs 文本）。
+
+布局：普通 `<table>` 结构，外层 `overflow-x: auto` 容器。`data-sortable` 属性启用排序。
+
+HTML 结构：
+```html
+<div class="cmp-wrap" data-anim="fade-up">
+  <table class="cmp-table" data-sortable>
+    <thead>
+      <tr>
+        <th data-sort>维度 <span class="cmp-arrow">↕</span></th>
+        <th data-sort>方案 A <span class="cmp-arrow">↕</span></th>
+        <th data-sort>方案 B <span class="cmp-arrow">↕</span></th>
+        <th data-sort>方案 C <span class="cmp-arrow">↕</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>实施成本</td><td>高</td><td>中</td><td>低</td></tr>
+      <tr><td>覆盖范围</td><td>全国</td><td>区域</td><td>城市</td></tr>
+      <tr><td>见效速度</td><td>快</td><td>中</td><td>慢</td></tr>
+      <tr><td>可持续性</td><td>强</td><td>中</td><td>弱</td></tr>
+    </tbody>
+  </table>
+</div>
+```
+
+使用规则：
+- 行数 3-10，列数 3-6（含首列标签）
+- 首列是维度标签，左对齐加粗
+- 数据单元格文字控制在 10 字以内
+
+CSS：
+```css
+.cmp-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid #e2e8f0; border-radius: var(--radius, 8px); }
+.cmp-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.cmp-table th {
+  position: sticky; top: 0; z-index: 2; background: #f8fafc;
+  padding: 0.6em 0.8em; text-align: left; font-weight: 600;
+  border-bottom: 2px solid var(--accent); white-space: nowrap;
+  cursor: pointer; user-select: none;
+}
+.cmp-table th:hover { background: #f1f5f9; }
+.cmp-arrow { font-size: 0.75rem; opacity: 0.3; margin-left: 0.3em; }
+.cmp-table th.sorted-asc .cmp-arrow, .cmp-table th.sorted-desc .cmp-arrow { opacity: 1; }
+.cmp-table th.sorted-asc .cmp-arrow::after { content: ' \25B2'; }
+.cmp-table th.sorted-desc .cmp-arrow::after { content: ' \25BC'; }
+.cmp-table td { padding: 0.5em 0.8em; border-bottom: 1px solid #e2e8f0; }
+.cmp-table tbody tr:nth-child(even) td { background: #f8fafc; }
+.cmp-table tbody tr:hover td { background: #f1f5f9; }
+.cmp-table tbody td:first-child { font-weight: 600; }
+```
+
+JS：
+```html
+<script>
+// 对比表排序
+(function(){document.querySelectorAll('[data-sortable] th[data-sort]').forEach(function(t){
+t.addEventListener('click',function(){
+var T=this.closest('table'),b=T.querySelector('tbody'),R=Array.from(b.querySelectorAll('tr'));
+var i=Array.from(this.parentNode.children).indexOf(this),a=!this.classList.contains('sorted-asc');
+T.querySelectorAll('th').forEach(function(h){h.classList.remove('sorted-asc','sorted-desc');});
+this.classList.add(a?'sorted-asc':'sorted-desc');
+R.sort(function(x,y){var u=x.children[i].textContent.trim(),v=y.children[i].textContent.trim();
+var p=parseFloat(u),q=parseFloat(v);
+if(!isNaN(p)&&!isNaN(q))return a?p-q:q-p;
+return a?u.localeCompare(v,'zh-CN'):v.localeCompare(u,'zh-CN');});
+R.forEach(function(r){b.appendChild(r);});});});})();
+</script>
+```
+
+降级说明：
+- **JS 未加载**：表格正常显示，排序功能不可用——粘性表头、斑马纹、悬停效果仍正常工作
+- **不支持 `position: sticky`**（旧浏览器）：表头随页面滚动，不固定
+
 ## 可选页面类型（来自 html-ppt 的布局概念）
 
 在纵向滚读课程中，以下特殊页可以打破单调的"标题→段落→图→标题"节奏：
@@ -406,6 +1474,21 @@ Step 2: 设计视觉组件
   - 条形图：提取数据 → 写 bar-chart HTML
   - 角色卡：确定参与者 → 写 cards SVG
   - 对比表：确定对比维度 → 写 comp-table HTML
+  - 折叠分步：拆解复杂概念为 3-5 步 → 写 step-detail HTML
+  - Tab 切换：多视角对比 → 写 tab-panel HTML
+  - 对比滑块：before/after 效果展示 → 写 compare-slider HTML
+  - 交互时间线：5-10 事件列表 → 写 tl-interactive HTML
+  - 数据卡片：关键统计数字展示 → 写 data-grid HTML
+  - 引文卡片：人物引言/文献引用 → 写 quote-card HTML
+  - 标注图片：复杂图表/地图标注 → 写 annotated-img HTML
+  - 状态链：阶段/进度展示 → 写 status-chain HTML
+  - 数值动画：关键数字滚动 → 为 dg-value 加 data-countup
+  - 标签组：关键词/分类展示 → 写 tag-group HTML
+  - 提示框：突出提示/警告 → 写 callout HTML
+  - 热力图：二维数据密度展示 → 写 heatmap HTML
+  - 步骤指示：流程进度引导 → 写 step-indicator HTML
+  - 信息面板：扩展内容侧边抽屉 → 写 info-panel HTML
+  - 对比表高级：多维度数据表格 → 写 cmp-table HTML
   - 🔴 每个 SVG 创建后立即验证：`python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"`，验证失败则回到上一步修改坐标/标签后重试
 
 Step 3: 写 HTML
@@ -443,6 +1526,36 @@ Step 5: 配套产出
 | 主题切换后 h2 的下划线颜色不变 | CSS 中 h2 border-bottom-color 使用了固定色而非 `var(--accent)` | 确保 h2 样式使用 `border-bottom-color: var(--accent)` 而非 `#c0392b` |
 | SVG viewBox 比例不匹配 width/height | 导致图片在 `<img>` 内被不等比例拉伸 | viewBox 的宽高比必须与 width/height 的宽高比一致（如 viewBox="0 0 700 480" 对应 width="700" height="480"） |
 | `<button>` 文字在 CSS 中设置了 `text-transform` | 导致选择题选项文字被大写，破坏可读性 | 不要在课程样式中全局设置 `text-transform`，如需设则用 `.quiz-btn { text-transform: none; }` 覆盖 |
+| 折叠分步的 `sd-trigger` 未设 `cursor: pointer` | 用户不知可点击，交互意图不明确 | 始终包含 `cursor: pointer` 和 `border: none`，消除默认按钮样式 |
+| 折叠展开动画中 `height` 从 `auto` 直接过渡 | CSS transition 无法从 `auto` 过渡到固定值，动画失效 | JS 中先测量 `scrollHeight` 再设 px 值，过渡结束后恢复 `auto` |
+| Tab 面板中多个 `tab-pane` 同时 `display: block` | 所有视角内容重叠显示，视觉混乱 | 确保 JS 切换时先移除所有 `active` 类，再给目标添加 |
+| 窄屏时 Tab 导航溢出 | 横向 Tab 过多时溢出容器，部分 Tab 看不到 | 已设 `.tab-nav { overflow-x: auto; }`，检查未误删此属性 |
+| 对比滑块的两张图片尺寸不一致 | 图片错位导致对比效果失真 | 确保 before 和 after 图片宽高完全一致（用同一张原图裁切/调色） |
+| 滑块 touch 事件中调用了 `e.preventDefault()` 但未设 `{passive: false}` | 某些浏览器忽略 preventDefault 并报警告 | touch 事件监听已设 `{passive: false}`，需确保复制代码时保留此选项 |
+| 交互时间线的圆点 `::before` 被父元素 `overflow: hidden` 裁剪 | 时间线竖线穿过了圆点但圆点不完整 | 不要在 `.tl-interactive` 或 `.tli-item` 上设 `overflow: hidden` |
+| 交互时间线事件 < 5 个仍使用此组件 | 视觉空洞，竖线过长但事件过少 | 事件 < 5 个时使用静态 CSS 时间线或列表 |
+| 数据卡片的 `dg-value` 数值位数过多（6+ 位） | 数字太长在卡片内折行或溢出 | 使用缩写（如 8.8 万亿而非 8800000000000）或增大 `minmax` 值 |
+| 数据卡片 < 3 张仍使用网格布局 | 只有 1-2 张卡片在宽屏上拉得极宽，视觉失衡 | 少于 3 张卡片时使用内联 flex 或段落展示 |
+| 引文卡片连续使用超过 2 个 | 多个引文卡片堆叠失去强调效果，读者疲劳 | 每课最多用 1-2 张引文卡片，选最关键的一两句 |
+| 引文卡片 `qc-text` 过短（< 10 字） | 一句话太短，配不上卡片容器的视觉重量 | 引文至少 20 字，过短时融入正文或使用 `<blockquote>` |
+| 标注图片的坐标使用 px 而非百分比 | 图片缩放后标注点错位 | 始终使用百分比坐标（`left: 25%`），勿用 px |
+| 标注点数量超过 6 个 | 图片被标注点覆盖，难以看清 | 标注点控制在 3-6 个，必要时拆分多张图片 |
+| 状态链的 `sc-label` 超过 6 字 | 窄屏下文字溢出或换行破坏对齐 | 标签控制在 2-4 字，过长则用缩写 |
+| 状态链全部为 `pending` | 整条链全灰，读者看不出任何进展信息 | 至少标注一个 `done` 或 `current` 状态 |
+| `data-countup` 数值超过 999999 | 数字过长，动画卡顿或显示异常 | 用万/亿等单位缩写（如 `data-countup="88"` 配合单位 "百万"） |
+| 页面中 `[data-countup]` 元素超过 8 个 | 同时触发多个 IntersectionObserver + 动画，性能开销大 | 控制在 8 个以内，或错开放置在不同视口区域 |
+| 标签组中标签超过 8 个 | 多行标签降低可读性 | 精选控制 3-8 个 |
+| 标签文字超过 6 字 | 标签被撑得太宽，破坏整体节奏 | 控制在 6 字以内，过长用缩写 |
+| 提示框在一课中使用超过 4 次 | 彩色区块堆叠失去视觉冲击力 | 精选关键信息，每课最多 4 个提示框 |
+| 提示框连续排列无正文间隔 | 各色区块挤在一起，难以区分 | 提示框之间至少隔 1 段正文 |
+| 热力图数据全部相同（全 0 或全 4） | 整张图只有一种颜色，失去对比意义 | 确保数据分布有梯度，至少包含 3 种级别 |
+| 热力图行列标签超过 6 字 | 单元格被标签文字撑宽，比例失调 | 标签控制在 4 字以内 |
+| 步骤指示器全部为待办（无 `done`/`current`） | 整条全灰，读者看不出进度 | 至少标注一个 `done` 或 `current` |
+| 步骤指示器标签超过 4 字 | 窄屏下标签换行或溢出 | 控制在 4 字以内 |
+| 一课中使用信息面板超过 3 次 | 读者频繁开关面板，影响阅读流畅度 | 控制在 3 个以内，精选真正需要扩展的内容 |
+| 信息面板内容在触发时被 `overflow: hidden` 裁剪 | 面板内长内容无法完整查看 | 确保面板设 `overflow-y: auto` |
+| 对比表单元格文字超过 10 字 | 列宽被撑得参差不齐 | 控制在 10 字以内或用缩写 |
+| 对比表 `th` 未设 `position: sticky` | 长表格滚动时表头消失，读者迷失 | 确保 `th` 包含 `position: sticky; top: 0;` |
 
 ## 写作风格
 
@@ -457,7 +1570,7 @@ Step 5: 配套产出
 
 | # | 反模式 | 为什么 | 替代做法 |
 |---|---|---|---|
-| 1 | 课程中同时使用所有 6 种视觉组件 | 视觉密度过高，读者"喘不过气" | 每课选 2-3 个组件，和叙事节奏匹配 |
+| 1 | 课程中同时使用所有视觉组件（7+ 种） | 视觉密度过高，读者"喘不过气" | 每课选 2-3 个组件，和叙事节奏匹配 |
 | 2 | SVG 流程图用纯红色表示所有环节 | 失去颜色语义，读者无法从颜色快速判断"这是好事还是坏事" | 严格遵守颜色语义：蓝=正常，橙=触发，红=崩溃，绿=救助 |
 | 3 | 条形图的 `width` 直接用绝对数值（如 `width:9000000`） | 超出容器宽度，数据失真 | 先归一化到最大值，按百分比设 width |
 | 4 | 角色卡片中放超过 4 行文本 | 卡片视觉重量失衡，字号被迫缩小 | 每张卡片最多 3 行描述，单行不超过 25 字 |
@@ -479,5 +1592,6 @@ Step 5: 配套产出
 - [ ] Quiz 数据属性正确（`data-correct="true"` v.s. `"false"`）
 - [ ] 外部链接的 SVG src 路径正确
 - [ ] 课程间链接使用相对路径（不以 `/` 或 `http` 开头），兼容 GitHub 仓库内跳转
+- [ ] 折叠分步组件 JS 正常工作（展开/收起动画平滑，`aria-expanded` 同步更新）
 
-验证自动化：`python scripts/validate-lesson.py lessons/NNNN-slug.html` — 自动检查 SVG 路径、XML 有效性、quiz 正确数、h1 数量、data-anim 语法、容器宽度。
+验证自动化：`python scripts/validate-lesson.py lessons/NNNN-slug.html` — 自动检查 SVG 路径/XML 有效性/颜色对比度、quiz 正确数/完整度、h1 数量、data-anim 语法、容器宽度、相对路径、PPT JS（主题+导航）存在性。
