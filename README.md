@@ -1,6 +1,6 @@
 # teach_more_pic — 视觉增强课程制作
 
-配合 [base `teach` skill](https://github.com/qwerkilo/teach-skill) 使用的视觉增强技能，为每节课程注入 PPT 级的视觉品质。
+配合 [base `teach` skill](https://github.com/mattpocock/skills/tree/main/teach) 使用的视觉增强技能，为每节课程注入 PPT 级的视觉品质。
 
 > 需要先安装 base `teach` skill——本项目是它的视觉增强插件，两者缺一不可。
 
@@ -9,7 +9,7 @@
 ### 前提
 
 本技能需要 [opencode](https://opencode.ai) 环境。已安装了以下 base skill：
-- [teach](https://github.com/qwerkilo/teach-skill) — 基础课程制作技能（必装）
+- [teach](https://github.com/mattpocock/skills/tree/main/teach) — 基础课程制作技能（必装）
 - `fireworks-tech-graph` — SVG 流程图创建（可选，用于自动生成流程图）
 
 ### 手动安装
@@ -19,8 +19,9 @@
 cd ~/.agents/skills
 git clone https://github.com/qwerkilo/teach_more_pic
 
-# 同时安装 base teach skill
-git clone https://github.com/qwerkilo/teach-skill
+# 同时安装 base teach skill（位于 mattpocock/skills 仓库中）
+git clone https://github.com/mattpocock/skills
+# 然后复制或链接 skills/teach 到 .agents/skills/teach
 ```
 
 ### 通过 AGENTS.md 配置
