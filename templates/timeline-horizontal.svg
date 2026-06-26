@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 {HEIGHT}" width="700" height="{HEIGHT}">
+  <defs><filter id="s"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/></filter></defs>
+  <style>text{font-family:"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;}.t{font-size:18px;font-weight:700;fill:#1e293b;}.y{font-size:12px;font-weight:700;fill:#c0392b;}.l{font-size:12px;font-weight:500;}</style>
+  <rect width="700" height="{HEIGHT}" fill="#ffffff" rx="12"/>
+  <text x="350" y="30" text-anchor="middle" class="t">{TITLE}</text>
+  <!-- Horizontal timeline bar -->
+  <line x1="60" y1="100" x2="640" y2="100" stroke="#d1d5db" stroke-width="2"/>
+  <!-- === EVENT 1 === -->
+  <!-- <circle cx="120" cy="100" r="8" fill="#c0392b"/>
+  <text x="120" y="80" text-anchor="middle" class="y">{YEAR}</text>
+  <text x="120" y="125" text-anchor="middle" class="l">{LABEL}</text> -->
+  <!-- === EVENT N: cx = 60 + (i-1) * (580/(N-1)), cy=100 === -->
+</svg>
