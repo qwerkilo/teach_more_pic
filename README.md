@@ -1,6 +1,35 @@
 # teach_more_pic — 视觉增强课程制作
 
-配合 base `teach` skill 使用的视觉增强技能，为每节课程注入 PPT 级的视觉品质。
+配合 [base `teach` skill](https://github.com/qwerkilo/teach-skill) 使用的视觉增强技能，为每节课程注入 PPT 级的视觉品质。
+
+> 需要先安装 base `teach` skill——本项目是它的视觉增强插件，两者缺一不可。
+
+## 安装
+
+### 前提
+
+本技能需要 [opencode](https://opencode.ai) 环境。已安装了以下 base skill：
+- [teach](https://github.com/qwerkilo/teach-skill) — 基础课程制作技能（必装）
+- `fireworks-tech-graph` — SVG 流程图创建（可选，用于自动生成流程图）
+
+### 手动安装
+
+```bash
+# 克隆到 opencode 的 skills 目录
+cd ~/.agents/skills
+git clone https://github.com/qwerkilo/teach_more_pic
+
+# 同时安装 base teach skill
+git clone https://github.com/qwerkilo/teach-skill
+```
+
+### 通过 AGENTS.md 配置
+
+在项目根目录的 `AGENTS.md` 中引用这两个 skill：
+
+```
+Skills: teach, teach_more_pic
+```
 
 ## 能力
 
@@ -13,6 +42,14 @@
 - **三幕叙事** — 设置矛盾 → 危机爆发 → 转折与遗产
 
 ## 使用方法
+
+在 opencode 中同时激活两个 skill：
+
+```
+Skills: teach, teach_more_pic
+```
+
+base `teach` 负责课程结构、mission、learning records；`teach_more_pic` 负责视觉组件（流程图、时间线、条形图等）。
 
 ```bash
 # 验证课程 HTML
