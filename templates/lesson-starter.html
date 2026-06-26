@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="warm">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XXXX 课标题</title>
+<style>
+/* ===== CSS 变量与主题 ===== */
+:root {
+  --bg: #faf9f7; --text: #1a1a1a; --accent: #c0392b;
+  --font: "Noto Serif CJK SC", Georgia, "Times New Roman", serif;
+  --font-h: "Noto Serif CJK SC", Georgia, "Times New Roman", serif;
+  --lh: 1.8; --radius: 8px; --anim-dur: 0.6s; --anim-y: 24px;
+  --h2-border: 1px solid #ddd; --h1-size: 2rem;
+}
+[data-theme="apple"] {
+  --bg: #ffffff; --text: #1d1d1f; --accent: #0066cc;
+  --font: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+  --font-h: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
+  --lh: 1.9; --radius: 12px; --anim-dur: 0.8s; --anim-y: 20px;
+  --h2-border: 1px solid #f0f0f0; --h1-size: 2.1rem;
+}
+[data-theme="minimax"] {
+  --bg: #ffffff; --text: #0a0a0a; --accent: #ff5530;
+  --font: "DM Sans", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-h: "DM Sans", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --lh: 1.7; --radius: 8px; --anim-dur: 0.35s; --anim-y: 30px;
+  --h2-border: none; --h1-size: 2.4rem;
+}
+[data-theme="nvidia"] {
+  --bg: #ffffff; --text: #1a1a1a; --accent: #76b900;
+  --font: "Inter", Arial, "Helvetica Neue", sans-serif;
+  --font-h: "Inter", Arial, "Helvetica Neue", sans-serif;
+  --lh: 1.6; --radius: 2px; --anim-dur: 0s; --anim-y: 0px;
+  --h2-border: 2px solid var(--accent); --h1-size: 1.9rem;
+}
+
+/* ===== 正文排版 ===== */
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: var(--lh); max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
+h1 { font-size: var(--h1-size); font-family: var(--font-h); margin-top: 2rem; }
+h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-border); padding-bottom: 0.3em; margin-top: 2em; }
+
+/* ===== 动画 ===== */
+[data-anim] { opacity: 0; transform: translateY(var(--anim-y)); transition: opacity var(--anim-dur) ease, transform var(--anim-dur) ease; }
+[data-anim].in-view { opacity: 1; transform: translateY(0); }
+[data-anim="fade"] { transform: none; }
+[data-anim="slide-left"] { transform: translateX(calc(var(--anim-y) * -1)); }
+[data-anim="slide-left"].in-view { transform: translateX(0); }
+
+/* ===== 封面页 ===== */
+.cover-page { text-align: center; padding: 4rem 1rem; margin-bottom: 2rem; border-bottom: 2px solid var(--accent); }
+.cover-badge { display: inline-block; padding: 0.2em 1em; background: var(--accent); color: #fff; border-radius: 3px; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 1em; }
+.cover-subtitle { font-size: 1.1rem; color: #888; margin-top: 0.5em; }
+.cover-hook { font-size: 0.95rem; color: #666; margin-top: 1em; font-style: italic; }
+
+/* ===== Quiz ===== */
+.quiz-section { margin: 2rem 0; }
+.quiz-question { margin: 1.5em 0; }
+.quiz-q-text { font-weight: 600; margin-bottom: 0.5em; }
+.quiz-option { display: block; width: 100%; padding: 0.5em 1em; margin: 0.3em 0; border: 1px solid #d0d0d0; border-radius: 6px; background: #fff; text-align: left; cursor: pointer; font-size: 0.9rem; transition: background 0.2s ease; }
+.quiz-option:hover { background: #f5f5f5; }
+.quiz-option.correct { background: #d4edda; border-color: #28a745; }
+.quiz-option.wrong { background: #f8d7da; border-color: #dc3545; }
+.quiz-feedback { font-size: 0.85rem; margin-top: 0.3em; min-height: 1.2em; color: #555; }
+
+/* ===== 组件 CSS 从此处插入（按前缀分组） ===== */
+/* INSERT: 从 components/NN-name.md 复制 CSS 到这里 */
+
+/* ===== 响应式 ===== */
+@media (max-width: 600px) {
+  body { padding: 0 1rem; }
+  h1 { font-size: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 封面页 ===== -->
+<div class="cover-page">
+  <div class="cover-badge">第 N 课</div>
+  <h1>标题</h1>
+  <p class="cover-subtitle">副标题——核心问题或结论</p>
+  <p class="cover-hook">吸引人的引子，2-3 句话</p>
+</div>
+
+<!-- ===== 第一章：设置矛盾 ===== -->
+<div class="section-divider">
+  <span class="divider-num">第一幕</span>
+  <h2>设置矛盾</h2>
+</div>
+
+<p>第一幕引出问题……</p>
+
+<!-- INSERT: 视觉组件 HTML 从这里插入 -->
+
+<!-- ===== 第二章：危机爆发 ===== -->
+<div class="section-divider">
+  <span class="divider-num">第二幕</span>
+  <h2>危机爆发</h2>
+</div>
+
+<p>第二幕核心内容……</p>
+
+<!-- INSERT: 视觉组件 HTML 从这里插入 -->
+
+<!-- ===== 第三章：转折与遗产 ===== -->
+<div class="section-divider">
+  <span class="divider-num">第三幕</span>
+  <h2>转折与遗产</h2>
+</div>
+
+<p>第三幕收束与联系……</p>
+
+<!-- INSERT: 视觉组件 HTML 从这里插入 -->
+
+<!-- ===== 总结页 ===== -->
+<div class="summary-cards">
+  <div class="summary-card"><span class="summary-icon">💡</span><strong>核心洞察</strong><p>一句话</p></div>
+  <div class="summary-card"><span class="summary-icon">🔗</span><strong>与上一课的联系</strong><p>一句话</p></div>
+  <div class="summary-card"><span class="summary-icon">❓</span><strong>开放问题</strong><p>一句话</p></div>
+</div>
+
+<!-- ===== 测验 ===== -->
+<div class="quiz-section">
+  <h2>课后测验</h2>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text">1. 问题一？</p>
+    <button class="quiz-option" data-correct="true">正确选项</button>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <p class="quiz-feedback"></p>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text">2. 问题二？</p>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <button class="quiz-option" data-correct="true">正确选项</button>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <p class="quiz-feedback"></p>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text">3. 问题三？</p>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <button class="quiz-option" data-correct="true">正确选项</button>
+    <p class="quiz-feedback"></p>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text">4. 问题四？</p>
+    <button class="quiz-option" data-correct="true">正确选项</button>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <p class="quiz-feedback"></p>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text">5. 问题五？</p>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <button class="quiz-option" data-correct="true">正确选项</button>
+    <button class="quiz-option" data-correct="false">错误选项</button>
+    <p class="quiz-feedback"></p>
+  </div>
+</div>
+
+<!-- ===== Quiz JS ===== -->
+<script>
+(function(){
+  document.querySelectorAll('.quiz-option').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var q = this.closest('.quiz-question');
+      q.querySelectorAll('.quiz-option').forEach(function(b) { b.disabled = true; });
+      var correct = this.dataset.correct === 'true';
+      this.classList.add(correct ? 'correct' : 'wrong');
+      if (!correct) {
+        q.querySelector('.quiz-option[data-correct="true"]').classList.add('correct');
+      }
+      q.querySelector('.quiz-feedback').textContent = correct ? '✓ 正确！' : '✗ 不正确。正确答案已标出。';
+    });
+  });
+})();
+</script>
+
+<!-- ===== PPT 质感增强 JS ===== -->
+<script>
+(function(){var t=['warm','apple','minimax','nvidia'],i=0,d=document.documentElement;
+try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){i=(i+1)%t.length;d.dataset.theme=t[i];}});
+}catch(e){}
+try{var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in-view');});});
+document.querySelectorAll('[data-anim]').forEach(function(el){o.observe(el);});
+}catch(e){document.querySelectorAll('[data-anim]').forEach(function(el){el.style.opacity='1';el.style.transform='none';});}
+try{var s=document.querySelectorAll('h2');
+document.addEventListener('keydown',function(e){if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&!e.ctrlKey&&!e.metaKey){e.preventDefault();
+var c=Array.from(s).findIndex(function(h){var r=h.getBoundingClientRect();return r.top>=0&&r.top<window.innerHeight/2;});
+var n=e.key==='ArrowRight'?Math.min(c+1,s.length-1):Math.max(c-1,0);if(n>=0&&s[n])s[n].scrollIntoView({behavior:'smooth'});}});}catch(e){}
+})();
+</script>
+
+<!-- ===== 组件 JS 从此处插入（可选） ===== -->
+<!-- INSERT: 从 components/NN-name.md 复制 JS 到这里 -->
+
+</body>
+</html>
