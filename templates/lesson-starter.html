@@ -66,11 +66,20 @@ h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-bord
 /* ===== 组件 CSS 从此处插入（按前缀分组） ===== */
 /* INSERT: 从 components/NN-name.md 复制 CSS 到这里 */
 
-/* ===== 主题选择器 ===== */
-.theme-picker { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; gap: 6px; padding: 6px 10px; background: rgba(255,255,255,0.85); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+/* ===== 底部工具栏（主题选择器 + 浮动目录） ===== */
+.ui-toolbar { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(255,255,255,0.85); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.theme-picker { display: flex; gap: 6px; }
 .tp-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; background: var(--tp-color); cursor: pointer; padding: 0; transition: transform 0.2s ease, border-color 0.2s ease; }
 .tp-btn:hover { transform: scale(1.2); }
 .tp-btn.active { border-color: var(--text); transform: scale(1.15); }
+.toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.6; transition: opacity 0.2s ease; color: var(--text); }
+.toc-btn:hover { opacity: 1; }
+.toc-panel { position: fixed; bottom: 70px; right: 20px; z-index: 998; background: var(--bg); border: 1px solid #e2e8f0; border-radius: var(--radius, 8px); padding: 0.6em 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); max-height: 50vh; overflow-y: auto; display: none; min-width: 160px; }
+.toc-panel.open { display: block; }
+.toc-list { list-style: none; margin: 0; padding: 0; }
+.toc-item { padding: 0.4em 1em; font-size: 0.82rem; cursor: pointer; color: #64748b; transition: color 0.15s ease, background 0.15s ease; }
+.toc-item:hover { background: rgba(0,0,0,0.03); color: var(--text); }
+.toc-item.active { color: var(--accent); font-weight: 600; background: rgba(0,0,0,0.02); }
 
 /* ===== 响应式 ===== */
 @media (max-width: 600px) {
@@ -184,13 +193,17 @@ h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-bord
 })();
 </script>
 
-<!-- ===== 主题选择器 ===== -->
-<div class="theme-picker" role="toolbar" aria-label="切换主题">
-  <button class="tp-btn active" data-theme="warm" aria-label="暖色主题" style="--tp-color:#c0392b;" title="暖色 (默认)"></button>
-  <button class="tp-btn" data-theme="apple" aria-label="Apple 主题" style="--tp-color:#0066cc;" title="Apple"></button>
-  <button class="tp-btn" data-theme="minimax" aria-label="Minimax 主题" style="--tp-color:#ff5530;" title="Minimax"></button>
-  <button class="tp-btn" data-theme="nvidia" aria-label="NVIDIA 主题" style="--tp-color:#76b900;" title="NVIDIA"></button>
+<!-- ===== 底部工具栏（主题选择器 + 浮动目录） ===== -->
+<div class="ui-toolbar">
+  <div class="theme-picker" role="toolbar" aria-label="切换主题">
+    <button class="tp-btn active" data-theme="warm" style="--tp-color:#c0392b;" title="暖色"></button>
+    <button class="tp-btn" data-theme="apple" style="--tp-color:#0066cc;" title="Apple"></button>
+    <button class="tp-btn" data-theme="minimax" style="--tp-color:#ff5530;" title="Minimax"></button>
+    <button class="tp-btn" data-theme="nvidia" style="--tp-color:#76b900;" title="NVIDIA"></button>
+  </div>
+  <button class="toc-btn" aria-label="目录" title="目录">📑</button>
 </div>
+<nav class="toc-panel"><ul class="toc-list"></ul></nav>
 
 <!-- ===== PPT 质感增强 JS ===== -->
 <script>
@@ -201,6 +214,19 @@ document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('act
 }catch(e){}
 try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){i=(i+1)%t.length;d.dataset.theme=t[i];
 document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
+}catch(e){}
+try{var tl=document.querySelector('.toc-list');if(tl){var h2s=document.querySelectorAll('h2');
+h2s.forEach(function(h,i){var li=document.createElement('li');li.className='toc-item';li.textContent=h.textContent;
+li.addEventListener('click',function(){h.scrollIntoView({behavior:'smooth'});
+document.querySelector('.toc-panel').classList.remove('open');});tl.appendChild(li);});
+document.querySelector('.toc-btn').addEventListener('click',function(){
+document.querySelector('.toc-panel').classList.toggle('open');});
+var to=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+var idx=Array.from(h2s).indexOf(e.target);
+document.querySelectorAll('.toc-item').forEach(function(x,i){x.classList.toggle('active',i===idx);});}});},
+{rootMargin:'-80px 0px -60% 0px'});h2s.forEach(function(h){to.observe(h);});
+document.addEventListener('click',function(e){if(!e.target.closest('.ui-toolbar')&&!e.target.closest('.toc-panel')){
+document.querySelector('.toc-panel').classList.remove('open');}});}
 }catch(e){}
 try{var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in-view');});});
 document.querySelectorAll('[data-anim]').forEach(function(el){o.observe(el);});

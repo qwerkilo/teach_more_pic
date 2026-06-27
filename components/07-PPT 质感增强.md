@@ -126,45 +126,56 @@ document.addEventListener('keydown', e => {
 
 在页面右下角添加一个浮动的主题选择器，方便不熟悉 T 键的用户切换主题。包含 4 个彩色圆点按钮，当前主题高亮。
 
-HTML（放在 `<body>` 末尾，JS 之前）：
+HTML（放在 `<body>` 末尾，JS 之前）——使用组合工具栏（主题选择器 + 浮动目录）：
 ```html
-<div class="theme-picker" role="toolbar" aria-label="切换主题">
-  <button class="tp-btn" data-theme="warm" aria-label="暖色主题" style="--tp-color:#c0392b;" title="暖色 (默认)"></button>
-  <button class="tp-btn" data-theme="apple" aria-label="Apple 主题" style="--tp-color:#0066cc;" title="Apple"></button>
-  <button class="tp-btn" data-theme="minimax" aria-label="Minimax 主题" style="--tp-color:#ff5530;" title="Minimax"></button>
-  <button class="tp-btn" data-theme="nvidia" aria-label="NVIDIA 主题" style="--tp-color:#76b900;" title="NVIDIA"></button>
+<div class="ui-toolbar">
+  <div class="theme-picker" role="toolbar" aria-label="切换主题">
+    <button class="tp-btn active" data-theme="warm" style="--tp-color:#c0392b;" title="暖色"></button>
+    <button class="tp-btn" data-theme="apple" style="--tp-color:#0066cc;" title="Apple"></button>
+    <button class="tp-btn" data-theme="minimax" style="--tp-color:#ff5530;" title="Minimax"></button>
+    <button class="tp-btn" data-theme="nvidia" style="--tp-color:#76b900;" title="NVIDIA"></button>
+  </div>
+  <button class="toc-btn" aria-label="目录" title="目录">📑</button>
 </div>
+<nav class="toc-panel"><ul class="toc-list"></ul></nav>
 ```
 
-CSS（放在课程 `<style>` 中）：
+CSS（放在课程 `<style>` 中）——主题选择器 + TOC 共用样式：
 ```css
-.theme-picker {
-  position: fixed; bottom: 20px; right: 20px; z-index: 999;
-  display: flex; gap: 6px; padding: 6px 10px;
-  background: rgba(255,255,255,0.85); backdrop-filter: blur(6px);
-  border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-.tp-btn {
-  width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent;
-  background: var(--tp-color); cursor: pointer; padding: 0;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
+.ui-toolbar { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(255,255,255,0.85); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.theme-picker { display: flex; gap: 6px; }
+.tp-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; background: var(--tp-color); cursor: pointer; padding: 0; transition: transform 0.2s ease, border-color 0.2s ease; }
 .tp-btn:hover { transform: scale(1.2); }
 .tp-btn.active { border-color: var(--text); transform: scale(1.15); }
+.toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.6; transition: opacity 0.2s ease; color: var(--text); }
+.toc-btn:hover { opacity: 1; }
+.toc-panel { position: fixed; bottom: 70px; right: 20px; z-index: 998; background: var(--bg); border: 1px solid #e2e8f0; border-radius: var(--radius, 8px); padding: 0.6em 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); max-height: 50vh; overflow-y: auto; display: none; min-width: 160px; }
+.toc-panel.open { display: block; }
+.toc-list { list-style: none; margin: 0; padding: 0; }
+.toc-item { padding: 0.4em 1em; font-size: 0.82rem; cursor: pointer; color: #64748b; transition: color 0.15s ease, background 0.15s ease; }
+.toc-item:hover { background: rgba(0,0,0,0.03); color: var(--text); }
+.toc-item.active { color: var(--accent); font-weight: 600; background: rgba(0,0,0,0.02); }
 ```
 
-JS（与主题切换 JS 整合，在 `keydown` 之后追加点击处理）：
+JS（在 PPT 运行时模板中整合）——主题选择器 + TOC 处理：
 ```js
-// 主题选择器按钮
-document.querySelectorAll('.tp-btn').forEach(function(b){b.addEventListener('click',function(){
-var t=this.dataset.theme;document.documentElement.dataset.theme=t;
-document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.remove('active');});
-this.classList.add('active');});});
-// 保持 T 键与选择器同步
-document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){
-i=(i+1)%t.length;d.dataset.theme=t[i];
-document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
-```
+try{document.querySelectorAll('.tp-btn').forEach(function(b){b.addEventListener('click',function(){
+var th=this.dataset.theme;d.dataset.theme=th;i=t.indexOf(th);
+document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===th);});});});
+}catch(e){}
+try{var tl=document.querySelector('.toc-list');if(tl){var h2s=document.querySelectorAll('h2');
+h2s.forEach(function(h,i){var li=document.createElement('li');li.className='toc-item';li.textContent=h.textContent;
+li.addEventListener('click',function(){h.scrollIntoView({behavior:'smooth'});
+document.querySelector('.toc-panel').classList.remove('open');});tl.appendChild(li);});
+document.querySelector('.toc-btn').addEventListener('click',function(){
+document.querySelector('.toc-panel').classList.toggle('open');});
+var to=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+var idx=Array.from(h2s).indexOf(e.target);
+document.querySelectorAll('.toc-item').forEach(function(x,i){x.classList.toggle('active',i===idx);});}});},
+{rootMargin:'-80px 0px -60% 0px'});h2s.forEach(function(h){to.observe(h);});
+document.addEventListener('click',function(e){if(!e.target.closest('.ui-toolbar')&&!e.target.closest('.toc-panel')){
+document.querySelector('.toc-panel').classList.remove('open');}});}
+}catch(e){}
 
 #### 7.6 JS 运行时模板
 
@@ -180,7 +191,20 @@ document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('act
 }catch(e){}
 try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){i=(i+1)%t.length;d.dataset.theme=t[i];
 document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
-}catch(e){} // 主题切换降级：静默失败，不影响课程阅读
+}catch(e){} // 主题切换降级：静默失败
+try{var tl=document.querySelector('.toc-list');if(tl){var h2s=document.querySelectorAll('h2');
+h2s.forEach(function(h,i){var li=document.createElement('li');li.className='toc-item';li.textContent=h.textContent;
+li.addEventListener('click',function(){h.scrollIntoView({behavior:'smooth'});
+document.querySelector('.toc-panel').classList.remove('open');});tl.appendChild(li);});
+document.querySelector('.toc-btn').addEventListener('click',function(){
+document.querySelector('.toc-panel').classList.toggle('open');});
+var to=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+var idx=Array.from(h2s).indexOf(e.target);
+document.querySelectorAll('.toc-item').forEach(function(x,i){x.classList.toggle('active',i===idx);});}});},
+{rootMargin:'-80px 0px -60% 0px'});h2s.forEach(function(h){to.observe(h);});
+document.addEventListener('click',function(e){if(!e.target.closest('.ui-toolbar')&&!e.target.closest('.toc-panel')){
+document.querySelector('.toc-panel').classList.remove('open');}});}
+}catch(e){} // 浮动目录降级：静默失败
 try{var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in-view');});});
 document.querySelectorAll('[data-anim]').forEach(function(el){o.observe(el);});
 }catch(e){document.querySelectorAll('[data-anim]').forEach(function(el){el.style.opacity='1';el.style.transform='none';});
