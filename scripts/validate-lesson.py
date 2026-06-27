@@ -140,19 +140,24 @@ def check_ppt_js(html):
 
 
 def check_inline_svg(html):
-    """Inline SVGs must be wrapped in .svg-fig figure."""
+    """Inline SVGs must be wrapped in .svg-fig figure, excluding icon SVGs."""
     issues = []
-    # Find <svg> tags that are not inside a code block or highlighted area
-    inlines = re.findall(r"<svg\s", html)
-    figures = re.findall(r'class="[^"]*svg-fig[^"]*"', html)
-    if inlines and not figures:
-        for m in re.finditer(r"<svg\s", html):
-            pos = m.start()
-            # Check if inside a code block
-            code_start = html.rfind("```", 0, pos)
-            code_end = html.find("```", pos)
-            if code_start != -1 and code_end != -1:
-                continue
+    has_figure = bool(re.search(r'class="[^"]*svg-fig[^"]*"', html))
+    # Find each <svg> opening tag with its attributes
+    for m in re.finditer(r'<svg\s+([^>]*)>', html):
+        tag = m.group()
+        attrs = m.group(1)
+        pos = m.start()
+        # Check if inside a code block
+        code_start = html.rfind("```", 0, pos)
+        code_end = html.find("```", pos)
+        if code_start != -1 and code_end != -1:
+            continue
+        # Check if it's an icon SVG (width <= 20)
+        wm = re.search(r'width="(\d+)"', attrs)
+        if wm and int(wm.group(1)) <= 20:
+            continue
+        if not has_figure:
             issues.append("Inline <svg> found without .svg-fig wrapper")
             break
     return issues

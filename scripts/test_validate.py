@@ -57,6 +57,8 @@ test("ppt: missing T key fails", len(v.check_ppt_js(
 test("inline svg: with wrapper passes", not v.check_inline_svg(
     '<figure class="svg-fig"><svg xmlns="..."></svg></figure>'))
 test("inline svg: no wrapper fails", len(v.check_inline_svg('<svg xmlns="..."></svg>')) > 0)
+test("inline svg: icon svg passes", not v.check_inline_svg(
+    '<button><svg width="16" height="16" viewBox="0 0 20 20"></svg></button>'))
 
 # ==== check_component_consistency ====
 test("lbox: trigger+target passes", not v.check_component_consistency(

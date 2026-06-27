@@ -131,13 +131,13 @@ document.addEventListener('keydown', e => {
 
 #### 7.5 主题选择器按钮（UI 方式切换，替代纯键盘）
 
-在页面右下角添加一个浮动的主题选择器。点击 🎨 按钮打开主题面板，显示所有主题的名称和色点，当前主题高亮。比 19 个小圆点更易用。
+在页面右下角添加一个浮动的主题选择器。点击 <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="7" r="2" fill="currentColor"/><path d="M4 15l4-4"/></svg> 按钮打开主题面板，显示所有主题的名称和色点，当前主题高亮。比 19 个小圆点更易用。
 
-HTML（放在 `<body>` 末尾，JS 之前）——使用组合工具栏（🎨 主题按钮 + 📑 目录按钮）：
+HTML（放在 `<body>` 末尾，JS 之前）——使用组合工具栏（<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="7" r="2" fill="currentColor"/><path d="M4 15l4-4"/></svg> 主题按钮 + <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 5h14M3 10h14M3 15h10"/></svg> 目录按钮）：
 ```html
 <div class="ui-toolbar">
-  <button class="tp-btn-toggle" aria-label="切换主题" title="切换主题">🎨</button>
-  <button class="toc-btn" aria-label="目录" title="目录">📑</button>
+  <button class="tp-btn-toggle" aria-label="切换主题" title="切换主题"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="7" r="2" fill="currentColor"/><path d="M4 15l4-4"/></svg></button>
+  <button class="toc-btn" aria-label="目录" title="目录"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 5h14M3 10h14M3 15h10"/></svg></button>
 </div>
 <nav class="tp-panel">
   <div class="tp-grid" role="listbox" aria-label="选择主题">
