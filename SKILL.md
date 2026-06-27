@@ -2,10 +2,13 @@
 name: teach_more_pic
 description: >
   Teach a concept with visual-heavy HTML lessons: SVG flowcharts (via fireworks-tech-graph),
-  CSS timelines, bar charts, role cards. Use when creating new lessons or redesigning
-  existing ones for visual variety. Complements the base `teach` skill — run both.
+  CSS timelines, bar charts, role cards, data grids, comparison tables, interactive timelines,
+  charts (bar/pie/line/stacked), foldable steps, tab panels, heatmaps, lightbox modals.
+  Use when creating new lessons or redesigning existing ones for visual variety.
+  Complements the base `teach` skill — run both.
   Triggers: "visual lesson", "redesign lesson", "add diagrams", "图表", "流程图",
-  "SVG", "diagram", "timeline", "infographic", "可视化", "图示".
+  "SVG", "diagram", "timeline", "infographic", "可视化", "图示", "数据可视化", "图表",
+  "流程图", "时间线", "交互式", "数据卡片", "热力图", "对比表".
 disable-model-invocation: true
 argument-hint: "What lesson to create or redesign?"
 ---
