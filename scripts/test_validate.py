@@ -82,6 +82,28 @@ test("dialog: with close passes", not v.check_component_consistency(
 test("dialog: no close fails", len(v.check_component_consistency(
     '<dialog></dialog>')) > 0)
 
+# ==== check_focus_visible ====
+test("focus-visible: present passes", not v.check_focus_visible(
+    '<style>:focus-visible { outline: 2px solid red; }</style>'))
+test("focus-visible: missing fails", len(v.check_focus_visible(
+    '<style>body { color: red; }</style>')) > 0)
+
+# ==== check_tabular_nums ====
+test("tabular-nums: present passes", not v.check_tabular_nums(
+    '<style>body { font-variant-numeric: tabular-nums; }</style>'))
+test("tabular-nums: missing fails", len(v.check_tabular_nums(
+    '<style>body { color: red; }</style>')) > 0)
+
+# ==== check_semantic_html ====
+test("semantic: article present passes", not v.check_semantic_html(
+    '<html><article></article></html>'))
+test("semantic: section present passes", not v.check_semantic_html(
+    '<html><section></section></html>'))
+test("semantic: nav present passes", not v.check_semantic_html(
+    '<html><nav></nav></html>'))
+test("semantic: none fails", len(v.check_semantic_html(
+    '<html><div></div></html>')) > 0)
+
 # ==== Results ====
 print(f"\n{PASS} passed, {FAIL} failed")
 if FAIL > 0:

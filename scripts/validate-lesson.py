@@ -163,26 +163,6 @@ def check_inline_svg(html):
     return issues
 
 
-def check_component_consistency(html):
-    """Check that component HTML classes have matching CSS."""
-    issues = []
-    component_map = {
-        "sd-trigger": "sd-item",
-        "tli-dot": "tli-item",
-        "tab-btn": "tab-pane",
-        "dg-card": "dg-value",
-        "qc-bar": "quote-card",
-        "ai-dot": "annotated-img",
-        "sc-step": "status-chain",
-        "si-step": "step-indicator",
-        "callout-": "callout-",
-        "cmp-table": "cmp-table",
-    }
-    for trigger, context in component_map.items():
-        if trigger in html and context not in html:
-            pass  # Partial use is OK; only flag when HTML structure is broken
-    return issues
-
 
 def check_component_consistency(html):
     """Check that component HTML attributes have matching target elements."""
@@ -213,6 +193,28 @@ def check_component_consistency(html):
     return issues
 
 
+def check_focus_visible(html):
+    """Must have :focus-visible outline styles."""
+    if not re.search(r":focus-visible", html):
+        return ["Missing :focus-visible outline rule"]
+    return []
+
+
+def check_tabular_nums(html):
+    """Should have font-variant-numeric: tabular-nums for number alignment."""
+    if not re.search(r"tabular-nums", html):
+        return ["Missing font-variant-numeric: tabular-nums"]
+    return []
+
+
+def check_semantic_html(html):
+    """Should use at least one semantic element (article/section/nav/aside)."""
+    for tag in ("<article", "<section", "<nav", "<aside", "<main"):
+        if tag in html:
+            return []
+    return ["No semantic HTML elements found (use <article>/<section>/<nav>/<aside>)"]
+
+
 def run_all(path):
     if not os.path.exists(path):
         print(f"{FAIL} File not found: {path}")
@@ -235,6 +237,9 @@ def run_all(path):
         ("PPT JS (theme + nav) present", check_ppt_js(html)),
         ("Inline SVG in .svg-fig", check_inline_svg(html)),
         ("Component consistency", check_component_consistency(html)),
+        (":focus-visible outline", check_focus_visible(html)),
+        ("tabular-nums alignment", check_tabular_nums(html)),
+        ("Semantic HTML elements", check_semantic_html(html)),
     ]
 
     all_pass = True
