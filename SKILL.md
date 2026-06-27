@@ -20,6 +20,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 ## 前置条件
 
 - `fireworks-tech-graph` skill available (for SVG diagram creation)
+- ECharts 5.x: download to `libs/echarts.min.js` for offline chart support (#26)
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
 
 ## 课程叙事框架

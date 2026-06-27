@@ -4,13 +4,27 @@
 
 #### 前置依赖
 
-- 下载 ECharts 到本地 `libs/echarts.min.js`（或从 CDN 加载）
-  - 本地：`mkdir libs && curl -Lo libs/echarts.min.js https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js`
-  - CDN：`<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>`
+ECharts 库需要独立下载到本地 `libs/` 目录。两种加载方式：
+
+**离线加载（推荐）** — 在课程中使用前先准备好本地文件：
+
+```bash
+# PowerShell（Windows）
+Invoke-WebRequest -Uri "https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" -OutFile "libs/echarts.min.js"
+
+# macOS / Linux
+mkdir -p libs && curl -Lo libs/echarts.min.js https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js
+```
 
 ```html
-<!-- 在 </head> 前加载 -->
+<!-- 课程中引用本地文件 -->
 <script src="libs/echarts.min.js"></script>
+```
+
+**CDN 加载（备选）** — 需要网络，适合快速原型：
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 ```
 
 #### 26a — 纵向柱状图

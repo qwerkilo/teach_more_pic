@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ECharts 交互式图表集 — 示例</title>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<!-- 优先本地文件，CDN 作为 fallback -->
+<script src="../libs/echarts.min.js"></script>
+<script>if(typeof echarts==='undefined'){document.write('<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"><\/script>')}</script>
 <style>
 :root { --bg: #faf9f7; --text: #1a1a1a; --accent: #c0392b; --surface: #f5f0eb; --border: #ddd8d0; --muted: #888; --radius: 8px; }
 body { font-family: "Noto Serif CJK SC",Georgia,serif; background: var(--bg); color: var(--text); max-width: 800px; margin: 0 auto; padding: 2rem; }
