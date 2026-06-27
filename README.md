@@ -43,6 +43,7 @@ Skills: teach, teach_more_pic, fireworks-tech-graph
 - **PPT 质感** — 右下角工具栏（SVG 调色盘图标主题面板 + SVG 目录）+ T 键快捷切换、滚动动画、键盘导航
 - **19 品牌主题** — 从各品牌 DESIGN.md 自动提取 CSS 变量，组件使用 `var(--border/surface/accent)` 自动跟随
 - **主题切换动画** — 切换时 bg/text/border/shadow 0.35s 平滑过渡，`prefers-reduced-motion` 时自动禁用
+- **深度主题系统** — 每个主题从 DESIGN.md 提取 22 个 CSS 变量（含 `--surface-raised`、`--muted`、`--h2-size`、`--body-size`、`--small-size`），字体和行高精确匹配品牌设计语言
 
 **交互式组件（#8-14）：**
 - **折叠式分步详解** — 复杂概念分步折叠点击展开
@@ -102,7 +103,7 @@ python scripts/test_validate.py
 ├── components/             各组件独立文件（22 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
 │   ├── validate-lesson.py  课程验证脚本（11 项检查）
-│   ├── test_validate.py    验证脚本单元测试（25 项）[已过期]
+│   ├── test_validate.py    验证脚本单元测试（29 项）（Popover/dialog 一致性检查）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（19 个 .html）
 ├── templates/              5 个模板（4 SVG 骨架 + 1 课程起始 HTML）

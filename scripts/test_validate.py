@@ -73,6 +73,14 @@ test("panel: trigger+target passes", not v.check_component_consistency(
     '<span data-panel="glossary"></span><div id="panel-glossary"></div>'))
 test("panel: trigger no target fails", len(v.check_component_consistency(
     '<span data-panel="glossary"></span>')) > 0)
+test("popover: trigger+target passes", not v.check_component_consistency(
+    '<button popovertarget="pop-1"></button><div id="pop-1" popover></div>'))
+test("popover: trigger no target fails", len(v.check_component_consistency(
+    '<button popovertarget="pop-1"></button>')) > 0)
+test("dialog: with close passes", not v.check_component_consistency(
+    '<dialog><button onclick="this.closest(\'dialog\').close()">x</button></dialog>'))
+test("dialog: no close fails", len(v.check_component_consistency(
+    '<dialog></dialog>')) > 0)
 
 # ==== Results ====
 print(f"\n{PASS} passed, {FAIL} failed")

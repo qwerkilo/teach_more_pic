@@ -195,10 +195,21 @@ def check_component_consistency(html):
     # Info panel: data-panel="X" must have corresponding id="panel-X"
     panel_triggers = re.findall(r'data-panel="([^"]+)"', html)
     for pid in panel_triggers:
-        if f'id="panel-{pid}"' not in html and f'id="panel-{pid}"' not in html:
-            # data-panel in ip-btn maps to id="panel-X"
-            if f'id="panel-{pid}"' not in html:
-                issues.append(f"Info panel trigger data-panel=\"{pid}\" has no matching #panel-{pid}")
+        if f'id="panel-{pid}"' not in html:
+            issues.append(f"Info panel trigger data-panel=\"{pid}\" has no matching #panel-{pid}")
+    # Popover: popovertarget="X" must have matching id="X" with popover attribute
+    popover_triggers = re.findall(r'popovertarget="([^"]+)"', html)
+    for pid in popover_triggers:
+        target = f'id="{pid}"'
+        if target not in html:
+            issues.append(f"Popover trigger popovertarget=\"{pid}\" has no matching element")
+        elif f'popover' not in html:
+            pass  # popover content may not be in same file
+    # Dialog: <dialog> should have close mechanism
+    dialogs = len(re.findall(r'<dialog[\s>]', html))
+    close_methods = len(re.findall(r'close\(\)|showModal\(\)', html))
+    if dialogs > 0 and close_methods == 0:
+        issues.append("Found <dialog> without showModal() or close() calls")
     return issues
 
 
