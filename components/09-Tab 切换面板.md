@@ -38,10 +38,10 @@ HTML 结构：
 
 CSS：
 ```css
-.tab-panel { display: flex; gap: 0; margin: 1.5rem 0; border: 1px solid #e2e8f0; border-radius: var(--radius, 8px); overflow: hidden; }
-.tab-nav { display: flex; flex-direction: column; gap: 4px; padding: 0.8em; background: var(--bg); border-right: 1px solid #e2e8f0; min-width: 100px; }
+.tab-panel { display: flex; gap: 0; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: var(--radius, 8px); overflow: hidden; }
+.tab-nav { display: flex; flex-direction: column; gap: 4px; padding: 0.8em; background: var(--bg); border-right: 1px solid var(--border); min-width: 100px; }
 .tab-btn {
-  display: block; width: 100%; padding: 0.55em 1em; border: 1px solid #e2e8f0; border-radius: 6px;
+  display: block; width: 100%; padding: 0.55em 1em; border: 1px solid var(--border); border-radius: 6px;
   background: transparent; color: var(--text); cursor: pointer; text-align: left;
   font-size: 0.88rem; font-weight: 500; transition: all var(--anim-dur, 0.2s) ease;
 }
@@ -55,9 +55,11 @@ CSS：
 
 @media (max-width: 600px) {
   .tab-panel { flex-direction: column; }
-  .tab-nav { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid #e2e8f0; padding: 0.5em; }
+  .tab-nav { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 0.5em; }
   .tab-btn { white-space: nowrap; flex-shrink: 0; }
 }
+.tab-btn { cursor: pointer; min-height: 44px; }
+.tab-btn:active { transform: scale(0.97); }
 ```
 
 JS（与其他 PPT 增强 JS 一起放在课程末尾 `<script>` 中）：

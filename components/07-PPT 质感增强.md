@@ -2,42 +2,39 @@
 
 在保持纵向滚读结构的基础上，添加 PPT 级的视觉品质。以下三个能力需要添加到每个课程的 `<head>` 中（CSS + JS）。
 
-#### 7.1 主题切换（T 键）
+#### 7.1 主题切换（T 键 + localStorage 持久化）
 
-键盘按 `T` 键循环切换主题。CSS 层使用 `[data-theme="..."]` 选择器覆盖。
+键盘按 `T` 键循环切换主题。用户选择的主题自动保存到 `localStorage`，刷新页面或切换课程后保留。
 
-默认包含 4 个主题，每个主题控制 12 个 CSS 变量：
+默认包含以下主题（来自 `theme/*/DESIGN.md`），每个主题控制 12 个 CSS 变量：
 
 ```css
 :root {
   --bg: #faf9f7; --text: #1a1a1a; --accent: #c0392b;
+  --accent-text: #ffffff; --surface: #f5f0eb; --border: #ddd8d0;
+  --link: #c0392b; --success: #16a34a; --warning: #d97706; --error: #dc2626;
   --font: "Noto Serif CJK SC", Georgia, "Times New Roman", serif;
   --font-h: "Noto Serif CJK SC", Georgia, "Times New Roman", serif;
-  --lh: 1.8; --radius: 8px; --anim-dur: 0.6s; --anim-y: 24px;
+  --lh: 1.8; --radius: 8px; --anim-dur: 0.3s; --anim-y: 18px;
   --h2-border: 1px solid #ddd; --h1-size: 2rem;
 }
-[data-theme="apple"] {
-  --bg: #ffffff; --text: #1d1d1f; --accent: #0066cc;
-  --font: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
-  --font-h: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
-  --lh: 1.9; --radius: 12px; --anim-dur: 0.8s; --anim-y: 20px;
-  --h2-border: 1px solid #f0f0f0; --h1-size: 2.1rem;
-}
-[data-theme="minimax"] {
-  --bg: #ffffff; --text: #0a0a0a; --accent: #ff5530;
-  --font: "DM Sans", "Inter", "Helvetica Neue", Arial, sans-serif;
-  --font-h: "DM Sans", "Inter", "Helvetica Neue", Arial, sans-serif;
-  --lh: 1.7; --radius: 8px; --anim-dur: 0.35s; --anim-y: 30px;
-  --h2-border: none; --h1-size: 2.4rem;
-}
-[data-theme="nvidia"] {
-  --bg: #ffffff; --text: #1a1a1a; --accent: #76b900;
-  --font: "Inter", Arial, "Helvetica Neue", sans-serif;
-  --font-h: "Inter", Arial, "Helvetica Neue", sans-serif;
-  --lh: 1.6; --radius: 2px; --anim-dur: 0s; --anim-y: 0px;
-  --h2-border: 2px solid var(--accent); --h1-size: 1.9rem;
-}
-```
+[data-theme="apple"] { --bg: #ffffff; --text: #1d1d1f; --accent: #0066cc; --accent-text: #ffffff; --surface: #f5f5f7; --border: #e0e0e0; --link: #0066cc; --font: "SF Pro Text","Helvetica Neue",sans-serif; --font-h: "SF Pro Display","Helvetica Neue",sans-serif; --lh: 1.9; --radius: 12px; --anim-dur: 0.8s; --anim-y: 20px; --h2-border: 1px solid #f0f0f0; --h1-size: 2.1rem; }
+[data-theme="minimax"] { --bg: #ffffff; --text: #0a0a0a; --accent: #0a0a0a; --accent-text: #ffffff; --surface: #f2f3f5; --border: #e5e7eb; --link: #0a0a0a; --font: "DM Sans","Inter","Helvetica Neue",sans-serif; --font-h: "DM Sans","Inter","Helvetica Neue",sans-serif; --lh: 1.7; --radius: 8px; --anim-dur: 0.35s; --anim-y: 30px; --h2-border: none; --h1-size: 2.4rem; }
+[data-theme="nvidia"] { --bg: #ffffff; --text: #000000; --accent: #76b900; --accent-text: #000000; --surface: #f7f7f7; --border: #cccccc; --link: #0046a4; --success: #16a34a; --warning: #df6500; --error: #e52020; --font: "Inter",Arial,sans-serif; --font-h: "Inter",Arial,sans-serif; --lh: 1.6; --radius: 2px; --anim-dur: 0s; --anim-y: 0px; --h2-border: 2px solid var(--accent); --h1-size: 1.9rem; }
+[data-theme="airbnb"] { --bg: #ffffff; --text: #222222; --accent: #ff385c; --accent-text: #ffffff; --surface: #f7f7f7; --border: #dddddd; --link: #ff385c; --font: "Airbnb Cereal VF","Helvetica Neue",sans-serif; --font-h: "Airbnb Cereal VF","Helvetica Neue",sans-serif; }
+[data-theme="airtable"] { --bg: #ffffff; --text: #181d26; --accent: #181d26; --accent-text: #ffffff; --surface: #f8fafc; --border: #dddddd; --link: #1b61c9; --font: "Inter Display","Helvetica Neue",sans-serif; --font-h: "Inter Display","Helvetica Neue",sans-serif; }
+[data-theme="binance"] { --bg: #ffffff; --text: #181a20; --accent: #fcd535; --accent-text: #181a20; --border: #e0e0e0; --font: "BinanceNova",sans-serif; --font-h: "BinancePlex",sans-serif; }
+[data-theme="bmw-m"] { --bg: #000000; --text: #ffffff; --accent: #ffffff; --accent-text: #000000; --surface: #1a1a1a; --border: #3c3c3c; --link: #ffffff; --font: "BMWTypeNextLatin",sans-serif; --font-h: "BMWTypeNextLatin",sans-serif; }
+[data-theme="claude"] { --bg: #faf9f5; --text: #141413; --accent: #cc785c; --accent-text: #ffffff; --surface: #efe9de; --border: #e6dfd8; --link: #cc785c; --success: #5db872; --warning: #d4a017; --error: #c64545; --font: "StyreneB","Helvetica Neue",sans-serif; --font-h: "Copernicus","Georgia",serif; }
+[data-theme="cursor"] { --bg: #f7f7f4; --text: #26251e; --accent: #f54e00; --accent-text: #ffffff; --border: #e6e5e0; --link: #f54e00; --font: "CursorGothic",sans-serif; --font-h: "CursorGothic",sans-serif; }
+[data-theme="dell-1996"] { --bg: #ffffff; --text: #000000; --accent: #e91d2a; --accent-text: #ffffff; --border: #e0e0e0; --link: #0000ee; --font: "Times New Roman",serif; --font-h: "Helvetica",sans-serif; }
+[data-theme="figma"] { --bg: #ffffff; --text: #000000; --accent: #000000; --accent-text: #ffffff; --surface: #f7f7f5; --border: #e6e6e6; --font: "figmaMono",monospace; --font-h: "figmaSans",sans-serif; }
+[data-theme="hp"] { --bg: #ffffff; --text: #1a1a1a; --accent: #024ad8; --accent-text: #ffffff; --border: #e8e8e8; --link: #024ad8; --error: #b3262b; --font: "Forma DJR Micro","Helvetica Neue",sans-serif; --font-h: "Forma DJR Micro","Helvetica Neue",sans-serif; }
+[data-theme="ibm"] { --bg: #ffffff; --text: #161616; --accent: #0f62fe; --accent-text: #ffffff; --border: #e0e0e0; --link: #0f62fe; --font: "IBM Plex Sans","Helvetica Neue",sans-serif; --font-h: "IBM Plex Sans","Helvetica Neue",sans-serif; }
+[data-theme="nike"] { --bg: #ffffff; --text: #111111; --accent: #111111; --accent-text: #ffffff; --border: #cacacb; --success: #007d48; --font: "Helvetica Now Text Medium","Helvetica Neue",sans-serif; --font-h: "Helvetica Now Display Medium","Helvetica Neue",sans-serif; }
+[data-theme="notion"] { --bg: #ffffff; --text: #1a1a1a; --accent: #5645d4; --accent-text: #ffffff; --surface: #fafaf9; --border: #e5e3df; --link: #0075de; --font: "Notion Sans","Inter",sans-serif; --font-h: "Notion Sans","Inter",sans-serif; }
+[data-theme="x.ai"] { --bg: #0a0a0a; --text: #ffffff; --accent: #ffffff; --accent-text: #0a0a0a; --border: #212327; --font: "GeistMono",monospace; --font-h: "universalSans","Helvetica Neue",sans-serif; }
+[data-theme="zapier"] { --bg: #fffefb; --text: #201515; --accent: #ff4f00; --accent-text: #fffefb; --link: #ff4f00; --font: "Degular Display","Georgia",serif; --font-h: "Inter","Helvetica Neue",sans-serif; }
 
 | 变量 | 作用 | warm | apple | minimax | nvidia |
 |------|------|------|-------|---------|--------|
@@ -52,17 +49,26 @@
 
 主题详情参考 `theme/{apple|minimax|nvidia}/DESIGN.md`。
 
-主题详情参考 `theme/{apple|minimax|nvidia}/DESIGN.md`。
+页面加载时从 `localStorage` 读取主题，无记录则用默认 `warm`：
 
-JS 处理 T 键：
+```js
+(function(){
+  var t=['warm','apple','minimax','nvidia','airbnb','airtable','binance','bmw-m','claude','cursor','dell-1996','figma','hp','ibm','nike','notion','x.ai','zapier'];
+  var saved=localStorage.getItem('theme');
+  if(saved&&t.indexOf(saved)>-1){document.documentElement.dataset.theme=saved;}
+})();
+```
+
+T 键切换并保存：
 
 ```js
 const themes = ['warm', 'apple', 'minimax', 'nvidia'];
-let ti = 0;
+let ti = themes.indexOf(document.documentElement.dataset.theme) || 0;
 document.addEventListener('keydown', e => {
   if (e.key === 't' && !e.ctrlKey && !e.metaKey) {
     ti = (ti + 1) % themes.length;
     document.documentElement.dataset.theme = themes[ti];
+    localStorage.setItem('theme', themes[ti]);
   }
 });
 ```
@@ -72,11 +78,12 @@ document.addEventListener('keydown', e => {
 使用 IntersectionObserver 实现元素进入视口时播放动画。
 
 ```css
-[data-anim] { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+[data-anim] { opacity: 0; transform: translateY(var(--anim-y, 24px)); transition: opacity var(--anim-dur, 0.3s) ease-out, transform var(--anim-dur, 0.3s) ease-out; }
 [data-anim].in-view { opacity: 1; transform: translateY(0); }
 [data-anim="fade"] { transform: none; }
-[data-anim="slide-left"] { transform: translateX(-24px); }
+[data-anim="slide-left"] { transform: translateX(calc(var(--anim-y, 24px) * -1)); }
 [data-anim="slide-left"].in-view { transform: translateX(0); }
+@media (prefers-reduced-motion: reduce) { [data-anim] { opacity: 1; transform: none; transition: none; } }
 ```
 
 需要动画的元素加 `data-anim="fade-up"`。JS：
@@ -124,29 +131,51 @@ document.addEventListener('keydown', e => {
 
 #### 7.5 主题选择器按钮（UI 方式切换，替代纯键盘）
 
-在页面右下角添加一个浮动的主题选择器，方便不熟悉 T 键的用户切换主题。包含 4 个彩色圆点按钮，当前主题高亮。
+在页面右下角添加一个浮动的主题选择器。点击 🎨 按钮打开主题面板，显示所有主题的名称和色点，当前主题高亮。比 19 个小圆点更易用。
 
-HTML（放在 `<body>` 末尾，JS 之前）——使用组合工具栏（主题选择器 + 浮动目录）：
+HTML（放在 `<body>` 末尾，JS 之前）——使用组合工具栏（🎨 主题按钮 + 📑 目录按钮）：
 ```html
 <div class="ui-toolbar">
-  <div class="theme-picker" role="toolbar" aria-label="切换主题">
-    <button class="tp-btn active" data-theme="warm" style="--tp-color:#c0392b;" title="暖色"></button>
-    <button class="tp-btn" data-theme="apple" style="--tp-color:#0066cc;" title="Apple"></button>
-    <button class="tp-btn" data-theme="minimax" style="--tp-color:#ff5530;" title="Minimax"></button>
-    <button class="tp-btn" data-theme="nvidia" style="--tp-color:#76b900;" title="NVIDIA"></button>
-  </div>
+  <button class="tp-btn-toggle" aria-label="切换主题" title="切换主题">🎨</button>
   <button class="toc-btn" aria-label="目录" title="目录">📑</button>
 </div>
+<nav class="tp-panel">
+  <div class="tp-grid" role="listbox" aria-label="选择主题">
+    <button class="tp-item active" data-theme="warm" style="--tp-color:#c0392b;">暖色</button>
+    <button class="tp-item" data-theme="apple" style="--tp-color:#0066cc;">Apple</button>
+    <button class="tp-item" data-theme="minimax" style="--tp-color:#ff5530;">Minimax</button>
+    <button class="tp-item" data-theme="nvidia" style="--tp-color:#76b900;">NVIDIA</button>
+    <button class="tp-item" data-theme="airbnb" style="--tp-color:#ff385c;">Airbnb</button>
+    <button class="tp-item" data-theme="airtable" style="--tp-color:#181d26;">Airtable</button>
+    <button class="tp-item" data-theme="binance" style="--tp-color:#fcd535;">Binance</button>
+    <button class="tp-item" data-theme="bmw-m" style="--tp-color:#3c3c3c;">BMW M</button>
+    <button class="tp-item" data-theme="claude" style="--tp-color:#cc785c;">Claude</button>
+    <button class="tp-item" data-theme="cursor" style="--tp-color:#f54e00;">Cursor</button>
+    <button class="tp-item" data-theme="dell-1996" style="--tp-color:#e91d2a;">Dell 1996</button>
+    <button class="tp-item" data-theme="figma" style="--tp-color:#000000;">Figma</button>
+    <button class="tp-item" data-theme="hp" style="--tp-color:#024ad8;">HP</button>
+    <button class="tp-item" data-theme="ibm" style="--tp-color:#0f62fe;">IBM</button>
+    <button class="tp-item" data-theme="nike" style="--tp-color:#111111;">Nike</button>
+    <button class="tp-item" data-theme="notion" style="--tp-color:#5645d4;">Notion</button>
+    <button class="tp-item" data-theme="x.ai" style="--tp-color:#636363;">x.ai</button>
+    <button class="tp-item" data-theme="zapier" style="--tp-color:#ff4f00;">Zapier</button>
+  </div>
+</nav>
 <nav class="toc-panel"><ul class="toc-list"></ul></nav>
 ```
 
-CSS（放在课程 `<style>` 中）——主题选择器 + TOC 共用样式：
+CSS（放在课程 `<style>` 中）——工具栏 + 主题面板 + TOC 共用样式：
 ```css
 .ui-toolbar { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(255,255,255,0.85); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-.theme-picker { display: flex; gap: 6px; }
-.tp-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; background: var(--tp-color); cursor: pointer; padding: 0; transition: transform 0.2s ease, border-color 0.2s ease; }
-.tp-btn:hover { transform: scale(1.2); }
-.tp-btn.active { border-color: var(--text); transform: scale(1.15); }
+.tp-btn-toggle, .toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.6; transition: opacity 0.2s ease; color: var(--text); }
+.tp-btn-toggle:hover, .toc-btn:hover { opacity: 1; }
+.tp-panel { position: fixed; bottom: 70px; right: 20px; z-index: 998; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius, 8px); padding: 0.6em; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: none; max-height: 50vh; overflow-y: auto; }
+.tp-panel.open { display: block; }
+.tp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; min-width: 180px; }
+.tp-item { display: flex; align-items: center; gap: 6px; padding: 0.4em 0.6em; border: 1px solid transparent; border-radius: 6px; background: none; cursor: pointer; font-size: 0.82rem; color: var(--text); text-align: left; transition: background 0.15s ease; }
+.tp-item:hover { background: rgba(0,0,0,0.04); }
+.tp-item.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); font-weight: 600; }
+.tp-item::before { content: ''; width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; background: var(--tp-color); border: 1px solid rgba(0,0,0,0.1); }
 .toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.6; transition: opacity 0.2s ease; color: var(--text); }
 .toc-btn:hover { opacity: 1; }
 .toc-panel { position: fixed; bottom: 70px; right: 20px; z-index: 998; background: var(--bg); border: 1px solid #e2e8f0; border-radius: var(--radius, 8px); padding: 0.6em 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); max-height: 50vh; overflow-y: auto; display: none; min-width: 160px; }
@@ -184,14 +213,25 @@ document.querySelector('.toc-panel').classList.remove('open');}});}
 ```html
 <script>
 // PPT 质感增强 — 含降级处理
-(function(){var t=['warm','apple','minimax','nvidia'],i=t.indexOf(document.documentElement.dataset.theme)||0,d=document.documentElement;
-try{document.querySelectorAll('.tp-btn').forEach(function(b){b.addEventListener('click',function(){
+(function(){var t=['warm','apple','minimax','nvidia'];try{var s=localStorage.getItem('theme');if(s&&t.indexOf(s)>-1){document.documentElement.dataset.theme=s;}}catch(e){}
+var i=t.indexOf(document.documentElement.dataset.theme);if(i<0)i=0;var d=document.documentElement;
+try{document.querySelectorAll('.tp-item').forEach(function(b){b.addEventListener('click',function(){
 var th=this.dataset.theme;d.dataset.theme=th;i=t.indexOf(th);
-document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===th);});});});
+try{localStorage.setItem('theme',th);}catch(e){}
+document.querySelectorAll('.tp-item').forEach(function(x){x.classList.toggle('active',x.dataset.theme===th);});
+document.querySelector('.tp-panel').classList.remove('open');});});
+}catch(e){}
+try{document.querySelector('.tp-btn-toggle').addEventListener('click',function(){
+document.querySelector('.tp-panel').classList.toggle('open');});
 }catch(e){}
 try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){i=(i+1)%t.length;d.dataset.theme=t[i];
-document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
+try{localStorage.setItem('theme',t[i]);}catch(e){}
+document.querySelectorAll('.tp-item').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
 }catch(e){} // 主题切换降级：静默失败
+// 点击外部关闭主题面板
+try{document.addEventListener('click',function(e){if(!e.target.closest('.ui-toolbar')&&!e.target.closest('.tp-panel')){
+document.querySelector('.tp-panel').classList.remove('open');}});
+}catch(e){}
 try{var tl=document.querySelector('.toc-list');if(tl){var h2s=document.querySelectorAll('h2');
 h2s.forEach(function(h,i){var li=document.createElement('li');li.className='toc-item';li.textContent=h.textContent;
 li.addEventListener('click',function(){h.scrollIntoView({behavior:'smooth'});

@@ -49,9 +49,9 @@ test("anim: invalid value fails", len(v.check_data_anim_syntax('<div data-anim="
 # ==== check_ppt_js ====
 test("ppt: theme+nav present passes", not v.check_ppt_js(
     '<html data-theme="warm"><h2>A</h2><h2>B</h2>'
-    'key==="t" key==="ArrowRight" tp-btn</html>'))
+    'key==="t" key==="ArrowRight" tp-btn-toggle tp-item</html>'))
 test("ppt: missing T key fails", len(v.check_ppt_js(
-    '<html data-theme="warm">tp-btn</html>')) > 0)
+    '<html data-theme="warm">tp-item</html>')) > 0)
 
 # ==== check_inline_svg ====
 test("inline svg: with wrapper passes", not v.check_inline_svg(

@@ -128,8 +128,8 @@ def check_ppt_js(html):
     if has_themes:
         if not re.search(r"key\s*===?\s*['\"]t['\"]", html, re.IGNORECASE):
             issues.append("Missing theme switching JS (T key handler)")
-        if not re.search(r"tp-btn", html):
-            issues.append("Missing theme picker UI (.tp-btn elements)")
+        if not re.search(r"tp-btn-toggle|tp-item", html):
+            issues.append("Missing theme picker UI (.tp-btn-toggle / .tp-item elements)")
 
     has_sections = len(re.findall(r"<h2[^>]*>", html)) > 1
     if has_sections and not re.search(

@@ -20,7 +20,7 @@ h1 { font-size: 1.6rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5em; }
 .tli-title { flex: 1; font-size: 0.92rem; font-weight: 500; }
 .tli-icon { font-size: 1.1rem; color: var(--accent); font-weight: 300; margin-right: 0.3em; transition: transform var(--anim-dur) ease; }
 .tli-item[data-expanded="true"] .tli-icon { transform: rotate(45deg); }
-.tli-content { overflow: hidden; transition: height var(--anim-dur) ease; }
+.tli-content { overflow: hidden; transition: height var(--anim-dur) ease-out; }
 .tli-item[data-expanded="false"] .tli-content { height: 0; }
 .tli-item[data-expanded="true"] .tli-content { height: auto; }
 .tli-inner { padding: 0.2em 0 1em 3em; font-size: 0.92rem; }
