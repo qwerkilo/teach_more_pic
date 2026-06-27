@@ -21,3 +21,12 @@ HTML 结构（width 反映比例，颜色区分类别）：
   <div class="bar-track"><div class="bar-fill" style="width:75%; background:#c0392b;">数值</div></div>
 </div>
 ```
+
+使用规则：
+- 数据先归一化到最大值，全部等比换算为百分比
+- 颜色区分类别：蓝=正常、橙=触发、红=负面、绿=正面
+- `min-width: 2.5em` 确保短条也有数值可见
+
+降级说明：
+- **数值溢出条形**：加 `text-overflow: ellipsis` 截断，或在标签处显示数值
+- **窄屏标签溢出**：`.bar-label` 设为 80px 或换行显示

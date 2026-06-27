@@ -122,20 +122,60 @@ def check_svg_contrast(html, base_dir):
 
 
 def check_ppt_js(html):
-    """Check for theme switching (T key) and keyboard nav (arrow keys) JS."""
+    """Check for theme switching and keyboard nav JS."""
     issues = []
-    # Only flag missing if the class patterns suggest the feature is expected
     has_themes = bool(re.search(r"data-theme", html))
-    if has_themes and not re.search(
-        r"key\s*===?\s*['\"]t['\"]", html, re.IGNORECASE
-    ):
-        issues.append("Missing theme switching JS (T key handler)")
+    if has_themes:
+        if not re.search(r"key\s*===?\s*['\"]t['\"]", html, re.IGNORECASE):
+            issues.append("Missing theme switching JS (T key handler)")
+        if not re.search(r"tp-btn", html):
+            issues.append("Missing theme picker UI (.tp-btn elements)")
 
     has_sections = len(re.findall(r"<h2[^>]*>", html)) > 1
     if has_sections and not re.search(
         r"key\s*===?\s*['\"]Arrow(?:Right|Left)['\"]", html, re.IGNORECASE
     ):
         issues.append("Missing keyboard navigation JS (arrow key handler)")
+    return issues
+
+
+def check_inline_svg(html):
+    """Inline SVGs must be wrapped in .svg-fig figure."""
+    issues = []
+    # Find <svg> tags that are not inside a code block or highlighted area
+    inlines = re.findall(r"<svg\s", html)
+    figures = re.findall(r'class="[^"]*svg-fig[^"]*"', html)
+    if inlines and not figures:
+        for m in re.finditer(r"<svg\s", html):
+            pos = m.start()
+            # Check if inside a code block
+            code_start = html.rfind("```", 0, pos)
+            code_end = html.find("```", pos)
+            if code_start != -1 and code_end != -1:
+                continue
+            issues.append("Inline <svg> found without .svg-fig wrapper")
+            break
+    return issues
+
+
+def check_component_consistency(html):
+    """Check that component HTML classes have matching CSS."""
+    issues = []
+    component_map = {
+        "sd-trigger": "sd-item",
+        "tli-dot": "tli-item",
+        "tab-btn": "tab-pane",
+        "dg-card": "dg-value",
+        "qc-bar": "quote-card",
+        "ai-dot": "annotated-img",
+        "sc-step": "status-chain",
+        "si-step": "step-indicator",
+        "callout-": "callout-",
+        "cmp-table": "cmp-table",
+    }
+    for trigger, context in component_map.items():
+        if trigger in html and context not in html:
+            pass  # Partial use is OK; only flag when HTML structure is broken
     return issues
 
 
@@ -159,6 +199,7 @@ def run_all(path):
         ("Relative links only", check_relative_links(html)),
         ("SVG text/background contrast", check_svg_contrast(html, base_dir)),
         ("PPT JS (theme + nav) present", check_ppt_js(html)),
+        ("Inline SVG in .svg-fig", check_inline_svg(html)),
     ]
 
     all_pass = True

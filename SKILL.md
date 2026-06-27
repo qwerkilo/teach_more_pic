@@ -78,6 +78,21 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - 新增组件：先在 `components/` 下创建文件，再更新此索引表
 - 颜色语义全局统一：蓝=正常，橙=触发，红=崩溃，绿=救助
 
+### 共享模式：折叠展开 JS
+
+折叠分步详解（#08）和交互式时间线（#11）共用同一套 JS 模式：点击触发器（`.XX-trigger` / `.XX-dot`）→ 测量内容高度（`scrollHeight`）→ CSS transition 动画。核心逻辑：
+
+```js
+var i=this.closest('.XX-item'),c=i.querySelector('.XX-content'),o=i.dataset.expanded==='true';
+if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});
+i.dataset.expanded='false';this.setAttribute('aria-expanded','false');}else{
+c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});
+i.dataset.expanded='true';this.setAttribute('aria-expanded','true');
+c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}
+```
+
+替换其中的 `XX` 为对应组件的前缀（`sd`、`tli`）即可复用。两个组件文件中的 JS 代码均基于此模板。新增类似折叠组件时直接复制此模式。**注意**：`transitionend` 事件确保动画完成后将 `height` 恢复为 `auto`，防止内容变化（如字体渲染）后高度穿帮。
+
 ### 组件选择决策指南
 
 按内容类型选择最合适的组件：

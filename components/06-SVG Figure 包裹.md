@@ -14,3 +14,11 @@
 .svg-fig { margin: 1.5rem auto; text-align: center; }
 .svg-fig svg { max-width: 100%; height: auto; border-radius: 8px; }
 ```
+
+使用规则：
+- 所有 SVG（流程图、角色卡片等）均放入 `.svg-fig` 容器
+- 容器保证居中对齐 + 响应式缩放
+
+降级说明：
+- **SVG 内联导致布局溢出**：检查外层容器或改用 `<img src="NNNN-slug.svg">`
+- **需要下载原图**：在 `.svg-fig` 下方加 `<a href="NNNN-slug.svg" download>` 链接

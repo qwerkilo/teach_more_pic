@@ -122,15 +122,64 @@ document.addEventListener('keydown', e => {
 - 段落中不使用过多的引用或信息框——每个 `.info-box` / `.warning-box` 之间至少隔 1 段
 - 一个标准的 h2 章节体量："1-2 段引出 → 视觉组件 → 1-2 段深化"
 
-#### 7.5 JS 运行时模板
+#### 7.5 主题选择器按钮（UI 方式切换，替代纯键盘）
+
+在页面右下角添加一个浮动的主题选择器，方便不熟悉 T 键的用户切换主题。包含 4 个彩色圆点按钮，当前主题高亮。
+
+HTML（放在 `<body>` 末尾，JS 之前）：
+```html
+<div class="theme-picker" role="toolbar" aria-label="切换主题">
+  <button class="tp-btn" data-theme="warm" aria-label="暖色主题" style="--tp-color:#c0392b;" title="暖色 (默认)"></button>
+  <button class="tp-btn" data-theme="apple" aria-label="Apple 主题" style="--tp-color:#0066cc;" title="Apple"></button>
+  <button class="tp-btn" data-theme="minimax" aria-label="Minimax 主题" style="--tp-color:#ff5530;" title="Minimax"></button>
+  <button class="tp-btn" data-theme="nvidia" aria-label="NVIDIA 主题" style="--tp-color:#76b900;" title="NVIDIA"></button>
+</div>
+```
+
+CSS（放在课程 `<style>` 中）：
+```css
+.theme-picker {
+  position: fixed; bottom: 20px; right: 20px; z-index: 999;
+  display: flex; gap: 6px; padding: 6px 10px;
+  background: rgba(255,255,255,0.85); backdrop-filter: blur(6px);
+  border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.tp-btn {
+  width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent;
+  background: var(--tp-color); cursor: pointer; padding: 0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.tp-btn:hover { transform: scale(1.2); }
+.tp-btn.active { border-color: var(--text); transform: scale(1.15); }
+```
+
+JS（与主题切换 JS 整合，在 `keydown` 之后追加点击处理）：
+```js
+// 主题选择器按钮
+document.querySelectorAll('.tp-btn').forEach(function(b){b.addEventListener('click',function(){
+var t=this.dataset.theme;document.documentElement.dataset.theme=t;
+document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.remove('active');});
+this.classList.add('active');});});
+// 保持 T 键与选择器同步
+document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){
+i=(i+1)%t.length;d.dataset.theme=t[i];
+document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
+```
+
+#### 7.6 JS 运行时模板
 
 课程末尾的 `<script>` 块（在 quiz JS 之后）追加：
 
 ```html
 <script>
 // PPT 质感增强 — 含降级处理
-(function(){var t=['warm','apple','minimax','nvidia'],i=0,d=document.documentElement;
-try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){i=(i+1)%t.length;d.dataset.theme=t[i];}});
+(function(){var t=['warm','apple','minimax','nvidia'],i=t.indexOf(document.documentElement.dataset.theme)||0,d=document.documentElement;
+try{document.querySelectorAll('.tp-btn').forEach(function(b){b.addEventListener('click',function(){
+var th=this.dataset.theme;d.dataset.theme=th;i=t.indexOf(th);
+document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===th);});});});
+}catch(e){}
+try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){i=(i+1)%t.length;d.dataset.theme=t[i];
+document.querySelectorAll('.tp-btn').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
 }catch(e){} // 主题切换降级：静默失败，不影响课程阅读
 try{var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in-view');});});
 document.querySelectorAll('[data-anim]').forEach(function(el){o.observe(el);});

@@ -40,7 +40,7 @@ Skills: teach, teach_more_pic, fireworks-tech-graph
 - **CSS 时间线** — 垂直时间轴组件
 - **CSS 条形图** — 水平数据条
 - **对比表（增强版）** — 粘性表头、斑马纹、点击排序（#22）
-- **PPT 质感** — T 键主题切换、滚动动画、键盘导航
+- **PPT 质感** — 主题选择器按钮（右下角 4 色圆点）+ T 键快捷切换、滚动动画、键盘导航
 
 **交互式组件（#8-14）：**
 - **折叠式分步详解** — 复杂概念分步折叠点击展开
@@ -74,6 +74,12 @@ base `teach` 负责课程结构、mission、learning records；`teach_more_pic` 
 ```bash
 # 验证课程 HTML
 python scripts/validate-lesson.py lessons/NNNN-slug.html
+
+# 批量验证所有示例
+powershell -ExecutionPolicy Bypass -File scripts/run-tests.ps1
+
+# 运行验证脚本单元测试
+python scripts/test_validate.py
 ```
 
 ## 课程制作流程
@@ -90,7 +96,9 @@ python scripts/validate-lesson.py lessons/NNNN-slug.html
 ├── SKILL.md               ← 唯一入口文档，所有规则在此
 ├── components/             各组件独立文件（22 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
-│   └── validate-lesson.py  课程验证脚本（9 项检查）
+│   ├── validate-lesson.py  课程验证脚本（10 项检查）
+│   ├── test_validate.py    验证脚本单元测试（18 项）
+│   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（15 个 .html）
 ├── templates/              5 个模板（4 SVG 骨架 + 1 课程起始 HTML）
 ├── theme/{apple,minimax,nvidia}/DESIGN.md  主题设计参考
