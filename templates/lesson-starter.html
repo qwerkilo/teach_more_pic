@@ -153,6 +153,24 @@
   --lh: 1.55; --radius: 2px; --anim-dur: 0s; --anim-y: 0px; --h2-border: 2px solid var(--accent); --h1-size: 1.9rem;
 }
 
+[data-theme="spotify"] {
+  --bg: #121212; --text: #ffffff; --accent: #1ed760;
+  --accent-text: #000000; --surface: #181818; --border: #4d4d4d;
+  --surface-raised: #1f1f1f; --muted: #b3b3b3;
+  --link: #1ed760; --success: #1ed760; --warning: #ffa42b; --error: #f3727f;
+  --font: "SpotifyMixUI",sans-serif; --font-h: "SpotifyMixUITitle",sans-serif;
+  --lh: 1.5; --radius: 8px; --anim-dur: 0.3s; --anim-y: 0px; --h2-border: 1px solid #4d4d4d; --h1-size: 1.5rem;
+}
+
+[data-theme="tesla"] {
+  --bg: #ffffff; --text: #171a20; --accent: #3e6ae1;
+  --accent-text: #ffffff; --surface: #f4f4f4; --border: #d0d1d2;
+  --surface-raised: #f4f4f4; --muted: #5c5e62;
+  --link: #3e6ae1; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "Universal Sans Text",sans-serif; --font-h: "Universal Sans Display",sans-serif;
+  --lh: 1.43; --radius: 4px; --anim-dur: 0.33s; --anim-y: 0px; --h2-border: none; --h1-size: 2.5rem;
+}
+
 [data-theme="x.ai"] {
   --bg: #0a0a0a; --text: #ffffff; --accent: #ffffff;
   --accent-text: #0a0a0a; --surface: #f5f5f5; --border: #212327;
@@ -186,25 +204,32 @@ h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-bord
 
 /* ===== 封面页 ===== */
 .cover-page { text-align: center; padding: 4rem 1rem; margin-bottom: 2rem; border-bottom: 2px solid var(--accent); }
-.cover-badge { display: inline-block; padding: 0.2em 1em; background: var(--accent); color: #fff; border-radius: 3px; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 1em; }
-.cover-subtitle { font-size: 1.1rem; color: #888; margin-top: 0.5em; }
-.cover-hook { font-size: 0.95rem; color: #666; margin-top: 1em; font-style: italic; }
+.cover-badge { display: inline-block; padding: 0.2em 1em; background: var(--accent); color: var(--accent-text); border-radius: 3px; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 1em; }
+.cover-subtitle { font-size: 1.1rem; color: var(--muted); margin-top: 0.5em; }
+.cover-hook { font-size: 0.95rem; color: var(--muted); margin-top: 1em; font-style: italic; }
 
 /* ===== Quiz ===== */
 .quiz-section { margin: 2rem 0; }
 .quiz-question { margin: 1.5em 0; }
 .quiz-q-text { font-weight: 600; margin-bottom: 0.5em; }
-.quiz-option { display: block; width: 100%; padding: 0.5em 1em; margin: 0.3em 0; border: 1px solid #d0d0d0; border-radius: 6px; background: #fff; text-align: left; cursor: pointer; font-size: 0.9rem; transition: background 0.2s ease; }
-.quiz-option:hover { background: #f5f5f5; }
+.quiz-option { display: block; width: 100%; padding: 0.5em 1em; margin: 0.3em 0; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); text-align: left; cursor: pointer; font-size: 0.9rem; transition: background 0.2s ease; }
+.quiz-option:hover { background: var(--surface-raised); }
 .quiz-option.correct { background: #d4edda; border-color: #28a745; }
 .quiz-option.wrong { background: #f8d7da; border-color: #dc3545; }
-.quiz-feedback { font-size: 0.85rem; margin-top: 0.3em; min-height: 1.2em; color: #555; }
+.quiz-feedback { font-size: 0.85rem; margin-top: 0.3em; min-height: 1.2em; color: var(--muted); }
+
+/* ===== 章节分隔页 + 总结卡片 ===== */
+.section-divider { text-align: center; padding: 3rem 1rem; margin: 3rem 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.divider-num { display: inline-block; padding: 0.1em 0.8em; background: var(--accent); color: var(--accent-text); border-radius: 3px; font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 0.5em; }
+.summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+.summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.summary-icon { font-size: 1.5rem; display: block; margin-bottom: 0.3em; }
 
 /* ===== 组件 CSS 从此处插入（按前缀分组） ===== */
 /* INSERT: 从 components/NN-name.md 复制 CSS 到这里 */
 
 /* ===== 底部工具栏（主题选择器 + 浮动目录） ===== */
-.ui-toolbar { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(255,255,255,0.85); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.ui-toolbar { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: color-mix(in srgb, var(--surface) 85%, transparent); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .tp-btn-toggle, .toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.6; transition: opacity 0.2s ease; color: var(--text); }
 .tp-btn-toggle:hover, .toc-btn:hover { opacity: 1; }
 .tp-panel { position: fixed; bottom: 70px; right: 20px; z-index: 998; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius, 8px); padding: 0.6em; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: none; max-height: 50vh; overflow-y: auto; }
@@ -219,7 +244,7 @@ h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-bord
 .toc-panel { position: fixed; bottom: 70px; right: 20px; z-index: 998; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius, 8px); padding: 0.6em 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); max-height: 50vh; overflow-y: auto; display: none; min-width: 160px; }
 .toc-panel.open { display: block; }
 .toc-list { list-style: none; margin: 0; padding: 0; }
-.toc-item { padding: 0.4em 1em; font-size: 0.82rem; cursor: pointer; color: #64748b; transition: color 0.15s ease, background 0.15s ease; }
+.toc-item { padding: 0.4em 1em; font-size: 0.82rem; cursor: pointer; color: var(--muted); transition: color 0.15s ease, background 0.15s ease; }
 .toc-item:hover { background: rgba(0,0,0,0.03); color: var(--text); }
 .toc-item.active { color: var(--accent); font-weight: 600; background: rgba(0,0,0,0.02); }
 
@@ -351,6 +376,8 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
     <button class="tp-item" data-theme="apple" style="--tp-color:#0066cc;">Apple</button>
     <button class="tp-item" data-theme="minimax" style="--tp-color:#ff5530;">Minimax</button>
     <button class="tp-item" data-theme="nvidia" style="--tp-color:#76b900;">NVIDIA</button>
+    <button class="tp-item" data-theme="spotify" style="--tp-color:#1ed760;">Spotify</button>
+    <button class="tp-item" data-theme="tesla" style="--tp-color:#3e6ae1;">Tesla</button>
     <button class="tp-item" data-theme="airbnb" style="--tp-color:#ff385c;">Airbnb</button>
     <button class="tp-item" data-theme="airtable" style="--tp-color:#181d26;">Airtable</button>
     <button class="tp-item" data-theme="binance" style="--tp-color:#fcd535;">Binance</button>
@@ -371,7 +398,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
 <!-- ===== PPT 质感增强 JS ===== -->
 <script>
-(function(){var t=['warm','apple','minimax','nvidia','airbnb','airtable','binance','bmw-m','claude','cursor','dell-1996','figma','hp','ibm','nike','notion','x.ai','zapier'];try{var s=localStorage.getItem('theme');if(s&&t.indexOf(s)>-1){document.documentElement.dataset.theme=s;}}catch(e){}
+(function(){var t=['warm','apple','minimax','nvidia','spotify','tesla','airbnb','airtable','binance','bmw-m','claude','cursor','dell-1996','figma','hp','ibm','nike','notion','x.ai','zapier'];try{var s=localStorage.getItem('theme');if(s&&t.indexOf(s)>-1){document.documentElement.dataset.theme=s;}}catch(e){}
 var i=t.indexOf(document.documentElement.dataset.theme);if(i<0)i=0;var d=document.documentElement;
 try{document.querySelectorAll('.tp-item').forEach(function(b){b.addEventListener('click',function(){
 var th=this.dataset.theme;d.dataset.theme=th;i=t.indexOf(th);try{localStorage.setItem('theme',th);}catch(e){}
