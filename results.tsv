@@ -1,0 +1,5 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-06-27T18:00	baseline	teach_more_pic	-	77.3	baseline	-	初始评估	dry_run
+2026-06-27T18:05	e1bba20	teach_more_pic	77.3	79.7	keep	D4/D7	加 STOP 检查点 + 修正组件数	dry_run
+2026-06-27T18:10	fc83e0e	teach_more_pic	79.7	80.9	keep	D9	反例黑名单 9→13 条	dry_run
+2026-06-27T18:15	b10be4c	teach_more_pic	80.9	82.6	keep	D5	图表数据格式 + 组件复制精确化	dry_run

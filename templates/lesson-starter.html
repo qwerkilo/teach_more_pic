@@ -190,9 +190,14 @@
 }
 
 /* ===== 正文排版 ===== */
-body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: var(--lh); max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
-h1 { font-size: var(--h1-size); font-family: var(--font-h); margin-top: 2rem; }
-h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-border); padding-bottom: 0.3em; margin-top: 2em; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: var(--lh); max-width: 720px; margin: 0 auto; padding: 0 1.5rem; font-variant-numeric: tabular-nums; }
+h1 { font-size: var(--h1-size); font-family: var(--font-h); margin-top: 2rem; text-wrap: pretty; }
+h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-border); padding-bottom: 0.3em; margin-top: 2em; text-wrap: pretty; }
+
+/* ===== Focus visible — WCAG AA ===== */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:active { transform: scale(0.98); }
+@media (prefers-reduced-motion: reduce) { button:active { transform: none; } }
 
 /* ===== 动画 ===== */
 [data-anim] { opacity: 0; transform: translateY(var(--anim-y)); transition: opacity var(--anim-dur) ease-out, transform var(--anim-dur) ease-out; }
@@ -228,7 +233,7 @@ h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-bord
 /* ===== 组件 CSS 从此处插入（按前缀分组） ===== */
 /* INSERT: 从 components/NN-name.md 复制 CSS 到这里 */
 
-/* ===== 底部工具栏（主题选择器 + 浮动目录） — 固定深色背景，始终可读 ===== */
+/* ===== 底部工具栏（z-index 层级: toolbar=999, panel=998, overlay=1000） ===== */
 .ui-toolbar { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(20,20,20,0.88); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 .tp-btn-toggle, .toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; }
 .tp-btn-toggle:hover, .toc-btn:hover { opacity: 1; color: #ffffff; }
@@ -263,49 +268,49 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <body>
 
 <!-- ===== 封面页 ===== -->
-<div class="cover-page">
+<article class="cover-page">
   <div class="cover-badge">第 N 课</div>
   <h1>标题</h1>
   <p class="cover-subtitle">副标题——核心问题或结论</p>
   <p class="cover-hook">吸引人的引子，2-3 句话</p>
-</div>
+</article>
 
 <!-- ===== 第一章：设置矛盾 ===== -->
-<div class="section-divider">
+<section class="section-divider" aria-label="第一幕">
   <span class="divider-num">第一幕</span>
   <h2>设置矛盾</h2>
-</div>
+</section>
 
 <p>第一幕引出问题……</p>
 
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 第二章：危机爆发 ===== -->
-<div class="section-divider">
+<section class="section-divider" aria-label="第二幕">
   <span class="divider-num">第二幕</span>
   <h2>危机爆发</h2>
-</div>
+</section>
 
 <p>第二幕核心内容……</p>
 
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 第三章：转折与遗产 ===== -->
-<div class="section-divider">
+<section class="section-divider" aria-label="第三幕">
   <span class="divider-num">第三幕</span>
   <h2>转折与遗产</h2>
-</div>
+</section>
 
 <p>第三幕收束与联系……</p>
 
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 总结页 ===== -->
-<div class="summary-cards">
+<aside class="summary-cards">
   <div class="summary-card"><span class="summary-icon">💡</span><strong>核心洞察</strong><p>一句话</p></div>
   <div class="summary-card"><span class="summary-icon">🔗</span><strong>与上一课的联系</strong><p>一句话</p></div>
   <div class="summary-card"><span class="summary-icon">❓</span><strong>开放问题</strong><p>一句话</p></div>
-</div>
+</aside>
 
 <!-- ===== 测验 ===== -->
 <div class="quiz-section">
