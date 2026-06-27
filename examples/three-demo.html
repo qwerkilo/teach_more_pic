@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three.js 3D 柱状图 — 示例</title>
+<script src="../libs/three.min.js"></script>
+<style>
+:root { --bg: #faf9f7; --text: #1a1a1a; --surface: #f5f0eb; --border: #ddd8d0; --radius: 8px; }
+body { font-family: "Noto Serif CJK SC",Georgia,serif; background: var(--bg); color: var(--text); max-width: 800px; margin: 0 auto; padding: 2rem; }
+h1 { text-wrap: pretty; border-bottom: 2px solid #c0392b; padding-bottom: 0.5em; }
+.chart-box { background: var(--surface); border-radius: var(--radius); margin: 1rem 0; padding: 8px; }
+.no-js-fallback { display: none; text-align: center; padding: 2rem; }
+</style>
+</head>
+<body>
+
+<h1>Three.js 3D 柱状图</h1>
+<p>五国 GDP 规模对比（示意数据）</p>
+<div class="chart-box"><div id="three-bar" style="width:100%;height:400px;"></div></div>
+
+<script>
+(function(){
+  var container = document.getElementById('three-bar');
+  if(!container || typeof THREE === 'undefined') return;
+
+  var w = container.clientWidth, h = container.clientHeight;
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf5f0eb);
+
+  var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
+  camera.position.set(5, 4, 8);
+  camera.lookAt(0, 0, 0);
+
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(w, h);
+  container.appendChild(renderer.domElement);
+
+  var data = [3.2, 5.1, 2.8, 4.5, 3.9];
+  var colors = [0xc0392b, 0xe67e22, 0x2ecc71, 0x3498db, 0x9b59b6];
+  for(var i = 0; i < data.length; i++){
+    var bar = new THREE.Mesh(
+      new THREE.BoxGeometry(0.6, data[i], 0.6),
+      new THREE.MeshLambertMaterial({ color: colors[i] })
+    );
+    bar.position.set((i - 2) * 1.2, data[i] / 2, 0);
+    scene.add(bar);
+  }
+
+  var floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(8, 3),
+    new THREE.MeshLambertMaterial({ color: 0xddd8d0, side: THREE.DoubleSide })
+  );
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -0.05;
+  scene.add(floor);
+
+  var light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(5, 10, 7);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+  function animate(){ requestAnimationFrame(animate); renderer.render(scene, camera); }
+  animate();
+
+  window.addEventListener('resize', function(){
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

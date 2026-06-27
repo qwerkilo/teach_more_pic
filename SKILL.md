@@ -37,7 +37,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 
 ## 视觉组件工具箱
 
-25 个组件，每个组件的 HTML/CSS/JS 代码和用法规则在 `components/NN-name.md` 中。此处只列索引。
+26 个组件，每个组件的 HTML/CSS/JS 代码和用法规则在 `components/NN-name.md` 中。此处只列索引。
 
 ### 核心组件（#1-7）
 
@@ -63,7 +63,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 13 | 引用/引文卡片 | `components/13-引用引文卡片.md` | 左侧竖条 + 引文 + 署名 |
 | 14 | 标注式图片 | `components/14-标注式图片.md` | 图片上数字标注点弹出说明 |
 
-### 数据与辅助组件（#15-25）
+### 数据与辅助组件（#15-26）
 
 | # | 组件 | 文件 | 说明 |
 |---|---|---|---|
@@ -77,7 +77,8 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 22 | 对比表增强版 | `components/22-对比表增强版.md` | 粘性表头 + 斑马纹 + 排序 |
 | 23 | 全屏模态/灯箱 | `components/23-全屏模态灯箱.md` | 点击放大全屏展示 |
 | 24 | ECharts 交互式图表集 | `components/26-ECharts 交互式图表集.md` | 柱状图/饼图/折线图/堆叠图，ECharts 引擎，交互式 |
-| 25 | 现代浏览器 API | `components/25-现代浏览器API组件.md` | 原生折叠/原生模态/CSS 幻灯片/Popover |
+| 25 | Three.js 3D 组件 | `components/27-Three.js 3D组件.md` | 3D 场景/柱状图/地理可视化，Three.js 引擎 |
+| 26 | 现代浏览器 API | `components/25-现代浏览器API组件.md` | 原生折叠/原生模态/CSS 幻灯片/Popover |
 
 ### 使用规则
 
