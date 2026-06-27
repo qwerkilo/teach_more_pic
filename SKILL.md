@@ -314,10 +314,16 @@ Step 5: 配套产出
   - EPUB 重建：如本课程隶属于某个系列（已有 `.epub` 文件），用 `teach` skill 的 EPUB 工具重新打包
   - 🔴 课程间链接验证：打开所有 `<a href="NNNN-slug.html">` 确认目标文件存在
 
-Step 6: 知识图谱更新
-  - 使用 `knowledge-graph-map` skill 为本课程创建或更新知识图谱
+Step 6: SPA 集成
+  - 将生成的 `lessons/NNN-slug.html` 内容内联到 `index.html`：
+    · 在 `index.html` 的 `</body>` 前插入 `<section class="lesson-view" id="lesson-NNN">...</section>`
+    · 确保每课一个独立的 `<section>`，用 `id="lesson-NNN"` 索引
+  - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
+  - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
+
+Step 7: 知识图谱更新
+  - 在 `kg-yuecai.html` 的 `graphData.nodes[]` 和 `links[]` 中追加新课程节点
   - 提取课程中的关键概念/术语作为节点，课程间的链接作为边
-  - 🔴 确保新节点与已有图谱中的节点正确连接
 ```
 
 ## 失败模式与异常处理
@@ -336,6 +342,8 @@ Step 6: 知识图谱更新
 | 主题切换后 h2 下划线颜色不变 | CSS 中使用固定色而非 `var(--accent)` | 确保使用 `border-bottom-color: var(--accent)` |
 | SVG viewBox 比例不匹配 width/height | 图片被不等比例拉伸 | 确保 viewBox 宽高比 = width/height 比 |
 | 折叠组件 `height` 从 `auto` 过渡 | CSS transition 无效 | JS 中先测量 scrollHeight 再设 px，恢复 auto |
+| SPA 中课程 `id` 冲突 | 两个 `<section>` 用了相同 `id` | 使用 `id="lesson-NNN"` 格式，NNN 为课程编号 |
+| `index.html` 中课程区块未显示 | `<section>` 插在了 `<body>` 外部 | 确认在 `</body>` 前插入，不是 `</html>` 之后 |
 | 组件特定的其他问题 | 见对应 `components/NN-name.md` 中的降级说明 | — |
 
 ## 写作风格
