@@ -34,8 +34,10 @@
 # 克隆到 opencode 的 skills 目录
 cd ~/.agents/skills
 git clone https://github.com/qwerkilo/teach_more_pic
+git clone https://github.com/AragornZJF/knowledge-graph-map
+git clone https://github.com/yizhiyanhua-ai/fireworks-tech-graph
 
-# 同时安装 base teach skill（位于 mattpocock/skills 仓库中）
+# 同时安装 mattpocock 的 base skills（位于同一仓库中）
 git clone https://github.com/mattpocock/skills
 # 然后复制或链接 skills/teach 和 skills/grill-me 到 .agents/skills/ 下
 ```
