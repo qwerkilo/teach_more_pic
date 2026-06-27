@@ -58,6 +58,16 @@ test("inline svg: with wrapper passes", not v.check_inline_svg(
     '<figure class="svg-fig"><svg xmlns="..."></svg></figure>'))
 test("inline svg: no wrapper fails", len(v.check_inline_svg('<svg xmlns="..."></svg>')) > 0)
 
+# ==== check_component_consistency ====
+test("lbox: trigger+target passes", not v.check_component_consistency(
+    '<span data-lbox="chart-1"></span><div id="lbox-chart-1"></div>'))
+test("lbox: trigger no target fails", len(v.check_component_consistency(
+    '<span data-lbox="chart-1"></span>')) > 0)
+test("panel: trigger+target passes", not v.check_component_consistency(
+    '<span data-panel="glossary"></span><div id="panel-glossary"></div>'))
+test("panel: trigger no target fails", len(v.check_component_consistency(
+    '<span data-panel="glossary"></span>')) > 0)
+
 # ==== Results ====
 print(f"\n{PASS} passed, {FAIL} failed")
 if FAIL > 0:

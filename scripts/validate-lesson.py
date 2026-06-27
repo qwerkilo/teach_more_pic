@@ -179,6 +179,24 @@ def check_component_consistency(html):
     return issues
 
 
+def check_component_consistency(html):
+    """Check that component HTML attributes have matching target elements."""
+    issues = []
+    # Lightbox: data-lbox="X" must have corresponding id="lbox-X"
+    lbox_triggers = re.findall(r'data-lbox="([^"]+)"', html)
+    for lid in lbox_triggers:
+        if f'id="lbox-{lid}"' not in html:
+            issues.append(f"Lightbox trigger data-lbox=\"{lid}\" has no matching #lbox-{lid}")
+    # Info panel: data-panel="X" must have corresponding id="panel-X"
+    panel_triggers = re.findall(r'data-panel="([^"]+)"', html)
+    for pid in panel_triggers:
+        if f'id="panel-{pid}"' not in html and f'id="panel-{pid}"' not in html:
+            # data-panel in ip-btn maps to id="panel-X"
+            if f'id="panel-{pid}"' not in html:
+                issues.append(f"Info panel trigger data-panel=\"{pid}\" has no matching #panel-{pid}")
+    return issues
+
+
 def run_all(path):
     if not os.path.exists(path):
         print(f"{FAIL} File not found: {path}")
@@ -200,6 +218,7 @@ def run_all(path):
         ("SVG text/background contrast", check_svg_contrast(html, base_dir)),
         ("PPT JS (theme + nav) present", check_ppt_js(html)),
         ("Inline SVG in .svg-fig", check_inline_svg(html)),
+        ("Component consistency", check_component_consistency(html)),
     ]
 
     all_pass = True

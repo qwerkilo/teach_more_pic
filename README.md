@@ -60,6 +60,7 @@ Skills: teach, teach_more_pic, fireworks-tech-graph
 - **步骤指示器** — 水平编号步骤条
 - **信息面板** — 右侧滑入抽屉
 - **对比表增强版** — 粘性表头 + 斑马纹 + 排序
+- **全屏模态/灯箱** — 点击放大全屏展示大图/详情
 
 ## 使用方法
 
@@ -96,8 +97,8 @@ python scripts/test_validate.py
 ├── SKILL.md               ← 唯一入口文档，所有规则在此
 ├── components/             各组件独立文件（22 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
-│   ├── validate-lesson.py  课程验证脚本（10 项检查）
-│   ├── test_validate.py    验证脚本单元测试（18 项）
+│   ├── validate-lesson.py  课程验证脚本（11 项检查）
+│   ├── test_validate.py    验证脚本单元测试（22 项）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（15 个 .html）
 ├── templates/              5 个模板（4 SVG 骨架 + 1 课程起始 HTML）

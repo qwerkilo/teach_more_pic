@@ -59,7 +59,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 13 | 引用/引文卡片 | `components/13-引用引文卡片.md` | 左侧竖条 + 引文 + 署名 |
 | 14 | 标注式图片 | `components/14-标注式图片.md` | 图片上数字标注点弹出说明 |
 
-### 数据与辅助组件（#15-22）
+### 数据与辅助组件（#15-23）
 
 | # | 组件 | 文件 | 说明 |
 |---|---|---|---|
@@ -71,6 +71,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 20 | 步骤指示器 | `components/20-步骤指示器.md` | 水平编号步骤条 |
 | 21 | 信息面板 | `components/21-信息面板.md` | 右侧滑入抽屉 |
 | 22 | 对比表增强版 | `components/22-对比表增强版.md` | 粘性表头 + 斑马纹 + 排序 |
+| 23 | 全屏模态/灯箱 | `components/23-全屏模态灯箱.md` | 点击放大全屏展示 |
 
 ### 使用规则
 
