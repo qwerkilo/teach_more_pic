@@ -104,6 +104,22 @@ test("semantic: nav present passes", not v.check_semantic_html(
 test("semantic: none fails", len(v.check_semantic_html(
     '<html><div></div></html>')) > 0)
 
+# ==== check_lib_deps ====
+test("lib deps: no echarts/three.js passes", not v.check_lib_deps(
+    '<html><p>hello</p></html>', '.'))
+test("lib deps: echarts CDN passes", not v.check_lib_deps(
+    '<html><script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>echarts.init()</html>', '.'))
+test("lib deps: three.js CDN passes", not v.check_lib_deps(
+    '<html><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>new THREE.Scene()</html>', '.'))
+test("lib deps: echarts local passes", not v.check_lib_deps(
+    '<html>echarts.init()</html>', '.'))
+test("lib deps: three.js local passes", not v.check_lib_deps(
+    '<html>new THREE.Scene()</html>', '.'))
+test("lib deps: echarts no lib fails", len(v.check_lib_deps(
+    '<html>echarts.init()</html>', 'C:\\nonexistent')) > 0)
+test("lib deps: three.js no lib fails", len(v.check_lib_deps(
+    '<html>new THREE.Scene()</html>', 'C:\\nonexistent')) > 0)
+
 # ==== Results ====
 print(f"\n{PASS} passed, {FAIL} failed")
 if FAIL > 0:

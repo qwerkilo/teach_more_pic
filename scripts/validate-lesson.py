@@ -215,6 +215,22 @@ def check_semantic_html(html):
     return ["No semantic HTML elements found (use <article>/<section>/<nav>/<aside>)"]
 
 
+def check_lib_deps(html, base_dir):
+    """Verify ECharts and Three.js lib files exist when used."""
+    issues = []
+    if re.search(r'echarts\.init\(', html):
+        has_local = os.path.exists(os.path.join(base_dir, "libs", "echarts.min.js"))
+        has_cdn = "cdn.jsdelivr.net/npm/echarts" in html
+        if not has_local and not has_cdn:
+            issues.append("ECharts usage found but no libs/echarts.min.js or CDN link")
+    if re.search(r'new THREE\.', html) or re.search(r'\bTHREE\b', html):
+        has_local = os.path.exists(os.path.join(base_dir, "libs", "three.min.js"))
+        has_cdn = "cdnjs.cloudflare.com/ajax/libs/three.js" in html
+        if not has_local and not has_cdn:
+            issues.append("Three.js usage found but no libs/three.min.js or CDN link")
+    return issues
+
+
 def run_all(path):
     if not os.path.exists(path):
         print(f"{FAIL} File not found: {path}")
@@ -240,6 +256,7 @@ def run_all(path):
         (":focus-visible outline", check_focus_visible(html)),
         ("tabular-nums alignment", check_tabular_nums(html)),
         ("Semantic HTML elements", check_semantic_html(html)),
+        ("Library deps (ECharts/Three.js)", check_lib_deps(html, base_dir)),
     ]
 
     all_pass = True
