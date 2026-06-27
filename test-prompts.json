@@ -8,5 +8,7 @@
   {"id": 7, "prompt": "第 14 课中雷曼兄弟破产前后的时间线用交互式时间线重写，至少 5 个事件，全部默认折叠", "expected": "产出 tl-interactive HTML 含 5+ 个 tli-item，全部 data-expanded=false，含完整 CSS/JS"},
   {"id": 8, "prompt": "第 3 课（货币政策工具）用一个带数字标注点的图片替换纯文字说明，标注至少 4 个关键工具", "expected": "产出 annotated-img HTML 含至少 4 个 ai-dot，百分比坐标，含完整 CSS/JS"},
   {"id": 9, "prompt": "在课程中加入一张 4×4 的对比表展示四种经济政策的实施成本、覆盖范围、见效速度、可持续性，列头可点击排序", "expected": "产出 cmp-table HTML 含 4 行 x 4 列 data-sortable 表格，含排序 JS"},
-  {"id": 10, "prompt": "第 6 课末尾增加一个信息面板用于显示「明斯基时刻」的术语详解，正文中插入触发按钮", "expected": "产出 info-panel HTML + ip-btn 触发按钮，含面板 CSS/JS 和 ESC 关闭逻辑"}
+  {"id": 10, "prompt": "第 6 课末尾增加一个信息面板用于显示「明斯基时刻」的术语详解，正文中插入触发按钮", "expected": "产出 info-panel HTML + ip-btn 触发按钮，含面板 CSS/JS 和 ESC 关闭逻辑"},
+  {"id": 11, "prompt": "第 7 课（全球GDP对比）加入纵向柱状图展示美中日英四国经济规模，再用饼图展示各国GDP构成比例", "expected": "产出 vchart 柱状图 + pie-chart SVG 饼图 HTML，使用 var(--accent/success/warning/error) 等主题变量"},
+  {"id": 12, "prompt": "第 10 课（2008-2009 经济走势）用折线图展示 GDP 季度变化趋势，5-7 个数据点", "expected": "产出 line-chart SVG 折线图 HTML，含 polyline + 数据点 circle，网格线虚线"}
 ]
