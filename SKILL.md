@@ -326,6 +326,7 @@ Step 6: SPA 集成
   - 🔴 验证：`id="lesson-NNN"` 在 `index.html` 中不与其他课程冲突
   - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
   - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
+  - 🔴 如课程使用了 ECharts 组件（#26），将 `libs/echarts.min.js` 复制到目标项目的 `libs/` 目录
 
 Step 7: 知识图谱更新
   - 在 `kg-yuecai.html` 的 `graphData.nodes[]` 和 `links[]` 中追加新课程节点
@@ -349,6 +350,7 @@ Step 7: 知识图谱更新
 | 主题切换后 h2 下划线颜色不变 | CSS 中使用固定色而非 `var(--accent)` | 确保使用 `border-bottom-color: var(--accent)` |
 | SVG viewBox 比例不匹配 width/height | 图片被不等比例拉伸 | 确保 viewBox 宽高比 = width/height 比 |
 | 折叠组件 `height` 从 `auto` 过渡 | CSS transition 无效 | JS 中先测量 scrollHeight 再设 px，恢复 auto |
+| ECharts 图表空白（echarts 未定义） | `libs/echarts.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
 | SPA 中课程 `id` 冲突 | 两个 `<section>` 用了相同 `id` | 使用 `id="lesson-NNN"` 格式，NNN 为课程编号 |
 | `index.html` 中课程区块未显示 | `<section>` 插在了 `<body>` 外部 | 确认在 `</body>` 前插入，不是 `</html>` 之后 |
 | 组件特定的其他问题 | 见对应 `components/NN-name.md` 中的降级说明 | — |
