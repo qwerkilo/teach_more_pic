@@ -2,10 +2,13 @@
 name: teach_more_pic
 description: >
   Teach a concept with visual-heavy HTML lessons: SVG flowcharts (via fireworks-tech-graph),
-  CSS timelines, bar charts, role cards. Use when creating new lessons or redesigning
-  existing ones for visual variety. Complements the base `teach` skill — run both.
+  CSS timelines, bar charts, role cards, data grids, comparison tables, interactive timelines,
+  charts (bar/pie/line/stacked), foldable steps, tab panels, heatmaps, lightbox modals.
+  Use when creating new lessons or redesigning existing ones for visual variety.
+  Complements the base `teach` skill — run both.
   Triggers: "visual lesson", "redesign lesson", "add diagrams", "图表", "流程图",
-  "SVG", "diagram", "timeline", "infographic", "可视化", "图示".
+  "SVG", "diagram", "timeline", "infographic", "可视化", "图示", "数据可视化", "图表",
+  "流程图", "时间线", "交互式", "数据卡片", "热力图", "对比表".
 disable-model-invocation: true
 argument-hint: "What lesson to create or redesign?"
 ---
@@ -313,17 +316,20 @@ Step 5: 配套产出
   - 调用 base `teach` skill 的 learning-record 模板，生成课程学习记录（含课程名、日期、关键概念列表）
   - EPUB 重建：如本课程隶属于某个系列（已有 `.epub` 文件），用 `teach` skill 的 EPUB 工具重新打包
   - 🔴 课程间链接验证：打开所有 `<a href="NNNN-slug.html">` 确认目标文件存在
+  - 🛑 STOP：用户确认配套产出无误后再进入 SPA 集成
 
 Step 6: SPA 集成
   - 将生成的 `lessons/NNN-slug.html` 内容内联到 `index.html`：
     · 在 `index.html` 的 `</body>` 前插入 `<section class="lesson-view" id="lesson-NNN">...</section>`
     · 确保每课一个独立的 `<section>`，用 `id="lesson-NNN"` 索引
+  - 🔴 验证：`id="lesson-NNN"` 在 `index.html` 中不与其他课程冲突
   - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
   - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
 
 Step 7: 知识图谱更新
   - 在 `kg-yuecai.html` 的 `graphData.nodes[]` 和 `links[]` 中追加新课程节点
   - 提取课程中的关键概念/术语作为节点，课程间的链接作为边
+  - 🔴 验证：新节点 id 不与已有节点重复
 ```
 
 ## 失败模式与异常处理
