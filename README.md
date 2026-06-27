@@ -14,6 +14,20 @@
 - [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) — SVG 流程图创建（**必备**，所有 SVG 流程图依赖此 skill）
 - [knowledge-graph-map](https://github.com/AragornZJF/knowledge-graph-map) — 知识图谱可视化（**必备**，课程完成后创建知识点图谱）
 
+### 发给 agent 安装（推荐）
+
+将以下内容发送给 OpenCode / Claude / Cursor 等 AI 助手一次安装所有前置技能：
+
+```
+帮我安装以下技能：
+1. teach — https://github.com/mattpocock/skills/tree/main/teach
+2. grill-me — https://github.com/mattpocock/skills/tree/main/grill-me
+3. fireworks-tech-graph — https://github.com/yizhiyanhua-ai/fireworks-tech-graph
+4. knowledge-graph-map — https://github.com/AragornZJF/knowledge-graph-map
+5. teach_more_pic — https://github.com/qwerkilo/teach_more_pic
+都克隆到 ~/.agents/skills/ 目录下。
+```
+
 ### 手动安装
 
 ```bash
