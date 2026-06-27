@@ -10,7 +10,8 @@
 
 本技能需要 [opencode](https://opencode.ai) 环境。已安装了以下 base skill：
 - [teach](https://github.com/mattpocock/skills/tree/main/teach) — 基础课程制作技能（必装）
-- [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) — SVG 流程图创建（**必备**，本技能所有 SVG 流程图依赖此 skill）
+- [grill-me](https://github.com/mattpocock/skills/tree/main/grill-me) — 需求拷问技能（**必备**，制课前对用户进行需求澄清）
+- [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) — SVG 流程图创建（**必备**，所有 SVG 流程图依赖此 skill）
 
 ### 手动安装
 
@@ -21,7 +22,7 @@ git clone https://github.com/qwerkilo/teach_more_pic
 
 # 同时安装 base teach skill（位于 mattpocock/skills 仓库中）
 git clone https://github.com/mattpocock/skills
-# 然后复制或链接 skills/teach 到 .agents/skills/teach
+# 然后复制或链接 skills/teach 和 skills/grill-me 到 .agents/skills/ 下
 ```
 
 ### 通过 AGENTS.md 配置
@@ -29,7 +30,7 @@ git clone https://github.com/mattpocock/skills
 在项目根目录的 `AGENTS.md` 中引用这些 skill：
 
 ```
-Skills: teach, teach_more_pic, fireworks-tech-graph
+Skills: teach, grill-me, teach_more_pic, fireworks-tech-graph
 ```
 
 ## 能力
