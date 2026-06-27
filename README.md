@@ -90,9 +90,10 @@ python scripts/test_validate.py
 
 ## 课程制作流程
 
-1. 复制 `templates/lesson-starter.html` 作为新课程骨架
-2. 从 SKILL.md 组件索引表选 2-3 个组件
-3. 打开对应 `components/NN-name.md`，复制 HTML/CSS/JS 合并到模板中
+0. **使用 `grill-me` skill 拷问需求** — 澄清主题/受众/叙事矛盾/数据/风格偏好，确认后再继续
+1. 复制 `templates/lesson-starter.html` 作为新课程骨架 → 确认三幕大纲
+2. 从 SKILL.md 组件索引表选 4-7 个组件（每幕 1-3 个），使用决策指南匹配 → 确认组件清单
+3. 打开对应 `components/NN-name.md`，复制 ````html`/```css`/```js` 合并到模板中
 4. SVG 保存为 `lessons/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
 5. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
 
@@ -100,15 +101,16 @@ python scripts/test_validate.py
 
 ```
 ├── SKILL.md               ← 唯一入口文档，所有规则在此
-├── components/             各组件独立文件（22 个 .md），含 HTML/CSS/JS/降级说明
+├── components/             各组件独立文件（25 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
 │   ├── validate-lesson.py  课程验证脚本（11 项检查）
 │   ├── test_validate.py    验证脚本单元测试（29 项）（Popover/dialog 一致性检查）
 │   └── run-tests.ps1       批量验证所有示例
-├── examples/               组件用法示例（19 个 .html）
+├── examples/               组件用法示例（21 个 .html）
 ├── templates/              5 个模板（4 SVG 骨架 + 1 课程起始 HTML）
 ├── theme/19 个品牌 DESIGN.md  各品牌设计语言参考
-└── test-prompts.json       测试提示词（10 个场景）
+├── test-prompts.json       测试提示词（12 个场景）
+└── results.tsv             darwin-skill 优化记录
 ```
 
 ## 前置依赖
