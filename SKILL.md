@@ -283,7 +283,7 @@ Step 2: 设计视觉组件
   - 🔴 输出：组件选择清单（组件名+编号+所属幕），展示给用户确认
   - 🛑 STOP：用户确认组件清单后再进入 Step 3
   - 🔴 每个 SVG 创建后立即验证：`python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"`
-  - **SVG 需同时保存为磁盘文件和内联到 HTML**：`lessons/NNNN-slug.svg` 保留为独立文件，同时将 SVG 内容复制到 HTML 中用 `<figure class="svg-fig">` 包裹内联
+  - **SVG 需同时保存为磁盘文件和内联到 HTML**：`lessons/svg/NNNN-slug.svg` 保留为独立文件，同时将 SVG 内容复制到 HTML 中用 `<figure class="svg-fig">` 包裹内联
 
 Step 3: 写 HTML
   - 复制 `templates/lesson-starter.html` 作为新课程骨架，填入标题/内容

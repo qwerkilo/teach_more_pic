@@ -94,7 +94,7 @@ python scripts/test_validate.py
 1. 复制 `templates/lesson-starter.html` 作为新课程骨架 → 确认三幕大纲
 2. 从 SKILL.md 组件索引表选 4-7 个组件（每幕 1-3 个），使用决策指南匹配 → 确认组件清单
 3. 打开对应 `components/NN-name.md`，复制 ````html`/```css`/```js` 合并到模板中
-4. SVG 保存为 `lessons/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
+4. SVG 保存为 `lessons/svg/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
 5. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
 
 ## 项目结构

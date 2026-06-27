@@ -20,5 +20,5 @@
 - 容器保证居中对齐 + 响应式缩放
 
 降级说明：
-- **SVG 内联导致布局溢出**：检查外层容器或改用 `<img src="NNNN-slug.svg">`
-- **需要下载原图**：在 `.svg-fig` 下方加 `<a href="NNNN-slug.svg" download>` 链接
+- **SVG 内联导致布局溢出**：检查外层容器或改用 `<img src="svg/NNNN-slug.svg">`
+- **需要下载原图**：在 `.svg-fig` 下方加 `<a href="svg/NNNN-slug.svg" download>` 链接
