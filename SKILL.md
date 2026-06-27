@@ -313,6 +313,11 @@ Step 5: 配套产出
   - 调用 base `teach` skill 的 learning-record 模板，生成课程学习记录（含课程名、日期、关键概念列表）
   - EPUB 重建：如本课程隶属于某个系列（已有 `.epub` 文件），用 `teach` skill 的 EPUB 工具重新打包
   - 🔴 课程间链接验证：打开所有 `<a href="NNNN-slug.html">` 确认目标文件存在
+
+Step 6: 知识图谱更新
+  - 使用 `knowledge-graph-map` skill 为本课程创建或更新知识图谱
+  - 提取课程中的关键概念/术语作为节点，课程间的链接作为边
+  - 🔴 确保新节点与已有图谱中的节点正确连接
 ```
 
 ## 失败模式与异常处理

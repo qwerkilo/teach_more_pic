@@ -12,6 +12,7 @@
 - [teach](https://github.com/mattpocock/skills/tree/main/teach) — 基础课程制作技能（必装）
 - [grill-me](https://github.com/mattpocock/skills/tree/main/grill-me) — 需求拷问技能（**必备**，制课前对用户进行需求澄清）
 - [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) — SVG 流程图创建（**必备**，所有 SVG 流程图依赖此 skill）
+- [knowledge-graph-map](https://github.com/AragornZJF/knowledge-graph-map) — 知识图谱可视化（**必备**，课程完成后创建知识点图谱）
 
 ### 手动安装
 
@@ -30,7 +31,7 @@ git clone https://github.com/mattpocock/skills
 在项目根目录的 `AGENTS.md` 中引用这些 skill：
 
 ```
-Skills: teach, grill-me, teach_more_pic, fireworks-tech-graph
+Skills: teach, grill-me, teach_more_pic, fireworks-tech-graph, knowledge-graph-map
 ```
 
 ## 能力
