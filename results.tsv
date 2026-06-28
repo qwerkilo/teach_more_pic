@@ -7,3 +7,7 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-06-28T12:05	f4d4b3b	teach_more_pic	79.2	79.8	keep	D4	Step4/7 加 STOP 检查点	dry_run
 2026-06-28T12:10	29129e7	teach_more_pic	79.8	81.5	keep	D5	替换"建议"措辞 + 文件命名 + 设计读法格式	dry_run
 2026-06-28T12:15	c8ae98f	teach_more_pic	81.5	82.1	keep	D4	Step6 SPA 加 STOP 检查点	dry_run
+2026-06-28T14:22	baseline	teach_more_pic	-	82.3	baseline	-	基线评估（9维：9/9/9/8/9/8/8/7/9）	dry_run
+2026-06-28T14:30	306f6b7	teach_more_pic	82.3	85.8	keep	D8	Step3 添加最终 HTML 结构示例	dry_run
+2026-06-28T14:35	ecc8f8b	teach_more_pic	85.8	86.0	keep	D1	frontmatter 补充 NOT scope + 新触发器	dry_run
+2026-06-28T14:40	3637db9	teach_more_pic	86.0	86.6	keep	D4	STOP 改为等待用户"确认"回复 + 修改循环	dry_run
