@@ -319,8 +319,10 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <!-- ===== 落地页：课程列表 ===== -->
   <div class="landing-view" id="landing-view">
     <div class="landing-hero">
-      <h2>课程目录</h2>
-      <p><!-- 系列描述，例如：用视觉化方式理解经济金融的核心机制。SPA 内展示课程简介，完整内容请打开对应 NNNN-slug.html --></p>
+      <h2 data-lang="zh">课程目录</h2>
+      <h2 data-lang="en">Course Catalog</h2>
+      <p data-lang="zh"><!-- 系列描述，例如：用视觉化方式理解经济金融的核心机制。SPA 内展示课程简介，完整内容请打开对应 NNNN-slug.html --></p>
+      <p data-lang="en"><!-- Course description. SPA shows course summary; full content at NNNN-slug.html --></p>
     </div>
     <div class="lesson-grid" id="lesson-grid">
       <!-- ===== 课程卡片占位 ===== -->
@@ -347,25 +349,33 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <section class="lesson-view" id="lesson-1">
   <div class="lesson-nav">
     <button class="back-btn" data-back>&larr; 返回目录</button>
-    <span class="lesson-title">第 1 课</span>
-    <a class="lesson-link" href="lessons/0001-slug.html" target="_blank"><i class="fas fa-external-link-alt"></i>完整课程</a>
+    <span class="lesson-title" data-lang="zh">第 1 课</span>
+    <span class="lesson-title" data-lang="en">Lesson 1</span>
+    <a class="lesson-link" href="lessons/0001-slug.html" target="_blank">完整课程 (Full Lesson)</a>
   </div>
   <article class="cover-page">
-    <div class="cover-badge">第 1 课</div>
-    <h1>标题</h1>
-    <p class="cover-subtitle">副标题</p>
-    <p class="cover-hook">引子</p>
+    <div class="cover-badge" data-lang="zh">第 1 课</div>
+    <div class="cover-badge" data-lang="en">Lesson 1</div>
+    <h1 data-lang="zh">标题</h1>
+    <h1 data-lang="en">Title</h1>
+    <p class="cover-subtitle" data-lang="zh">副标题</p>
+    <p class="cover-subtitle" data-lang="en">Subtitle</p>
+    <p class="cover-hook" data-lang="zh">引子</p>
+    <p class="cover-hook" data-lang="en">Hook</p>
   </article>
-  <p>内容...</p>
+  <p data-lang="zh">内容...</p>
+  <p data-lang="en">Content...</p>
 </section>
 
 <section class="lesson-view" id="lesson-2">
   <div class="lesson-nav">
     <button class="back-btn" data-back>&larr; 返回目录</button>
-    <span class="lesson-title">第 2 课</span>
-    <a class="lesson-link" href="lessons/0002-slug.html" target="_blank"><i class="fas fa-external-link-alt"></i>完整课程</a>
+    <span class="lesson-title" data-lang="zh">第 2 课</span>
+    <span class="lesson-title" data-lang="en">Lesson 2</span>
+    <a class="lesson-link" href="lessons/0002-slug.html" target="_blank">完整课程 (Full Lesson)</a>
   </div>
-  <p>内容...</p>
+  <p data-lang="zh">内容...</p>
+  <p data-lang="en">Content...</p>
 </section>
 -->
 
