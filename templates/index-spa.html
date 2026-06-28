@@ -241,6 +241,9 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 .back-btn:hover { background: var(--surface-raised); }
 .back-btn:active { transform: scale(0.98); }
 .lesson-nav .lesson-title { font-size: 0.9rem; font-weight: 600; color: var(--muted); }
+.lesson-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; padding: 0.3em 0.6em; border: 1px solid var(--border); border-radius: 6px; transition: background 0.15s ease; }
+.lesson-link:hover { background: var(--surface-raised); }
+.lesson-link i { margin-right: 4px; }
 
 /* ===== 课程内页面排版（与 lesson-starter 一致） ===== */
 .lesson-view .cover-page { text-align: center; padding: 3rem 1rem; margin-bottom: 2rem; border-bottom: 2px solid var(--accent); }
@@ -340,6 +343,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <div class="lesson-nav">
     <button class="back-btn" data-back>&larr; 返回目录</button>
     <span class="lesson-title">第 1 课</span>
+    <a class="lesson-link" href="lessons/0001-slug.html" target="_blank"><i class="fas fa-external-link-alt"></i>完整课程</a>
   </div>
   <article class="cover-page">
     <div class="cover-badge">第 1 课</div>
@@ -354,6 +358,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <div class="lesson-nav">
     <button class="back-btn" data-back>&larr; 返回目录</button>
     <span class="lesson-title">第 2 课</span>
+    <a class="lesson-link" href="lessons/0002-slug.html" target="_blank"><i class="fas fa-external-link-alt"></i>完整课程</a>
   </div>
   <p>内容...</p>
 </section>
