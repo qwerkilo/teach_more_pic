@@ -268,6 +268,14 @@ Step 7: 知识图谱更新
   - 节点名使用 `nameZh`/`nameEn` 双字段，图谱通过 L 键切换语言
   - 🔴 验证：新节点 id 不与已有节点重复
   - 🛑 STOP：确认图谱显示正确后再提交最终成果
+
+Step 8: 本地 HTTP 服务器（可选）
+  - 从 `templates/start-server.ps1` 复制到项目根目录
+  - 运行 `powershell -ExecutionPolicy Bypass -File start-server.ps1`
+  - 自动打开浏览器到 `index.html`（有 SPA 时）或第一课
+  - 按 Q 键停止服务器
+  - Python 内置 `http.server`，无需额外依赖
+  - Linux/macOS 替代：`python3 -m http.server 8000 && open http://localhost:8000/lessons/NNNN-slug.html`
 ```
 
 ## 文件资源速查
@@ -277,6 +285,8 @@ Step 7: 知识图谱更新
 | `templates/lesson-starter.html` | 课程骨架模板（所有课程的起点） | Step 3 |
 | `templates/index-spa.html` | SPA 课程集线器模板 | Step 6 |
 | `templates/kg-starter.html` | 知识图谱模板（双语 nameZh/nameEn） | Step 7 |
+| `templates/start-server.ps1` | 本地 HTTP 服务器启动脚本（Windows） | Step 8 |
+| `templates/start-server.sh` | 本地 HTTP 服务器启动脚本（Linux/macOS） | Step 8 |
 | `components/NN-name.md` | 组件代码 + 降级说明（27 个） | Step 2/3 |
 | `references/decision-guide.md` | 组件选择决策矩阵 + 组合示例 | Step 2 |
 | `references/page-types.md` | 封面/分隔页/总结页 HTML/CSS 代码 | 可选页面类型 |
