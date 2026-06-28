@@ -202,6 +202,7 @@ Step 6: SPA 集成
   - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
   - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
   - 🔴 如课程使用了 ECharts 组件（#26），将 `libs/echarts.min.js` 复制到目标项目的 `libs/` 目录
+  - 🛑 STOP：确认 SPA 预览正常后再进入 Step 7
 
 Step 7: 知识图谱更新
   - 新项目可从 `templates/kg-starter.html` 复制骨架，填入 `graphData.nodes[]` + `links[]`
