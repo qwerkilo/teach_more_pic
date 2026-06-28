@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="warm">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程系列</title>
+<style>
+/* ===== CSS 变量与主题 ===== */
+:root {
+  --bg: #faf9f7; --text: #1a1a1a; --accent: #c0392b;
+  --accent-text: #ffffff; --surface: #f5f0eb; --border: #ddd8d0;
+  --surface-raised: #ece6dd; --muted: #888;
+  --link: #c0392b; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "Noto Serif CJK SC",Georgia,"Times New Roman",serif;
+  --font-h: "Noto Serif CJK SC",Georgia,"Times New Roman",serif;
+  --lh: 1.8; --h1-size: 2rem; --h2-size: 1.3rem;
+  --body-size: 1rem; --small-size: 0.85rem;
+  --radius: 8px; --anim-dur: 0.3s; --anim-y: 18px;
+  --h2-border: 1px solid #ddd; --h1-size: 2rem;
+}
+[data-theme="airbnb"] {
+  --bg: #ffffff; --text: #222222; --accent: #ff385c;
+  --accent-text: #ffffff; --surface: #ffffff; --border: #dddddd;
+  --surface-raised: #f2f2f2; --muted: #6a6a6a;
+  --link: #ff385c; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "Airbnb Cereal VF",sans-serif; --font-h: "Airbnb Cereal VF",sans-serif;
+  --lh: 1.25;
+}
+[data-theme="airtable"] {
+  --bg: #ffffff; --text: #181d26; --accent: #181d26;
+  --accent-text: #ffffff; --surface: #f8fafc; --border: #dddddd;
+  --surface-raised: #e0e2e6; --muted: #41454d;
+  --link: #1b61c9; --success: #006400; --warning: #d97706; --error: #dc2626;
+  --font: "Inter Display",sans-serif; --font-h: "Inter Display",sans-serif;
+  --lh: 1.3;
+}
+[data-theme="apple"] {
+  --bg: #ffffff; --text: #1d1d1f; --accent: #0066cc;
+  --accent-text: #ffffff; --surface: #f5f5f7; --border: #e0e0e0;
+  --surface-raised: #f5f5f7; --muted: #666666;
+  --link: #0066cc; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "SF Pro Text",sans-serif; --font-h: "SF Pro Text",sans-serif;
+  --lh: 1.5; --radius: 12px; --anim-dur: 0.8s; --anim-y: 20px;
+}
+[data-theme="binance"] {
+  --bg: #ffffff; --text: #181a20; --accent: #fcd535;
+  --accent-text: #181a20; --surface: #f5f5f5; --border: #e0e0e0;
+  --surface-raised: #f5f5f5; --muted: #707a8a;
+  --link: #fcd535; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "BinanceNova",sans-serif; --font-h: "BinancePlex",sans-serif;
+  --lh: 1.4;
+}
+[data-theme="bmw-m"] {
+  --bg: #000000; --text: #ffffff; --accent: #ffffff;
+  --accent-text: #000000; --surface: #1a1a1a; --border: #3c3c3c;
+  --surface-raised: #262626; --muted: #7e7e7e;
+  --link: #ffffff; --success: #0fa336; --warning: #f4b400; --error: #dc2626;
+  --font: "BMWTypeNextLatin",sans-serif; --font-h: "BMWTypeNextLatin",sans-serif;
+  --lh: 1.4;
+}
+[data-theme="claude"] {
+  --bg: #faf9f5; --text: #141413; --accent: #cc785c;
+  --accent-text: #ffffff; --surface: #efe9de; --border: #e6dfd8;
+  --surface-raised: #efe9de; --muted: #6c6a64;
+  --link: #cc785c; --success: #5db872; --warning: #d4a017; --error: #c64545;
+  --font: "StyreneB",sans-serif; --font-h: "Copernicus",sans-serif;
+  --lh: 1.4;
+}
+[data-theme="cursor"] {
+  --bg: #f7f7f4; --text: #26251e; --accent: #f54e00;
+  --accent-text: #ffffff; --surface: #ffffff; --border: #e6e5e0;
+  --surface-raised: #e6e5e0; --muted: #807d72;
+  --link: #f54e00; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "CursorGothic",sans-serif; --font-h: "CursorGothic",sans-serif;
+  --lh: 1.4;
+}
+[data-theme="dell-1996"] {
+  --bg: #ffffff; --text: #000000; --accent: #e91d2a;
+  --accent-text: #ffffff; --surface: #ffffff; --border: #e0e0e0;
+  --surface-raised: #ffffff; --muted: #666666;
+  --link: #0000ee; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "Times New Roman",sans-serif; --font-h: "Helvetica",sans-serif;
+  --lh: 1.35;
+}
+[data-theme="figma"] {
+  --bg: #ffffff; --text: #000000; --accent: #000000;
+  --accent-text: #ffffff; --surface: #f7f7f5; --border: #e6e6e6;
+  --surface-raised: #f7f7f5; --muted: #666666;
+  --link: #000000; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "figmaMono",sans-serif; --font-h: "figmaSans",sans-serif;
+  --lh: 1.5;
+}
+[data-theme="hp"] {
+  --bg: #ffffff; --text: #1a1a1a; --accent: #024ad8;
+  --accent-text: #ffffff; --surface: #f5f5f5; --border: #e8e8e8;
+  --surface-raised: #f5f5f5; --muted: #666666;
+  --link: #024ad8; --success: #16a34a; --warning: #d97706; --error: #b3262b;
+  --font: "Forma DJR Micro",sans-serif; --font-h: "Forma DJR Micro",sans-serif;
+  --lh: 1.17;
+}
+[data-theme="ibm"] {
+  --bg: #ffffff; --text: #161616; --accent: #0f62fe;
+  --accent-text: #ffffff; --surface: #f5f5f5; --border: #e0e0e0;
+  --surface-raised: #f5f5f5; --muted: #525252;
+  --link: #0f62fe; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "IBM Plex Sans",sans-serif; --font-h: "IBM Plex Sans",sans-serif;
+  --lh: 1.33;
+}
+[data-theme="minimax"] {
+  --bg: #ffffff; --text: #0a0a0a; --accent: #0a0a0a;
+  --accent-text: #ffffff; --surface: #f2f3f5; --border: #e5e7eb;
+  --surface-raised: #f2f3f5; --muted: #a8aab2;
+  --link: #0a0a0a; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "DM Sans",sans-serif; --font-h: "DM Sans",sans-serif;
+  --lh: 1.6; --radius: 8px; --anim-dur: 0.35s; --anim-y: 30px; --h2-border: none; --h1-size: 2.4rem;
+}
+[data-theme="nike"] {
+  --bg: #ffffff; --text: #111111; --accent: #111111;
+  --accent-text: #ffffff; --surface: #f5f5f5; --border: #cacacb;
+  --surface-raised: #f5f5f5; --muted: #666666;
+  --link: #111111; --success: #007d48; --warning: #d97706; --error: #dc2626;
+  --font: "Helvetica Now Text Medium",sans-serif; --font-h: "Helvetica Now Display Medium",sans-serif;
+  --lh: 1.5;
+}
+[data-theme="notion"] {
+  --bg: #ffffff; --text: #1a1a1a; --accent: #5645d4;
+  --accent-text: #ffffff; --surface: #fafaf9; --border: #e5e3df;
+  --surface-raised: #fafaf9; --muted: #bbb8b1;
+  --link: #0075de; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "Notion Sans",sans-serif; --font-h: "Notion Sans",sans-serif;
+  --lh: 1.4;
+}
+[data-theme="nvidia"] {
+  --bg: #ffffff; --text: #000000; --accent: #76b900;
+  --accent-text: #000000; --surface: #f7f7f7; --border: #cccccc;
+  --surface-raised: #1a1a1a; --muted: #666666;
+  --link: #0046a4; --success: #16a34a; --warning: #df6500; --error: #e52020;
+  --font: "NVIDIA-EMEA",sans-serif; --font-h: "NVIDIA-EMEA",sans-serif;
+  --lh: 1.55; --radius: 2px; --anim-dur: 0s; --anim-y: 0px; --h2-border: 2px solid var(--accent); --h1-size: 1.9rem;
+}
+[data-theme="spotify"] {
+  --bg: #121212; --text: #ffffff; --accent: #1ed760;
+  --accent-text: #000000; --surface: #181818; --border: #4d4d4d;
+  --surface-raised: #1f1f1f; --muted: #b3b3b3;
+  --link: #1ed760; --success: #1ed760; --warning: #ffa42b; --error: #f3727f;
+  --font: "SpotifyMixUI",sans-serif; --font-h: "SpotifyMixUITitle",sans-serif;
+  --lh: 1.5; --radius: 8px; --anim-dur: 0.3s; --anim-y: 0px; --h2-border: 1px solid #4d4d4d; --h1-size: 1.5rem;
+}
+[data-theme="tesla"] {
+  --bg: #ffffff; --text: #171a20; --accent: #3e6ae1;
+  --accent-text: #ffffff; --surface: #f4f4f4; --border: #d0d1d2;
+  --surface-raised: #f4f4f4; --muted: #5c5e62;
+  --link: #3e6ae1; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "Universal Sans Text",sans-serif; --font-h: "Universal Sans Display",sans-serif;
+  --lh: 1.43; --radius: 4px; --anim-dur: 0.33s; --anim-y: 0px; --h2-border: none; --h1-size: 2.5rem;
+}
+[data-theme="x.ai"] {
+  --bg: #0a0a0a; --text: #ffffff; --accent: #ffffff;
+  --accent-text: #0a0a0a; --surface: #191919; --border: #212327;
+  --surface-raised: #1a1c20; --muted: #7d8187;
+  --link: #ffffff; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "GeistMono",sans-serif; --font-h: "universalSans",sans-serif;
+  --lh: 1.6;
+}
+[data-theme="zapier"] {
+  --bg: #fffefb; --text: #201515; --accent: #ff4f00;
+  --accent-text: #fffefb; --surface: #f5f5f5; --border: #e0e0e0;
+  --surface-raised: #f5f5f5; --muted: #666666;
+  --link: #ff4f00; --success: #16a34a; --warning: #d97706; --error: #dc2626;
+  --font: "Degular Display",sans-serif; --font-h: "Inter",sans-serif;
+  --lh: 1.6;
+}
+
+/* ===== SPA 全局样式 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: var(--lh); min-height: 100vh; font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ===== 主布局 ===== */
+#app { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ===== 顶部栏 ===== */
+.site-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 0; border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem; flex-wrap: wrap; gap: 0.5rem;
+}
+.site-header h1 { font-size: 1.4rem; font-weight: 700; font-family: var(--font-h); }
+.site-header .meta { font-size: 0.78rem; color: var(--muted); }
+.header-actions { display: flex; align-items: center; gap: 8px; }
+
+.theme-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--border); cursor: pointer; padding: 0;
+  background: var(--accent); transition: transform 0.18s ease;
+}
+.theme-btn:hover { transform: scale(1.15); }
+
+/* ===== 落地页（课程列表） ===== */
+.landing-view { padding: 0 0 3rem; }
+.landing-hero { text-align: center; padding: 3rem 0 2rem; }
+.landing-hero h2 { font-size: 1.6rem; font-weight: 700; font-family: var(--font-h); }
+.landing-hero p { color: var(--muted); margin-top: 0.5rem; max-width: 540px; margin-left: auto; margin-right: auto; }
+.lesson-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem; margin-top: 2rem;
+}
+.lesson-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.2rem; cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex; flex-direction: column; gap: 0.4rem;
+}
+.lesson-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.lesson-card:active { transform: scale(0.98); }
+.lesson-card .card-num {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em;
+  color: var(--accent); text-transform: uppercase;
+}
+.lesson-card .card-title { font-size: 1rem; font-weight: 700; font-family: var(--font-h); }
+.lesson-card .card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+/* ===== 课程视图（SPA 切换） ===== */
+.lesson-view {
+  display: none; padding: 0 0 4rem;
+}
+.lesson-view.active { display: block; }
+
+.lesson-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 0; margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.5rem;
+}
+.back-btn {
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.4em 0.8em; font-size: 0.85rem; cursor: pointer;
+  color: var(--text); transition: background 0.15s ease;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.back-btn:hover { background: var(--surface-raised); }
+.back-btn:active { transform: scale(0.98); }
+.lesson-nav .lesson-title { font-size: 0.9rem; font-weight: 600; color: var(--muted); }
+
+/* ===== 课程内页面排版（与 lesson-starter 一致） ===== */
+.lesson-view .cover-page { text-align: center; padding: 3rem 1rem; margin-bottom: 2rem; border-bottom: 2px solid var(--accent); }
+.lesson-view .cover-badge { display: inline-block; padding: 0.2em 1em; background: var(--accent); color: var(--accent-text); border-radius: 3px; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 1em; }
+.lesson-view .cover-subtitle { font-size: 1.1rem; color: var(--muted); margin-top: 0.5em; }
+.lesson-view .cover-hook { font-size: 0.95rem; color: var(--muted); margin-top: 1em; font-style: italic; }
+.lesson-view h1 { font-size: var(--h1-size); font-family: var(--font-h); margin-top: 2rem; text-wrap: pretty; }
+.lesson-view h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-border); padding-bottom: 0.3em; margin-top: 2em; text-wrap: pretty; }
+.lesson-view p { margin: 1em 0; }
+.lesson-view .section-divider { text-align: center; padding: 3rem 1rem; margin: 3rem 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.lesson-view .divider-num { display: inline-block; padding: 0.1em 0.8em; background: var(--accent); color: var(--accent-text); border-radius: 3px; font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 0.5em; }
+.lesson-view .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+.lesson-view .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; }
+.lesson-view .summary-icon { font-size: 1.5rem; display: block; margin-bottom: 0.3em; }
+.lesson-view .quiz-section { margin: 2rem 0; }
+.lesson-view .quiz-question { margin: 1.5em 0; }
+.lesson-view .quiz-q-text { font-weight: 600; margin-bottom: 0.5em; }
+.lesson-view .quiz-option { display: block; width: 100%; padding: 0.5em 1em; margin: 0.3em 0; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); text-align: left; cursor: pointer; font-size: 0.9rem; }
+.lesson-view .quiz-option:hover { background: var(--surface-raised); }
+.lesson-view .quiz-option.correct { background: #d4edda; border-color: #28a745; }
+.lesson-view .quiz-option.wrong { background: #f8d7da; border-color: #dc3545; }
+.lesson-view .quiz-feedback { font-size: 0.85rem; margin-top: 0.3em; min-height: 1.2em; color: var(--muted); }
+
+/* ===== 动画 ===== */
+.lesson-view [data-anim] { opacity: 0; transform: translateY(var(--anim-y)); transition: opacity var(--anim-dur) ease-out, transform var(--anim-dur) ease-out; }
+.lesson-view [data-anim].in-view { opacity: 1; transform: translateY(0); }
+.lesson-view [data-anim="fade"] { transform: none; }
+@media (prefers-reduced-motion: reduce) { .lesson-view [data-anim] { opacity: 1; transform: none; transition: none; } }
+
+/* ===== 底部工具栏（与 lesson-starter 一致） ===== */
+.ui-toolbar { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(20,20,20,0.88); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.tp-btn-toggle { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; }
+.tp-btn-toggle:hover { opacity: 1; color: #ffffff; }
+.tp-panel { position: fixed; bottom: 70px; right: 20px; z-index: 998; background: #1a1a1a; border: 1px solid #333; border-radius: var(--radius, 8px); padding: 0.6em; box-shadow: 0 4px 16px rgba(0,0,0,0.3); display: none; max-height: 50vh; overflow-y: auto; }
+.tp-panel.open { display: block; }
+.tp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; min-width: 180px; }
+.tp-item { display: flex; align-items: center; gap: 6px; padding: 0.4em 0.6em; border: 1px solid transparent; border-radius: 6px; background: none; cursor: pointer; font-size: 0.82rem; color: #d0d0d0; text-align: left; transition: background 0.15s ease; }
+.tp-item:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+.tp-item.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 20%, #222); color: #ffffff; font-weight: 600; }
+.tp-item::before { content: ''; width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; background: var(--tp-color); border: 1px solid rgba(255,255,255,0.15); }
+
+/* ===== 响应式 ===== */
+@media (max-width: 640px) {
+  #app { padding: 0 1rem; }
+  .lesson-grid { grid-template-columns: 1fr; }
+  .site-header h1 { font-size: 1.1rem; }
+  .landing-hero h2 { font-size: 1.3rem; }
+}
+
+/* ===== 过渡动画 ===== */
+body { transition: background-color 0.35s ease-out, color 0.35s ease-out; }
+body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out, border-color 0.35s ease-out, box-shadow 0.35s ease-out; }
+@media (prefers-reduced-motion: reduce) { body, body * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- ===== SPA 主容器 ===== -->
+<div id="app">
+  <header class="site-header">
+    <h1>课程系列</h1>
+    <span class="meta" id="spa-meta"></span>
+    <div class="header-actions">
+      <button class="theme-btn" id="btn-cycle-theme" aria-label="切换主题" title="切换主题"></button>
+    </div>
+  </header>
+
+  <!-- ===== 落地页：课程列表 ===== -->
+  <div class="landing-view" id="landing-view">
+    <div class="landing-hero">
+      <h2>课程目录</h2>
+      <p><!-- 系列描述，例如：用视觉化方式理解经济金融的核心机制 --></p>
+    </div>
+    <div class="lesson-grid" id="lesson-grid">
+      <!-- ===== 课程卡片占位 ===== -->
+      <!--
+      <div class="lesson-card" data-lesson="1">
+        <span class="card-num">第 1 课</span>
+        <span class="card-title">课程标题</span>
+        <span class="card-desc">一句话描述</span>
+      </div>
+      <div class="lesson-card" data-lesson="2">
+        <span class="card-num">第 2 课</span>
+        <span class="card-title">课程标题</span>
+        <span class="card-desc">一句话描述</span>
+      </div>
+      -->
+    </div>
+  </div>
+</div>
+
+<!-- ===== 课程容器（切换前隐藏） ===== -->
+<!-- 每课一个独立的 <section>，用 id="lesson-NNN" 索引 -->
+<!--
+<section class="lesson-view" id="lesson-1">
+  <div class="lesson-nav">
+    <button class="back-btn" data-back>&larr; 返回目录</button>
+    <span class="lesson-title">第 1 课</span>
+  </div>
+  <article class="cover-page">
+    <div class="cover-badge">第 1 课</div>
+    <h1>标题</h1>
+    <p class="cover-subtitle">副标题</p>
+    <p class="cover-hook">引子</p>
+  </article>
+  <p>内容...</p>
+</section>
+
+<section class="lesson-view" id="lesson-2">
+  <div class="lesson-nav">
+    <button class="back-btn" data-back>&larr; 返回目录</button>
+    <span class="lesson-title">第 2 课</span>
+  </div>
+  <p>内容...</p>
+</section>
+-->
+
+<!-- ===== 底部工具栏 ===== -->
+<div class="ui-toolbar">
+  <button class="tp-btn-toggle" aria-label="切换主题" title="切换主题"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="7" r="2" fill="currentColor"/><path d="M4 15l4-4"/></svg></button>
+</div>
+<nav class="tp-panel">
+  <div class="tp-grid" role="listbox" aria-label="选择主题">
+    <button class="tp-item active" data-theme="warm" style="--tp-color:#c0392b;">暖色</button>
+    <button class="tp-item" data-theme="apple" style="--tp-color:#0066cc;">Apple</button>
+    <button class="tp-item" data-theme="minimax" style="--tp-color:#ff5530;">Minimax</button>
+    <button class="tp-item" data-theme="nvidia" style="--tp-color:#76b900;">NVIDIA</button>
+    <button class="tp-item" data-theme="spotify" style="--tp-color:#1ed760;">Spotify</button>
+    <button class="tp-item" data-theme="tesla" style="--tp-color:#3e6ae1;">Tesla</button>
+    <button class="tp-item" data-theme="airbnb" style="--tp-color:#ff385c;">Airbnb</button>
+    <button class="tp-item" data-theme="airtable" style="--tp-color:#181d26;">Airtable</button>
+    <button class="tp-item" data-theme="binance" style="--tp-color:#fcd535;">Binance</button>
+    <button class="tp-item" data-theme="bmw-m" style="--tp-color:#3c3c3c;">BMW M</button>
+    <button class="tp-item" data-theme="claude" style="--tp-color:#cc785c;">Claude</button>
+    <button class="tp-item" data-theme="cursor" style="--tp-color:#f54e00;">Cursor</button>
+    <button class="tp-item" data-theme="dell-1996" style="--tp-color:#e91d2a;">Dell 1996</button>
+    <button class="tp-item" data-theme="figma" style="--tp-color:#000000;">Figma</button>
+    <button class="tp-item" data-theme="hp" style="--tp-color:#024ad8;">HP</button>
+    <button class="tp-item" data-theme="ibm" style="--tp-color:#0f62fe;">IBM</button>
+    <button class="tp-item" data-theme="nike" style="--tp-color:#111111;">Nike</button>
+    <button class="tp-item" data-theme="notion" style="--tp-color:#5645d4;">Notion</button>
+    <button class="tp-item" data-theme="x.ai" style="--tp-color:#636363;">x.ai</button>
+    <button class="tp-item" data-theme="zapier" style="--tp-color:#ff4f00;">Zapier</button>
+  </div>
+</nav>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ===== 主题 ===== */
+  var t = ['warm','apple','minimax','nvidia','spotify','tesla','airbnb','airtable','binance','bmw-m','claude','cursor','dell-1996','figma','hp','ibm','nike','notion','x.ai','zapier'];
+  try { var s = localStorage.getItem('theme'); if (s && t.indexOf(s) > -1) document.documentElement.dataset.theme = s; } catch(e) {}
+  var i = t.indexOf(document.documentElement.dataset.theme); if (i < 0) i = 0;
+  var d = document.documentElement;
+
+  function applyTheme(th) {
+    d.dataset.theme = th; i = t.indexOf(th);
+    try { localStorage.setItem('theme', th); } catch(e) {}
+    document.querySelectorAll('.tp-item').forEach(function(x) { x.classList.toggle('active', x.dataset.theme === th); });
+  }
+
+  try {
+    document.querySelectorAll('.tp-item').forEach(function(b) {
+      b.addEventListener('click', function() { applyTheme(this.dataset.theme); document.querySelector('.tp-panel').classList.remove('open'); });
+    });
+  } catch(e) {}
+  try {
+    document.querySelector('.tp-btn-toggle').addEventListener('click', function() { document.querySelector('.tp-panel').classList.toggle('open'); });
+  } catch(e) {}
+  try {
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.ui-toolbar') && !e.target.closest('.tp-panel')) document.querySelector('.tp-panel').classList.remove('open');
+    });
+  } catch(e) {}
+  try {
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 't' && !e.ctrlKey && !e.metaKey) { applyTheme(t[(i + 1) % t.length]); }
+    });
+  } catch(e) {}
+
+  /* ===== SPA 导航 ===== */
+  var views = document.querySelectorAll('.lesson-view');
+  var landing = document.getElementById('landing-view');
+  var grid = document.getElementById('lesson-grid');
+
+  function showLanding() {
+    if (landing) landing.style.display = 'block';
+    views.forEach(function(v) { v.classList.remove('active'); });
+    if (history.replaceState) history.replaceState(null, '', '#');
+  }
+
+  function showLesson(id) {
+    var target = document.getElementById(id);
+    if (!target || !target.classList.contains('lesson-view')) return;
+    if (landing) landing.style.display = 'none';
+    views.forEach(function(v) { v.classList.remove('active'); });
+    target.classList.add('active');
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
+
+    var anims = target.querySelectorAll('[data-anim]');
+    if (anims.length) {
+      var io = new IntersectionObserver(function(es) {
+        es.forEach(function(e) { if (e.isIntersecting) e.classList.add('in-view'); });
+      });
+      anims.forEach(function(el) { io.observe(el); });
+    }
+  }
+
+  function navigateTo(hash) {
+    if (!hash || hash === '#') { showLanding(); return; }
+    var id = hash.replace('#', '');
+    if (id.match(/^lesson-\d+$/)) showLesson(id);
+    else showLanding();
+  }
+
+  /* ===== 初始化卡片 ===== */
+  views.forEach(function(v) {
+    var m = v.id.match(/^lesson-(\d+)$/);
+    if (!m) return;
+    var num = m[1];
+    var titleEl = v.querySelector('.cover-page h1');
+    var descEl = v.querySelector('.cover-subtitle');
+    var title = titleEl ? titleEl.textContent.trim() : ('第 ' + num + ' 课');
+    var desc = descEl ? descEl.textContent.trim() : '';
+    var card = document.createElement('div');
+    card.className = 'lesson-card';
+    card.setAttribute('data-lesson', num);
+    card.innerHTML = '<span class="card-num">第 ' + num + ' 课</span><span class="card-title">' + title + '</span>' + (desc ? '<span class="card-desc">' + desc + '</span>' : '');
+    card.addEventListener('click', function() { showLesson('lesson-' + num); });
+    if (grid) grid.appendChild(card);
+  });
+
+  /* ===== 返回按钮 ===== */
+  document.querySelectorAll('[data-back]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) { e.preventDefault(); showLanding(); });
+  });
+
+  /* ===== 页面统计 ===== */
+  var meta = document.getElementById('spa-meta');
+  if (meta) meta.textContent = views.length + ' 课';
+
+  /* ===== hash 路由 ===== */
+  window.addEventListener('hashchange', function() { navigateTo(location.hash); });
+  navigateTo(location.hash);
+
+  /* ===== 键盘导航（左右箭头切课） ===== */
+  try {
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        if (e.ctrlKey || e.metaKey) return;
+        var active = document.querySelector('.lesson-view.active');
+        if (!active) return;
+        var ids = Array.from(views).map(function(v) { return v.id; });
+        var idx = ids.indexOf(active.id);
+        if (idx < 0) return;
+        var next = e.key === 'ArrowRight' ? Math.min(idx + 1, ids.length - 1) : Math.max(idx - 1, 0);
+        if (next !== idx) showLesson(ids[next]);
+      }
+    });
+  } catch(e) {}
+
+  /* ===== 恢复初始主题激活 ===== */
+  document.querySelectorAll('.tp-item').forEach(function(x) { x.classList.toggle('active', x.dataset.theme === d.dataset.theme); });
+})();
+</script>
+</body>
+</html>

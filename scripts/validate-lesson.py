@@ -385,7 +385,8 @@ def run_all(path):
 
     base_dir = os.path.dirname(path)
     is_kg = "graphdata" in html.lower()
-    is_index = os.path.basename(path).lower() == "index.html"
+    basename = os.path.basename(path).lower()
+    is_index = basename == "index.html" or basename.startswith("index-")
 
     results = [
         ("SVG files exist & valid", check_svg_links(html, base_dir)),

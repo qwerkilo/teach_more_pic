@@ -101,7 +101,7 @@ python scripts/test_validate.py
 │   ├── test_validate.py    验证脚本单元测试（61 项，覆盖全部 17 项检查）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（21 个 .html）
-├── templates/              6 个模板（4 SVG 骨架 + 1 课程起始 HTML + 1 知识图谱骨架）
+├── templates/              7 个模板（4 SVG 骨架 + 1 课程起始 HTML + 1 知识图谱骨架 + 1 SPA 入口）
 ├── theme/19 个品牌 DESIGN.md  各品牌设计语言参考
 ├── test-prompts.json       测试提示词（12 个场景）
 └── results.tsv             darwin-skill 优化记录

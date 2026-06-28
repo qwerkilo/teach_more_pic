@@ -195,9 +195,10 @@ Step 5: 配套产出
   - 🛑 STOP：用户确认配套产出无误后再进入 SPA 集成
 
 Step 6: SPA 集成
-  - 将生成的 `lessons/NNN-slug.html` 内容内联到 `index.html`：
-    · 在 `index.html` 的 `</body>` 前插入 `<section class="lesson-view" id="lesson-NNN">...</section>`
-    · 确保每课一个独立的 `<section>`，用 `id="lesson-NNN"` 索引
+  - 从 `templates/index-spa.html` 复制骨架作为 `index.html`，插入各课的
+    `<section class="lesson-view" id="lesson-NNN">...</section>` 到注释标记处
+  - 已有 SPA 则直接追加新 `<section class="lesson-view">` 到 `</body>` 前
+  - 确保每课一个独立的 `<section>`，用 `id="lesson-NNN"` 索引
   - 🔴 验证：`id="lesson-NNN"` 在 `index.html` 中不与其他课程冲突
   - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
   - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
