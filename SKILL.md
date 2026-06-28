@@ -1,15 +1,12 @@
 ---
 name: teach_more_pic
 description: >
-  Teach a concept with visual-heavy HTML lessons: SVG flowcharts (via fireworks-tech-graph),
-  CSS timelines, bar charts, role cards, data grids, comparison tables, interactive timelines,
-  charts (bar/pie/line/stacked/force/sankey), foldable steps, tab panels, heatmaps, lightbox modals,
-  and 3D scenes with Three.js.
+   SVG + CSS + ECharts + D3.js + Three.js visual-heavy HTML lessons.
   Use when creating new lessons or redesigning existing ones for visual variety.
   Complements the base `teach` skill — run both.
   Does NOT: generate text content, write quiz questions, manage learning records, or build EPUB files.
   Triggers: "visual lesson", "redesign lesson", "add diagrams", "图表", "流程图",
-  "SVG", "diagram", "timeline", "infographic", "可视化", "图示", "数据可视化", "图表",
+  "SVG", "diagram", "timeline", "infographic", "可视化", "图示", "数据可视化",
   "流程图", "时间线", "交互式", "数据卡片", "热力图", "对比表", "力导向图", "桑基图",
   "3D 场景", "Three.js", "ECharts", "D3.js",
   "中英双语", "language switch", "语言切换", "bilingual".
@@ -26,7 +23,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - `fireworks-tech-graph` skill available (for SVG diagram creation)
 - 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js、magicui-effects.css，课程创建时完整复制到目标项目即可
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
-- Magic UI CSS 效果：`libs/magicui-effects.css` 共享 6 种装饰效果（shiny-text、noise-overlay、dot-bg、meteors、border-glow、blur-fade），所有模板和示例均已引用
+- Magic UI CSS 效果：`libs/magicui-effects.css` 共享 13 种零依赖装饰效果（shiny-text/noise/dot/grid/meteors/border-glow/glare-hover/gradient-text/blur/neon-card/spotlight-card/interactive-btn/typing-cursor），所有模板和示例均已引用
 
 ## 核心约定
 
@@ -135,28 +132,34 @@ c.addEventListener('transitionend',function h(){c.removeEventListener('transitio
 
 ### 组件选择决策指南
 
-按内容类型选择最合适的组件。六个象限和完整决策表见 `references/decision-guide.md`。
+按内容类型选择最合适的组件。七个象限和完整决策表见 `references/decision-guide.md`。
 
 快速摘要：
 
 | 象限 | 适用场景 | 核心组件 |
 |------|---------|---------|
 | 一：解释与拆解 | 复杂概念分步拆解、多视角对比 | 折叠分步 (#8)、Tab 面板 (#9)、SVG 流程图 (#1) |
-| 二：数据与统计 | 数值对比、趋势、占比 | ECharts 柱状/饼/折线/堆叠 (#24) |
+| 二：数据与统计 | 数值对比、趋势、占比 | ECharts (#24)、D3.js (#27)、CSS 条形图 (#4) |
 | 三：时间与过程 | 事件序列、进度阶段 | CSS 时间线 (#3)、交互式时间线 (#11)、状态链 (#15) |
 | 四：引用与强调 | 名言、警告、术语 | 引文卡片 (#13)、告警条 (#18)、信息面板 (#21) |
 | 五：视觉对比 | 图对比、3D、全屏 | 对比滑块 (#10)、Three.js (#25)、灯箱 (#23) |
 | 六：零 JS 方案 | 需要降级的场景 | 原生折叠/模态/幻灯片/Popover (#26) |
+| 七：Magic UI 装饰 | 锦上添花的纯 CSS 效果 | shiny-text / globe / neon-card / 边框发光 / 网格背景 |
 
-→ 详细选择矩阵 + 10 组三幕组合示例见 `references/decision-guide.md`
+→ 完整选择矩阵 + 7 组三幕组合示例见 `references/decision-guide.md`
 
 ## 可选页面类型
 
-在纵向滚读课程中，以下特殊页可以打破单调的"标题→段落→图→标题"节奏。完整 HTML/CSS 代码见 `references/page-types.md`。
+在纵向滚读课程中，以下特殊页可以打破单调的"标题→段落→图→标题"节奏。完整 HTML/CSS 代码（含中英双语版）见 `references/page-types.md`。
 
-- **封面页**：每课必须使用
-- **章节分隔页**：三幕叙事时使用，放在第一幕与第二幕之间、第二幕与第三幕之间
-- **总结页**：长篇课程（>3000 字）使用，短课可跳过
+| 类型 | 必选？ | 用法 | 视觉亮点 |
+|------|--------|------|---------|
+| **封面页** | ✅ 每课必须 | 课程开头，展示编号 + 标题 + 引子 | shiny-text 光泽标题、药丸 badge |
+| **章节分隔页** | ✅ 三幕必须 | 幕与幕之间，标记叙事切换 | 圆形编号 + 顶部装饰线 |
+| **总结卡片** | ✅ 每课必须 | 测验前，3 张卡片总结核心洞察 | SVG 矢量图标、hover 微上浮 |
+| **全宽引文页** | 可选 | 关键论断单独占据视区 | 左侧 accent 竖线、40vh 高度 |
+| **关键数字页** | 可选 | 数据密集型课程强调关键数字 | 3rem 超大数字 + accent 色 |
+| **信息面板侧边栏** | 可选 | 术语解释、背景补充 | 右浮动、窄屏自动降级 |
 
 ## 🔴 重要纪律（必须遵守）
 
@@ -285,13 +288,12 @@ Step 8: 本地 HTTP 服务器（可选）
 | `templates/lesson-starter.html` | 课程骨架模板（所有课程的起点） | Step 3 |
 | `templates/index-spa.html` | SPA 课程集线器模板 | Step 6 |
 | `templates/kg-starter.html` | 知识图谱模板（双语 nameZh/nameEn） | Step 7 |
-| `templates/start-server.ps1` | 本地 HTTP 服务器启动脚本（Windows） | Step 8 |
-| `templates/start-server.sh` | 本地 HTTP 服务器启动脚本（Linux/macOS） | Step 8 |
+| `templates/start-server.ps1` / `.sh` | 本地 HTTP 服务器启动脚本（Windows PS / Linux bash） | Step 8 |
 | `components/NN-name.md` | 组件代码 + 降级说明（27 个） | Step 2/3 |
 | `references/decision-guide.md` | 组件选择决策矩阵 + 组合示例 | Step 2 |
 | `references/page-types.md` | 封面/分隔页/总结页 HTML/CSS 代码 | 可选页面类型 |
 | `scripts/validate-lesson.py` | 课程验证脚本（18 项检查） | Step 4 |
-| `scripts/test_validate.py` | 验证脚本单元测试（74 项） | 开发 |
+| `scripts/test_validate.py` | 验证脚本单元测试（81 项） | 开发 |
 | `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（shiny/noise/dot/meteor/glow/blur） | 模板自动加载 |
 | `libs/` | 离线包（echarts/three/d3/d3-sankey） | Step 6 |
 
@@ -299,32 +301,22 @@ Step 8: 本地 HTTP 服务器（可选）
 
 | 触发条件 | 超时判定 | 一线修复 | 仍失败兜底 |
 |---|---|---|---|
-| SVG 无法正确显示（浏览器空白） | 打开浏览器检查 → 5s 内无渲染 | 检查 SVG XML 语法；检查 viewBox 与 width/height 比例一致 | 降级为纯 CSS 流程图或外部链接 |
-| SVG 内联到 HTML 后排版错乱 | 页面加载后立即可见 → 无需等待 | 检查 `<figure class="svg-fig">` 容器：`svg { max-width: 100%; height: auto; }` | 降级为 `<img src="NNNN-slug.svg">` 外部引用 |
-| 条形图 width 导致数据溢出容器 | 页面加载后立即可见 → 无需等待 | 检查所有 `bar-fill` 的 width 值 ≤ 100% | 改用 `text-overflow: ellipsis` |
-| CSS 时间线在窄屏上跑偏 | 桌面端正常、窄屏异常 → 调整窗口可复现 | 确保 `.tl-dot` 使用 `position: absolute` + `left` 固定 | 转为水平折叠式 |
-| 角色卡片中文显示乱码 | 页面加载后立即可见 → 无需等待 | 确认 SVG 中 font-family 包含中文字体 | 用内联 font-family |
-| 测验 `<button>` 的 `data-correct` 属性写反 | 点击选项后反馈文字错误 | 用 `grep 'data-correct="true"'` 确认每题恰好 1 个 | 手动核验 |
-| fireworks-tech-graph 不可用时 | 调用后无输出 > 10s | 手动编写 SVG 或修改已有模板 | 用 CSS 伪元素制作简化版 |
-| SVG 中文字体不渲染 | 页面加载后立即可见 → 无需等待 | 确认 `<style>` 内 font-family 包含中文字体 | 在 `<style>` 内层加 text font-family |
-| IntersectionObserver 不触发动画 | 滚动到元素位置 2s 后仍无动画 | 移除该元素的 `data-anim` 属性 | 首屏前 2 个视觉元素不加 `data-anim` |
-| 主题切换后 h2 下划线颜色不变 | 按下 T 键后立即可见 | CSS 中使用固定色而非 `var(--accent)` | 确保使用 `border-bottom-color: var(--accent)` |
-| SVG viewBox 比例不匹配 width/height | 页面加载后立即可见 → 无需等待 | 图片被不等比例拉伸 | 确保 viewBox 宽高比 = width/height 比 |
-| Theme panel / TOC panel 点击外部不关闭 | 点击面板外部 1s 后面板未关闭 | `click` 事件未正确委托 | 在 document 上监听 click，排除 toolbar/panel 区域 |
-| 折叠组件 `height` 从 `auto` 过渡 | 点击展开/折叠时过渡不平滑 | CSS transition 无效 | JS 中先测量 scrollHeight 再设 px，恢复 auto |
-| ECharts 图表空白（echarts 未定义） | 页面加载 3s 后图表区域空白 | `libs/echarts.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
-| Three.js 场景空白（THREE 未定义） | 页面加载 3s 后 3D 区域空白 | `libs/three.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
-| D3.js 图表空白（d3 未定义） | 页面加载 3s 后 D3 区域空白 | `libs/d3.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
-| D3.js 桑基图空白（d3.sankey 未定义） | 页面加载 3s 后桑基图区域空白 | `libs/d3-sankey.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
-| ECharts CDN 可访问但本地 libs 版本过旧 | API 调用报错（如 `setOption is not a function`） | 检查版本号，本地与 CDN 同步 | 暂时切 CDN，重新下载 libs 覆盖 |
-| 三个图表库同时加载时内存/性能问题 | 页面帧率 < 30fps 持续 5s 以上 | 延迟加载非首屏图表；减少动画复杂度 | 禁用不必要的图表动画 |
-| SPA 中课程 `id` 冲突 | 路由跳转后显示错误的课程 | 两个 `<section>` 用了相同 `id` | 使用 `id="lesson-NNN"` 格式，NNN 为课程编号 |
-| `index.html` 中课程区块未显示 | 路由跳转后空白页 | `<section>` 插在了 `<body>` 外部 | 确认在 `</body>` 前插入，不是 `</html>` 之后 |
-| JS 报错 `})` unexpected | 打开浏览器控制台有红色报错 | IIFE 内嵌套 function + if 时括号顺序错误：外层 function body `}`，内层 if body `}`，最后 `)` 闭调用 | 检查 `});` vs `}})` 顺序 |
-| 浏览器缓存旧 JS 不生效 | 修改后刷新页面功能不变 | 刷新页面时未清缓存 | Ctrl+F5 强制刷新 |
-| 语言切换后内容错位 | 按下 L 键后有中文残余或排版错乱 | 中英文段落数量不一致或未成对标记 `data-lang` | 每段内容同时包裹 `[data-lang="zh"]` 和 `[data-lang="en"]`，确保两个版本段落数相同 |
-| 语言切换按钮无反应 | 按下 L 键后按钮文字不变 | `lang` 变量循环索引越界 | 确认语言数组（`['zh','en']`）与 localStorage key 一致，L 键监听独立于 T 键 |
-| 组件特定的其他问题 | — | 见对应 `components/NN-name.md` 中的降级说明 | — |
+| SVG 空白/排版错乱 | 5s 内无渲染 | 检查 XML 语法、viewBox 与 width/height 比例 | 降级为 `<img>` 外部引用 |
+| SVG 中文不渲染 | 页面加载后立即可见 | font-family 加中文字体 | 内联 font-family |
+| 条形图溢出容器 | 页面加载后立即可见 | 检查 `bar-fill` width ≤ 100% | `text-overflow: ellipsis` |
+| 测验 `data-correct` 写反 | 点击后反馈文字错误 | `grep 'data-correct="true"'` 确认每题 1 个 | 手动核验 |
+| IntersectionObserver 不触发 | 滚动 2s 后无动画 | 移除该元素 `data-anim` | 首屏元素不加 `data-anim` |
+| 主题切换后颜色不变 | 按下 T 键后立即可见 | 用 `var(--accent)` 而非固定色 | `border-bottom-color: var(--accent)` |
+| Panel 点击外部不关闭 | 点击外部 1s 后面板未关 | click 事件未委托到 document | 排除 toolbar/panel 区域 |
+| 折叠动画不平滑 | 点击时过渡不平滑 | 先 `scrollHeight` 再设 px | 过渡结束恢复 `auto` |
+| ECharts/Three/D3/D3-sankey 空白 | 页面加载 3s 后空白 | 对应 lib 未加载 | 复制 `libs/` 下文件，或 CDN 加载 |
+| libs 版本过旧 | API 报错（如 `setOption is not a function`） | 检查版本号，本地与 CDN 同步 | 重新下载 libs 覆盖 |
+| 多图表库性能问题 | 帧率 < 30fps 持续 5s | 延迟非首屏图表 | 减少动画复杂度 |
+| SPA 课程 id 冲突 | 路由跳转显示错误课程 | 两个 `id` 相同 | 用 `id="lesson-NNN"` 格式 |
+| JS 括号顺序错误 | 控制台 `})` unexpected | function body `}` + if body `}` + `)` 闭调用 | 检查 `});` vs `}})` 顺序 |
+| 浏览器缓存旧 JS | 修改后刷新无变化 | Ctrl+F5 强制刷新 | 注销浏览器缓存 |
+| 语言切换错位 | L 键后有中文残余 | 中英文段落数不一致或未成对 `data-lang` | 确保两版本段落数相同 |
+| 组件特定问题 | — | 见 `components/NN-name.md` | — |
 
 ## 写作风格
 
@@ -339,24 +331,16 @@ Step 8: 本地 HTTP 服务器（可选）
 
 | # | 反模式 | 为什么 | 替代做法 |
 |---|---|---|---|
-| 1 | 课程中同时使用超过 8 种组件 | 视觉密度过高，读者疲劳 | 每课控制在 4-7 个，精选与内容匹配的 |
-| 2 | SVG 流程图用纯红色表示所有环节 | 失去颜色语义 | 蓝=正常，橙=触发，红=崩溃，绿=救助 |
-| 3 | 条形图 width 用绝对数值 | 超出容器 | 归一化后按百分比 |
-| 4 | 角色卡片中放超过 4 行文本 | 视觉重量失衡 | 最多 3 行，单行 ≤25 字 |
-| 5 | CSS 时间轴 < 5 个事件 | 视觉空洞 | 事件 < 5 用列表 |
-| 6 | 混用 ASCII 图和 SVG 图 | 风格不统一 | 全部 SVG 或全部 ASCII |
-| 7 | SVG 浅色盒用白字 | 不可读 | 深色背景用白字，浅色背景用深字 |
-| 8 | 课程没有主题切换和键盘导航 | 缺少 PPT 质感 | 每个课程均加入 T 键和 ← → 键 |
-| 9 | 连续超过 4 段文本无视觉停顿 | 读者疲劳 | 每 1-2 段间插入一个视觉组件 |
-| 10 | 饼图展示时间序列、折线图展示静态分类 | 图表类型与数据性质错位 | 时间序列→折线图，静态比例→饼图，对比→柱状图 |
-| 11 | 编造不存在的统计数据或引文来源 | 损害课程可信度 | 无可靠数据时用模拟数据并标注 `mock-data` 类 |
-| 12 | 硬编码颜色覆盖 theme CSS 变量 | 主题切换后颜色不变 | 颜色值统一使用 `var(--accent)`、`var(--border)` 等 CSS 变量 |
-| 13 | 使用 emoji 作为结构图标（导航、工具栏、目录） | 风格不统一，窄屏错位 | 使用对应的 SVG 图标组件 |
-| 14 | 只写中文不写英文版本 | 违反中英双语约定 | 每段内容同时提供中英文 `data-lang` 成对标记 |
-| 15 | 课程依赖 CDN 而未预下载 libs 离线包 | 离线或网络差时图表全部空白，用户看到残缺页面 | 始终先复制本 skill `libs/` 下所有文件到目标项目 `libs/`，CDN 仅作为降级 |
-| 16 | ECharts/Three.js/D3.js libs 一个加载了一个没加载 | 一种图表渲染正常，另一种空白（如 ECharts 有图、D3 空白） | 逐一确认 `libs/` 下对应的 `.min.js` 存在；三个库无关，不会自动依赖加载 |
-| 17 | 混合示例中用了 D3 数据处理 + Three.js 渲染，但忘记加载 Three.js | 页面打开 3s 后 3D 区域空白，控制台报 THREE is not defined | 课程用到几个图表库就必须加载几个 libs 文件，无自动传递依赖 |
-| 18 | CDN 失效后页面完全空白（因 libs 未预下载） | 刷新页面后所有图表区域空白持续 5s+ | 强制要求每个图表库同时配置本地文件 + CDN 降级 `<script>if(...)document.write(...)` 双保险 |
+| 1 | 超过 8 种组件 / 连续 4 段无视觉停顿 | 视觉密度过高，读者疲劳 | 每课 4-7 个组件，每 1-2 段插一个视觉元素 |
+| 2 | 图标类型错位（饼图做时序、emoji 做结构） | 语义错误、风格不统一 | 时序→折线图，结构→SVG 图标 |
+| 3 | SVG 颜色语义错误 / 浅底白字 / 纯红流程图 | 不可读、失去语义 | 蓝=正常，橙=触发，红=崩溃，绿=救助；深底白字浅底深字 |
+| 4 | 条形图用绝对数值 / 角色卡片超 4 行 / 时间线 < 5 事件 | 溢出或视觉空洞 | 归一化百分比；最多 3 行；事件 < 5 用列表 |
+| 5 | 硬编码颜色而非 CSS 变量 | 主题切换后颜色不变 | 全部用 `var(--accent)`、`var(--border)` 等 |
+| 6 | 缺少 PPT 质感（无主题切换/键盘导航） | 交互体验差 | 每个课程加入 T 键 + ← → 键 |
+| 7 | 编造数据/引文 | 损害可信度 | 模拟数据标注 `mock-data` 类 |
+| 8 | 只写中文不写英文 / CDN 无离线降级 | 违反双语约定 / 离线空白 | 成对 `data-lang` + libs 离线包双保险 |
+| 9 | 混用 ASCII 和 SVG 图 | 风格不统一 | 全部 SVG 或全部 ASCII |
+| 10 | 图表库只加载部分依赖（D3+Three 但漏 Three） | 一种图表空白 | 用到几个库就加载几个 libs 文件 |
 
 ## 错误检查清单
 

@@ -57,7 +57,7 @@ Skills: teach, grill-me, teach_more_pic, fireworks-tech-graph, knowledge-graph-m
 - **#1-7 核心**：SVG 流程图 / 角色卡片 / CSS 时间线 / CSS 条形图 / 对比表 / SVG 容器 / PPT 质感（主题切换 + 语言切换 + 滚动动画 + 键盘导航 + 目录）
 - **#8-14 交互式**：折叠分步详解 / Tab 切换面板 / 图片对比滑块 / 交互式时间线 / 数据卡片网格 / 引文卡片 / 标注式图片
 - **#15-27 数据与辅助**：状态链 / 数值滚动动画 / 标签徽章组 / 告警条 / 热力图 / 步骤指示器 / 信息面板 / 对比表增强版 / 灯箱 / **ECharts 交互式图表**（柱状/饼/折线/堆叠，需 `libs/echarts.min.js`） / **Three.js 3D**（3D 可视化，需 `libs/three.min.js`，含 Sprite 文字标签） / **D3.js 自定义图表**（力导向图/旭日图/桑基图，需 `libs/d3.min.js` + `d3-sankey.min.js`） / 现代浏览器 API（原生折叠/模态/幻灯片/Popover）
-- **19 品牌主题** — 22 个 CSS 变量，`var(--accent/border/surface/...)` 自动跟随
+- **20 品牌主题** — 22 个 CSS 变量，`var(--accent/border/surface/...)` 自动跟随
 - **主题切换动画** — 0.35s 平滑过渡，`prefers-reduced-motion` 自动禁用
 
 ## 使用方法
@@ -107,34 +107,37 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 ├── components/             各组件独立文件（27 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
 │   ├── validate-lesson.py  课程验证脚本（18 项检查，含双语 + SPA + KG）
-│   ├── test_validate.py    验证脚本单元测试（78 项，覆盖全部 18 项检查）
+│   ├── test_validate.py    验证脚本单元测试（81 项，覆盖全部 18 项检查）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（24 个 .html，含 1 个 ECharts/D3/Three 混合）
 ├── libs/                   外部库（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js、magicui-effects.css）
 ├── references/             参考附件（决策指南、页面类型模板）
 ├── templates/              9 个模板（4 SVG 骨架 + 课程支架 + SPA + KG + 2 启动脚本）
-├── theme/19 个品牌 DESIGN.md  各品牌设计语言参考
-├── test-prompts.json       测试提示词（12 个场景）
-└── results.tsv             darwin-skill 优化记录
+├── theme/20 个品牌 DESIGN.md  各品牌设计语言参考
+├── test-prompts.json       测试提示词（3 个场景）
 ```
 
 ### Magic UI 装饰效果
 
-课程模板和所有示例通过 `libs/magicui-effects.css` 共享 6 种 CSS 装饰效果：
+课程模板和所有示例通过 `libs/magicui-effects.css` 共享 13 种 CSS 装饰效果，已内置到课程模板和所有示例：
 
 | 效果 | CSS 类 | 说明 |
 |---|---|---|
-| 光泽扫光 | `.shiny-text` | 文本渐变扫光动画（封面 badge / 标题） |
-| 噪点纹理 | `.noise-overlay` | SVG feTurbulence 噪点叠加层（封面/工具栏背景） |
+| 光泽扫光 | `.shiny-text` | 封面/标题光泽扫光动画 |
+| 噪点纹理 | `.noise-overlay` | SVG feTurbulence 噪点叠加层 |
 | 圆点网格 | `.dot-bg` | CSS radial-gradient 圆点背景 |
 | 直线网格 | `.grid-bg` | CSS linear-gradient 双线网格背景 |
 | 流星雨 | `.meteors-container` + `.meteor` | 封面装饰流星动画 |
 | 边框发光 | `.border-glow` | conic-gradient 旋转边框 |
 | 辉光悬停 | `.glare-hover` | 背景渐变过渡，鼠标悬停触发 |
 | 渐变文字 | `.gradient-text` | 多色渐变流动动画 |
-| 模糊淡入 | `data-anim="blur"` | 滚动 → 模糊消除入场动画 |
+| 模糊淡入 | `data-anim="blur"` | 滚动模糊淡入（filter blur + opacity） |
+| 霓虹卡片 | `.neon-card` | 霓虹渐变色边框 |
+| 聚光灯卡片 | `.spotlight-card` | 鼠标追踪聚光灯效果 |
+| 交互按钮 | `.interactive-btn` | 点击波纹扩散按钮 |
+| 打字光标 | `.typing-cursor` | 闪烁打字光标 |
 
-所有效果适配 CSS 变量（`var(--accent)`、`var(--surface)` 等），自动跟随主题切换。
+所有效果适配 CSS 变量（`var(--accent)`、`var(--surface)` 等），自动跟随主题切换。新增效果应先加到 `libs/magicui-effects.css` 再更新所有模板。
 
 ## 前置依赖
 
