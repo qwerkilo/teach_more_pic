@@ -183,6 +183,13 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
 }
 .empty-state i { font-size: 2.5rem; opacity: 0.4; }
 
+.lang-btn { background: none; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.72rem; cursor: pointer; padding: 1px 5px; line-height: 1.4; opacity: 0.7; transition: opacity 0.2s ease; color: var(--text-primary); font-family: inherit; font-weight: 600; letter-spacing: 0.03em; }
+.lang-btn:hover { opacity: 1; }
+[data-lang] { display: none; }
+[data-lang].active { display: inline; }
+h1[data-lang].active, h2[data-lang].active, p[data-lang].active, div[data-lang].active, span[data-lang].active, button[data-lang].active { display: block; }
+button[data-lang].lang-btn.active, button[data-lang].layout-btn.active, button[data-lang].action-btn.active, button[data-lang].theme-dot.active { display: inline-block; }
+
 @media (max-width: 640px) {
   .toolbar { padding: 10px 14px; gap: 10px; }
   .toolbar h1 { font-size: 1rem; width: 100%; margin-bottom: 4px; }
@@ -194,21 +201,25 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
 <body>
 <div id="app">
   <div class="toolbar">
-    <h1>课程知识图谱</h1>
+    <h1 data-lang="zh">课程知识图谱</h1>
+    <h1 data-lang="en">Course Knowledge Graph</h1>
     <span class="meta" id="meta-stats"></span>
     <div class="group">
-      <span class="label">布局</span>
-      <button class="layout-btn active" data-layout="force"><i class="fas fa-project-diagram"></i>力导向</button>
-      <button class="layout-btn" data-layout="radial"><i class="fas fa-bullseye"></i>辐射状</button>
+      <span class="label" data-lang="zh">布局</span>
+      <span class="label" data-lang="en">Layout</span>
+      <button class="layout-btn active" data-layout="force"><i class="fas fa-project-diagram"></i><span data-lang="zh">力导向</span><span data-lang="en">Force</span></button>
+      <button class="layout-btn" data-layout="radial"><i class="fas fa-bullseye"></i><span data-lang="zh">辐射状</span><span data-lang="en">Radial</span></button>
     </div>
     <div class="group">
-      <span class="label">主题</span>
+      <span class="label" data-lang="zh">主题</span>
+      <span class="label" data-lang="en">Theme</span>
       <button class="theme-dot active" data-theme="dark-tech" title="暗色科技"></button>
       <button class="theme-dot" data-theme="nature-fresh" title="自然清新"></button>
       <button class="theme-dot" data-theme="warm-sunset" title="暖阳落日"></button>
       <button class="theme-dot" data-theme="ocean-deep" title="深海幽蓝"></button>
     </div>
-    <button class="action-btn" id="btn-reset" title="重置视图"><i class="fas fa-undo"></i>重置</button>
+    <button class="lang-btn" data-lang-btn aria-label="切换语言" type="button">中</button>
+    <button class="action-btn" id="btn-reset"><i class="fas fa-undo"></i><span data-lang="zh">重置</span><span data-lang="en">Reset</span></button>
   </div>
   <div style="position: relative; flex: 1; display: flex;">
     <div id="chart"></div>
@@ -310,16 +321,29 @@ const layouts = {
 };
 
 // ===== 图谱数据（请修改此处：增删 nodes/links/categories） =====
-const graphData = {
-  "categories": ["课程", "概念"],
-  "nodes": [
-    { "id": "L1", "name": "课程 1", "category": "课程", "weight": 80, "desc": "示例课程节点" },
-    { "id": "C1", "name": "核心概念", "category": "概念", "weight": 60, "desc": "示例概念节点" },
-  ],
-  "links": [
-    { "source": "L1", "target": "C1", "relation": "包含" },
-  ]
-};
+const rawNodes = [
+  { "id": "L1", "nameZh": "课程 1", "nameEn": "Lesson 1", "category": "课程", "weight": 80, "desc": "示例课程节点" },
+  { "id": "C1", "nameZh": "核心概念", "nameEn": "Core Concept", "category": "概念", "weight": 60, "desc": "示例概念节点" },
+];
+const rawLinks = [
+  { "source": "L1", "target": "C1", "relation": "包含" },
+];
+const rawCats = ["课程", "概念"];
+const catNames = { "zh": ["课程", "概念"], "en": ["Course", "Concept"] };
+function buildGraphData(lang) {
+  var l = lang || 'zh';
+  return {
+    "categories": catNames[l] || catNames['zh'],
+    "nodes": rawNodes.map(function(n) {
+      var o = {};
+      Object.keys(n).forEach(function(k) { o[k] = n[k]; });
+      o.name = n['name' + (l === 'en' ? 'En' : 'Zh')] || n.nameZh;
+      return o;
+    }),
+    "links": rawLinks
+  };
+}
+var graphData = buildGraphData('zh');
 // ===== 图谱数据定义结束 =====
 
 (function() {
@@ -394,8 +418,9 @@ const graphData = {
         formatter: function(p) {
           if (p.dataType === 'edge') return p.data.relation || '';
           const n = p.data;
+          var isEn = false; try { var ls = localStorage.getItem('lang'); if (ls === 'en') isEn = true; } catch(e) {}
           return '<b>' + n.name + '</b><br/>' +
-                 '<span style="opacity:0.7">' + n.category + ' · 权重 ' + n.weight + '</span>';
+                 '<span style="opacity:0.7">' + n.category + (isEn ? ' · weight ' : ' · 权重 ') + n.weight + '</span>';
         },
         backgroundColor: themes[currentThemeName].tooltipBg,
         borderColor: themes[currentThemeName].borderColor,
@@ -438,8 +463,36 @@ const graphData = {
 
   function updateMeta() {
     const el = document.getElementById('meta-stats');
-    if (el) el.textContent = graphData.nodes.length + ' 节点 · ' + graphData.links.length + ' 关系 · ' + graphData.categories.length + ' 分类';
+    if (!el) return;
+    var isEn = false; try { var ls = localStorage.getItem('lang'); if (ls === 'en') isEn = true; } catch(e) {}
+    el.textContent = graphData.nodes.length + (isEn ? ' nodes · ' : ' 节点 · ') + graphData.links.length + (isEn ? ' edges · ' : ' 关系 · ') + graphData.categories.length + (isEn ? ' cats' : ' 分类');
   }
+
+  // ===== 语言切换 =====
+  var langBtn = document.querySelector('[data-lang-btn]');
+  var langs = ['zh','en'];
+  var langIdx = langs.indexOf(localStorage.getItem('lang')); if (langIdx < 0) langIdx = 0;
+  function setLang(l) {
+    document.querySelectorAll('[data-lang]').forEach(function(x) { x.classList.toggle('active', x.dataset.lang === l); });
+    try { localStorage.setItem('lang', l); } catch(e) {}
+    if (langBtn) langBtn.textContent = l === 'zh' ? '中' : 'EN';
+    graphData = buildGraphData(l);
+    graphData.nodes.forEach(function(node) {
+      var t = themes[currentThemeName];
+      var cats = graphData.categories;
+      var ci = cats.indexOf(node.category);
+      if (ci < 0) ci = rawNodes.indexOf(rawNodes.filter(function(n){return n.id===node.id;})[0]) % t.colors.length;
+      node.itemStyle = { color: t.colors[ci % t.colors.length] };
+      node.symbolSize = 18 + Math.round(node.weight / 5);
+      node.label = { color: t.textPrimary, show: true, position: 'right', fontSize: 11, fontWeight: 600 };
+    });
+    updateMeta();
+    renderLegend();
+    if (chart) chart.setOption(buildOption(), true);
+  }
+  setLang(langs[langIdx]);
+  if (langBtn) langBtn.addEventListener('click', function() { langIdx = (langIdx + 1) % langs.length; setLang(langs[langIdx]); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'l' && !e.ctrlKey && !e.metaKey) { langIdx = (langIdx + 1) % langs.length; setLang(langs[langIdx]); } });
 
   let chart = null;
   function initChart() {
@@ -454,8 +507,9 @@ const graphData = {
     chart.on('mouseover', { dataType: 'node' }, function(p) {
       const tip = document.getElementById('tooltip');
       if (!tip) return;
+      var isEn = false; try { var ls = localStorage.getItem('lang'); if (ls === 'en') isEn = true; } catch(e) {}
       tip.innerHTML = '<div class="tt-name">' + p.data.name + '</div>' +
-                      '<div class="tt-meta">' + p.data.category + ' · 权重 ' + p.data.weight + '</div>';
+                      '<div class="tt-meta">' + p.data.category + (isEn ? ' · weight ' : ' · 权重 ') + p.data.weight + '</div>';
       tip.classList.add('visible');
       positionTooltip(p.event.event);
     });
