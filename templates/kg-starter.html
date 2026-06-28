@@ -313,14 +313,11 @@ const layouts = {
 const graphData = {
   "categories": ["课程", "概念"],
   "nodes": [
-    // 课程节点
-    // { "id": "L1", "name": "第一课", "category": "课程", "weight": 100, "desc": "描述" },
-    // 概念节点
-    // { "id": "C1", "name": "概念名", "category": "概念", "weight": 65, "desc": "描述" },
+    { "id": "L1", "name": "课程 1", "category": "课程", "weight": 80, "desc": "示例课程节点" },
+    { "id": "C1", "name": "核心概念", "category": "概念", "weight": 60, "desc": "示例概念节点" },
   ],
   "links": [
-    // { "source": "L1", "target": "L2", "relation": "前置" },
-    // { "source": "L1", "target": "C1", "relation": "包含" },
+    { "source": "L1", "target": "C1", "relation": "包含" },
   ]
 };
 // ===== 图谱数据定义结束 =====

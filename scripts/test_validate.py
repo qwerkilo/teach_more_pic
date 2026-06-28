@@ -104,6 +104,99 @@ test("semantic: nav present passes", not v.check_semantic_html(
 test("semantic: none fails", len(v.check_semantic_html(
     '<html><div></div></html>')) > 0)
 
+# ==== check_spa_integration ====
+import tempfile
+
+fd, spa_tmp = tempfile.mkstemp(suffix=".html")
+os.close(fd)
+with open(spa_tmp, "w") as f:
+    f.write('<section class="lesson-view" id="lesson-42"><h1>Title</h1></section>')
+test("spa: lesson with section passes", not v.check_spa_integration(
+    '<section class="lesson-view" id="lesson-42"></section>', spa_tmp))
+os.unlink(spa_tmp)
+
+fd, spa_tmp2 = tempfile.mkstemp(suffix=".html")
+os.close(fd)
+with open(spa_tmp2, "w") as f:
+    f.write('<p>No lesson section here</p>')
+test("spa: missing id fails", len(v.check_spa_integration('<p>No section</p>', spa_tmp2)) > 0)
+os.unlink(spa_tmp2)
+
+# index.html SPA check
+test("spa: index.html with sections passes", not v.check_spa_integration(
+    '<section class="lesson-view" id="lesson-1"></section>'
+    '<section class="lesson-view" id="lesson-2"></section>'
+    '</section>', "C:/fake/index.html"))
+test("spa: index.html missing sections fails", len(v.check_spa_integration(
+    '<p>hello</p>', "C:/fake/index.html")) > 0)
+test("spa: index.html duplicate id fails", len(v.check_spa_integration(
+    '<section class="lesson-view" id="lesson-1"></section>'
+    '<section class="lesson-view" id="lesson-1"></section>'
+    '</section>', "C:/fake/index.html")) > 0)
+test("spa: KG file skips SPA check", not v.check_spa_integration(
+    'const graphData = {nodes:[]};', "C:/fake/kg-mine.html"))
+
+# ==== check_kg_structure ====
+test("kg: non-KG file skips", not v.check_kg_structure("<html><p>hello</p></html>", ""))
+test("kg: minimal valid KG passes", not v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [{"id":"L1","name":"第一课","category":"课程","weight":80}],'
+    '"links": [{"source":"L1","target":"L1","relation":"自指"}]'
+    '};', ""))
+test("kg: missing categories fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"nodes": [{"id":"L1","name":"第一课","category":"课程","weight":80}],'
+    '"links": [{"source":"L1","target":"L1","relation":"自指"}]'
+    '};', "")) > 0)
+test("kg: empty nodes fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [],'
+    '"links": [{"source":"L1","target":"L1","relation":"自指"}]'
+    '};', "")) > 0)
+test("kg: missing links fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [{"id":"L1","name":"第一课","category":"课程","weight":80}]'
+    '};', "")) > 0)
+test("kg: node missing id fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [{"name":"第一课","category":"课程","weight":80}],'
+    '"links": [{"source":"","target":"","relation":"x"}]'
+    '};', "")) > 0)
+test("kg: node missing name fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [{"id":"L1","category":"课程","weight":80}],'
+    '"links": [{"source":"L1","target":"L1","relation":"x"}]'
+    '};', "")) > 0)
+test("kg: duplicate node id fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [{"id":"L1","name":"A","category":"课程","weight":50},{"id":"L1","name":"B","category":"课程","weight":60}],'
+    '"links": [{"source":"L1","target":"L1","relation":"x"}]'
+    '};', "")) > 0)
+test("kg: link to unknown node fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [{"id":"L1","name":"A","category":"课程","weight":50}],'
+    '"links": [{"source":"L1","target":"NOEXIST","relation":"x"}]'
+    '};', "")) > 0)
+test("kg: invalid category on node fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [{"id":"L1","name":"A","category":"系统","weight":50}],'
+    '"links": [{"source":"L1","target":"L1","relation":"x"}]'
+    '};', "")) > 0)
+test("kg: weight over 100 fails", len(v.check_kg_structure(
+    'const graphData = {'
+    '"categories": ["课程"],'
+    '"nodes": [{"id":"L1","name":"A","category":"课程","weight":150}],'
+    '"links": [{"source":"L1","target":"L1","relation":"x"}]'
+    '};', "")) > 0)
+
 # ==== check_lib_deps ====
 test("lib deps: no echarts/three.js passes", not v.check_lib_deps(
     '<html><p>hello</p></html>', '.'))

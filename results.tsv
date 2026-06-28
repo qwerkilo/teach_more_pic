@@ -3,3 +3,7 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-06-27T18:05	e1bba20	teach_more_pic	77.3	79.7	keep	D4/D7	加 STOP 检查点 + 修正组件数	dry_run
 2026-06-27T18:10	fc83e0e	teach_more_pic	79.7	80.9	keep	D9	反例黑名单 9→13 条	dry_run
 2026-06-27T18:15	b10be4c	teach_more_pic	80.9	82.6	keep	D5	图表数据格式 + 组件复制精确化	dry_run
+2026-06-28T12:00	baseline	teach_more_pic	-	79.2	baseline	-	重构后新基线（splitted ref）	dry_run
+2026-06-28T12:05	f4d4b3b	teach_more_pic	79.2	79.8	keep	D4	Step4/7 加 STOP 检查点	dry_run
+2026-06-28T12:10	29129e7	teach_more_pic	79.8	81.5	keep	D5	替换"建议"措辞 + 文件命名 + 设计读法格式	dry_run
+2026-06-28T12:15	c8ae98f	teach_more_pic	81.5	82.1	keep	D4	Step6 SPA 加 STOP 检查点	dry_run

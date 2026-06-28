@@ -215,6 +215,150 @@ def check_semantic_html(html):
     return ["No semantic HTML elements found (use <article>/<section>/<nav>/<aside>)"]
 
 
+def check_spa_integration(html, path):
+    """Check lesson HTML has proper SPA section structure."""
+    issues = []
+    filename = os.path.basename(path).lower()
+
+    # If this is index.html, check section structure
+    if filename == "index.html":
+        sections = re.findall(
+            r'<section\s+class="([^"]*)"\s+id="lesson-(\d+)"[^>]*>', html
+        )
+        if not sections:
+            return ["index.html: no <section class=\"...\" id=\"lesson-NNN\"> found"]
+        ids = []
+        for cls, sid in sections:
+            if "lesson-view" not in cls:
+                issues.append(f"Section lesson-{sid}: missing class=\"lesson-view\"")
+            if sid in ids:
+                issues.append(f"Duplicate section id=\"lesson-{sid}\"")
+            ids.append(sid)
+            if f'</section>' not in html:
+                issues.append(f"Section lesson-{sid}: missing closing </section>")
+        return issues
+
+    # For regular lesson HTML files (not KG, not template)
+    if "graphdata" in html.lower():
+        return []  # KG files skip SPA check
+
+    m = re.search(r'id="lesson-(\d+)"', html)
+    if not m:
+        return ["Missing id=\"lesson-NNN\" in lesson HTML"]
+    sid = m.group(1)
+    m2 = re.search(r'<section\b[^>]*\bid="lesson-' + sid + r'"[^>]*>', html)
+    if not m2:
+        return [f"Missing <section> wrapper for id=\"lesson-{sid}\""]
+    if '</section>' not in html:
+        return ["Missing closing </section>"]
+    return issues
+
+
+def check_kg_structure(html, path):
+    """Validate knowledge graph data structure."""
+    issues = []
+
+    # Only check files containing graphData
+    block_match = re.search(
+        r'const\s+graphData\s*=\s*\{', html
+    )
+    if not block_match:
+        return []  # Not a KG file, skip
+
+    # Extract categories (array of strings)
+    cats = []
+    cat_match = re.search(
+        r'"categories"\s*:\s*\[([^\]]+)\]', html
+    )
+    if not cat_match:
+        issues.append("graphData: missing 'categories' array")
+    else:
+        cats = re.findall(r'"([^"]+)"', cat_match.group(1))
+        if len(cats) < 1:
+            issues.append("graphData: 'categories' array is empty (need at least 1)")
+
+    # Extract nodes (array of objects)
+    nodes_match = re.search(
+        r'"nodes"\s*:\s*\[(.+?)\]', html, re.DOTALL
+    )
+    if not nodes_match:
+        issues.append("graphData: missing 'nodes' array")
+        return issues
+
+    nodes_text = nodes_match.group(1)
+    node_ids = []
+    node_objs = re.findall(r'\{(.+?)\}', nodes_text, re.DOTALL)
+    node_count = len(node_objs)
+    if node_count < 1:
+        issues.append("graphData: 'nodes' array is empty (need at least 1)")
+    else:
+        weights = []
+        for i, nobj in enumerate(node_objs):
+            has_id = '"id"' in nobj
+            has_name = '"name"' in nobj
+            has_cat = '"category"' in nobj
+            if not has_id:
+                issues.append(f"Node #{i+1}: missing 'id'")
+            if not has_name:
+                issues.append(f"Node #{i+1}: missing 'name'")
+            if not has_cat:
+                issues.append(f"Node #{i+1}: missing 'category'")
+            nid = re.search(r'"id"\s*:\s*"([^"]+)"', nobj)
+            if nid:
+                if nid.group(1) in node_ids:
+                    issues.append(f"graphData: duplicate node id=\"{nid.group(1)}\"")
+                node_ids.append(nid.group(1))
+                # Validate category is in categories list
+                ncat = re.search(r'"category"\s*:\s*"([^"]+)"', nobj)
+                if ncat and cats and ncat.group(1) not in cats:
+                    issues.append(
+                        f"Node \"{nid.group(1)}\": category \"{ncat.group(1)}\" "
+                        f"not in categories list"
+                    )
+            nwt = re.search(r'"weight"\s*:\s*(\d+)', nobj)
+            if nwt:
+                weights.append(int(nwt.group(1)))
+        # Check weight distribution
+        if weights:
+            if max(weights) > 100:
+                issues.append("graphData: some node weights exceed 100")
+            if min(weights) < 0:
+                issues.append("graphData: negative node weights found")
+
+    # Extract links (array of objects)
+    links_match = re.search(
+        r'"links"\s*:\s*\[(.+?)\]', html, re.DOTALL
+    )
+    if not links_match:
+        issues.append("graphData: missing 'links' array")
+        return issues
+
+    links_text = links_match.group(1)
+    link_objs = re.findall(r'\{(.+?)\}', links_text, re.DOTALL)
+    link_count = len(link_objs)
+    if link_count < 1:
+        issues.append("graphData: 'links' array is empty (need at least 1)")
+    else:
+        for i, lobj in enumerate(link_objs):
+            has_src = '"source"' in lobj
+            has_tgt = '"target"' in lobj
+            has_rel = '"relation"' in lobj
+            if not has_src:
+                issues.append(f"Link #{i+1}: missing 'source'")
+            if not has_tgt:
+                issues.append(f"Link #{i+1}: missing 'target'")
+            if not has_rel:
+                issues.append(f"Link #{i+1}: missing 'relation'")
+            lsrc = re.search(r'"source"\s*:\s*"([^"]+)"', lobj)
+            ltgt = re.search(r'"target"\s*:\s*"([^"]+)"', lobj)
+            if lsrc and lsrc.group(1) not in node_ids:
+                issues.append(f"Link #{i+1}: source \"{lsrc.group(1)}\" references unknown node")
+            if ltgt and ltgt.group(1) not in node_ids:
+                issues.append(f"Link #{i+1}: target \"{ltgt.group(1)}\" references unknown node")
+
+    return issues
+
+
 def check_lib_deps(html, base_dir):
     """Verify ECharts and Three.js lib files exist when used."""
     issues = []
@@ -240,24 +384,39 @@ def run_all(path):
         html = f.read()
 
     base_dir = os.path.dirname(path)
+    is_kg = "graphdata" in html.lower()
+    is_index = os.path.basename(path).lower() == "index.html"
 
     results = [
         ("SVG files exist & valid", check_svg_links(html, base_dir)),
-        ("Quiz: exactly 1 correct per question", check_quiz_correct_count(html)),
-        ("Quiz: 5 questions x 3 options", check_quiz_completeness(html)),
-        ("Exactly one <h1>", check_h1_count(html)),
-        ("data-anim syntax valid", check_data_anim_syntax(html)),
-        ("Container width in range", check_container_width(html)),
-        ("Relative links only", check_relative_links(html)),
-        ("SVG text/background contrast", check_svg_contrast(html, base_dir)),
-        ("PPT JS (theme + nav) present", check_ppt_js(html)),
-        ("Inline SVG in .svg-fig", check_inline_svg(html)),
-        ("Component consistency", check_component_consistency(html)),
-        (":focus-visible outline", check_focus_visible(html)),
-        ("tabular-nums alignment", check_tabular_nums(html)),
-        ("Semantic HTML elements", check_semantic_html(html)),
-        ("Library deps (ECharts/Three.js)", check_lib_deps(html, base_dir)),
     ]
+
+    # KG files and index.html skip lesson-specific checks
+    if not is_kg and not is_index:
+        results += [
+            ("Quiz: exactly 1 correct per question", check_quiz_correct_count(html)),
+            ("Quiz: 5 questions x 3 options", check_quiz_completeness(html)),
+            ("Exactly one <h1>", check_h1_count(html)),
+            ("data-anim syntax valid", check_data_anim_syntax(html)),
+            ("Container width in range", check_container_width(html)),
+            ("Relative links only", check_relative_links(html)),
+            ("SVG text/background contrast", check_svg_contrast(html, base_dir)),
+            ("PPT JS (theme + nav) present", check_ppt_js(html)),
+            ("Inline SVG in .svg-fig", check_inline_svg(html)),
+            ("Component consistency", check_component_consistency(html)),
+            (":focus-visible outline", check_focus_visible(html)),
+            ("tabular-nums alignment", check_tabular_nums(html)),
+            ("Semantic HTML elements", check_semantic_html(html)),
+            ("Library deps (ECharts/Three.js)", check_lib_deps(html, base_dir)),
+            ("SPA integration (lesson-view section)", check_spa_integration(html, path)),
+        ]
+    else:
+        if is_kg:
+            results += [("Library deps (ECharts/Three.js)", check_lib_deps(html, base_dir))]
+        if is_index:
+            results += [("SPA integration (lesson-view section)", check_spa_integration(html, path))]
+
+    results += [("Knowledge graph structure", check_kg_structure(html, path))]
 
     all_pass = True
     for label, issues in results:

@@ -97,8 +97,8 @@ python scripts/test_validate.py
 ├── SKILL.md               ← 唯一入口文档，所有规则在此
 ├── components/             各组件独立文件（25 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
-│   ├── validate-lesson.py  课程验证脚本（11 项检查）
-│   ├── test_validate.py    验证脚本单元测试（29 项）（Popover/dialog 一致性检查）
+│   ├── validate-lesson.py  课程验证脚本（17 项检查，含 SPA 集成 + 知识图谱结构）
+│   ├── test_validate.py    验证脚本单元测试（61 项，覆盖全部 17 项检查）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（21 个 .html）
 ├── templates/              6 个模板（4 SVG 骨架 + 1 课程起始 HTML + 1 知识图谱骨架）
