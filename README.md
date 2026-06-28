@@ -94,10 +94,11 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 2. 从 SKILL.md 组件索引表选 4-7 个组件（每幕 1-3 个），使用决策指南匹配 → 确认组件清单
 3. 打开对应 `components/NN-name.md`，复制 ````html`/```css`/```js` 合并到模板中
 4. SVG 保存为 `lessons/svg/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
-5. **`libs/` 依赖**：先完整复制本 skill 的 `libs/` 下所有文件到目标项目的 `libs/`（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js），确保离线包版本一致
+5. **`libs/` 依赖**：先完整复制本 skill 的 `libs/` 下所有文件到目标项目的 `libs/`，确保离线包版本一致
 6. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
 7. SPA 集成：从 `templates/index-spa.html` 复制为 `index.html`，追加 `<section class="lesson-view" id="lesson-NNN">`
-7. 知识图谱：新项目从 `templates/kg-starter.html` 复制到项目根目录为 `kg-项目名.html`（双语 `nameZh`/`nameEn` + L 键切换）；已有项目在已有 `kg-*.html` 中追加节点和关系
+8. 知识图谱：新项目从 `templates/kg-starter.html` 复制到项目根目录为 `kg-项目名.html`（双语 `nameZh`/`nameEn` + L 键切换）；已有项目在已有 `kg-*.html` 中追加节点和关系
+9. 本地 HTTP 服务器：从 `templates/start-server.ps1`（Windows）或 `start-server.sh`（Linux/macOS）复制到项目根目录，运行后自动打开浏览器
 
 ## 项目结构
 
@@ -111,7 +112,7 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 ├── examples/               组件用法示例（24 个 .html，含 1 个 ECharts/D3/Three 混合）
 ├── libs/                   外部库（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js、magicui-effects.css）
 ├── references/             参考附件（决策指南、页面类型模板）
-├── templates/              7 个模板（4 SVG 骨架 + 1 课程起始 HTML + 1 知识图谱骨架 + 1 SPA 入口）
+├── templates/              9 个模板（4 SVG 骨架 + 课程支架 + SPA + KG + 2 启动脚本）
 ├── theme/19 个品牌 DESIGN.md  各品牌设计语言参考
 ├── test-prompts.json       测试提示词（12 个场景）
 └── results.tsv             darwin-skill 优化记录

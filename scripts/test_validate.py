@@ -256,6 +256,11 @@ test("data-anim: fade-up is still valid", not v.check_data_anim_syntax('<html><d
 test("data-anim: unknown value fails", len(v.check_data_anim_syntax('<html><div data-anim="foobar"></div></html>')) > 0)
 test("magicui: shiny-text class detected", not v.check_data_anim_syntax('<html><span class="shiny-text">hi</span></html>'))
 
+# ==== bilingual table-cell check ====
+test("bilingual: td with data-lang passes", not v.check_bilingual('<html><td data-lang="zh">中</td><td data-lang="en">EN</td><button data-lang-btn></button>key==="l"</html>'))
+test("bilingual: th with data-lang passes", not v.check_bilingual('<html><th data-lang="zh">中</th><th data-lang="en">EN</th><button data-lang-btn></button>key==="l"</html>'))
+test("anim: blur is valid in list", not v.check_data_anim_syntax('<html><div data-anim="blur"></div><div data-anim="fade-up"></div></html>'))
+
 # ==== Results ====
 print(f"\n{PASS} passed, {FAIL} failed")
 if FAIL > 0:
