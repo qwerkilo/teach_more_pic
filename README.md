@@ -109,10 +109,10 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 │   ├── validate-lesson.py  课程验证脚本（18 项检查，含双语 + SPA + KG）
 │   ├── test_validate.py    验证脚本单元测试（81 项，覆盖全部 18 项检查）
 │   └── run-tests.ps1       批量验证所有示例
-├── examples/               组件用法示例（24 个 .html，含 1 个 ECharts/D3/Three 混合）
+├── examples/               组件用法示例（27 个 .html，含 3 个新增: 流程图/对比表/SVG 容器，1 个 ECharts/D3/Three 混合）
 ├── libs/                   外部库（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js、magicui-effects.css）
 ├── references/             参考附件（决策指南、页面类型模板）
-├── templates/              9 个模板（4 SVG 骨架 + 课程支架 + SPA + KG + 2 启动脚本）
+├── templates/              9 个模板（4 有效 SVG 图例 + 课程支架 + SPA + KG + 2 启动脚本）
 ├── theme/20 个品牌 DESIGN.md  各品牌设计语言参考
 ├── test-prompts.json       测试提示词（3 个场景）
 ```

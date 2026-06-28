@@ -284,17 +284,22 @@ Step 8: 本地 HTTP 服务器（可选）
 ## 文件资源速查
 
 | 路径 | 用途 | 工作流中引用处 |
-|---|---|---|
-| `templates/lesson-starter.html` | 课程骨架模板（所有课程的起点） | Step 3 |
-| `templates/index-spa.html` | SPA 课程集线器模板 | Step 6 |
-| `templates/kg-starter.html` | 知识图谱模板（双语 nameZh/nameEn） | Step 7 |
+|---|---|---|---|
+| `templates/lesson-starter.html` | 课程骨架模板（所有课程的起点，内含 15 个组件 CSS/HTML/JS） | Step 3 |
+| `templates/index-spa.html` | SPA 课程集线器模板（hash 路由 + 主题/语言切换） | Step 6 |
+| `templates/kg-starter.html` | 知识图谱模板（双语 nameZh/nameEn，L 键切换） | Step 7 |
 | `templates/start-server.ps1` / `.sh` | 本地 HTTP 服务器启动脚本（Windows PS / Linux bash） | Step 8 |
+| `templates/flowchart-vertical.svg` | 垂直流程图模板（完整有效 SVG，四色语义） | Step 2/5 |
+| `templates/cycle-diagram.svg` | 循环图模板（中心+周边节点） | Step 2/5 |
+| `templates/comparison-side-by-side.svg` | 左右对比 SVG 模板（双列对比） | Step 2/5 |
+| `templates/timeline-horizontal.svg` | 水平时间线 SVG 模板（单线事件序列） | Step 2/5 |
+| `examples/*.html` | 27 个组件的独立用法示例（含 SVG 流程图 #1、灵活对比表 #5、SVG 容器 #6、D3/Three/ECharts 混合） | Step 2 参考 |
 | `components/NN-name.md` | 组件代码 + 降级说明（27 个） | Step 2/3 |
-| `references/decision-guide.md` | 组件选择决策矩阵 + 组合示例 | Step 2 |
-| `references/page-types.md` | 封面/分隔页/总结页 HTML/CSS 代码 | 可选页面类型 |
-| `scripts/validate-lesson.py` | 课程验证脚本（18 项检查） | Step 4 |
+| `references/decision-guide.md` | 组件选择决策矩阵 + 7 组三幕组合示例 | Step 2 |
+| `references/page-types.md` | 6 种可选页面类型的完整 HTML/CSS（中英双语） | 可选页面类型 |
+| `scripts/validate-lesson.py` | 课程验证脚本（18 项检查，含双语+SPA+KG） | Step 4 |
 | `scripts/test_validate.py` | 验证脚本单元测试（81 项） | 开发 |
-| `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（shiny/noise/dot/meteor/glow/blur） | 模板自动加载 |
+| `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（13 种零依赖纯 CSS） | 模板自动加载 |
 | `libs/` | 离线包（echarts/three/d3/d3-sankey） | Step 6 |
 
 ## 失败模式与异常处理
