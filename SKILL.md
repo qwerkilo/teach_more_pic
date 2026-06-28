@@ -206,6 +206,31 @@ Step 3: 写 HTML
   - 每幕之间的"视觉停顿"法则：每 2-3 段文本后插入一个视觉元素
   - 阅读节奏：核心内容用交互式组件（Tab/折叠/时间线），数据用卡片/条形图/热力图，引用用引文卡片，提示用告警条
   - **课程间互相链接使用相对路径**：如 `<a href="NNNN-slug.html">`，不要加前导 `/` 或完整 URL
+  - **最终 HTML 文件结构（必须遵守）**：
+```
+lessons/NNNN-slug.html
+├── <html lang="zh-CN" data-theme="warm">
+│   ├── <head>
+│   │   ├── <style>  ← 模板 CSS 变量 + 20 主题 + 正文排版 + 组件 CSS（按前缀分组）
+│   │   └── </head>
+│   ├── <body>
+│   │   ├── <article class="cover-page">  ← 中英双语封面 badge/h1/subtitle/hook
+│   │   ├── <section class="section-divider">  ← 第一幕分隔（divider-num + h2）
+│   │   ├── <p>  ← 中英双语正文段落
+│   │   ├── <figure class="svg-fig"><svg>...  ← SVG 流程图（磁盘 + 内联）
+│   │   ├── <!-- INSERT: 组件 HTML（拆散到各幕） -->
+│   │   ├── <section class="section-divider">  ← 第二幕分隔
+│   │   ├── ... 组件 + 正文 ...
+│   │   ├── <section class="section-divider">  ← 第三幕分隔
+│   │   ├── <aside class="summary-cards">  ← 3 张总结卡片（SVG 图标）
+│   │   ├── <div class="quiz-section">  ← 5 题双语测验
+│   │   ├── <div class="ui-toolbar">  ← T 键 + L 键 + 目录按钮
+│   │   ├── <!-- Quiz JS -->
+│   │   ├── <!-- PPT 质感增强 JS（主题/语言/TOC/动画/导航） -->
+│   │   └── <!-- 组件 JS -->
+│   └── </body>
+```
+  - 这个结构是必须遵守的骨架。所有课程内容以此为基底，仅填充 `<body>` 内的内容区。
 
 Step 4: 验证
   - 浏览器打开 .html 检查渲染
