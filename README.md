@@ -96,7 +96,7 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 4. SVG 保存为 `lessons/svg/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
 5. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
 6. SPA 集成：从 `templates/index-spa.html` 复制为 `index.html`，追加 `<section class="lesson-view" id="lesson-NNN">`
-7. 知识图谱：新项目从 `templates/kg-starter.html` 复制骨架；已有项目在已有 `kg-*.html` 追加节点和关系
+7. 知识图谱：新项目从 `templates/kg-starter.html` 复制到项目根目录为 `kg-项目名.html`（双语 `nameZh`/`nameEn` + L 键切换）；已有项目在已有 `kg-*.html` 中追加节点和关系
 
 ## 项目结构
 
