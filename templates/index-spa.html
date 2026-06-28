@@ -355,17 +355,17 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
       <div class="noise-overlay" style="opacity:0.02;"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="noise-filter-spa"><feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="6" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="linear" slope="0.15"/><feFuncG type="linear" slope="0.15"/><feFuncB type="linear" slope="0.15"/></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(#noise-filter-spa)" opacity="1"/></svg></div>
       <h2 class="shiny-text" data-lang="zh">课程目录</h2>
       <h2 class="shiny-text" data-lang="en">Course Catalog</h2>
-      <p data-lang="zh"><!-- 系列描述，例如：用视觉化方式理解经济金融的核心机制。SPA 内展示课程简介，完整内容请打开对应 NNNN-slug.html --></p>
-      <p data-lang="en"><!-- Course description. SPA shows course summary; full content at NNNN-slug.html --></p>
+      <p data-lang="zh">用视觉化方式理解经济金融的核心机制。SPA 内展示课程简介，完整内容请打开对应 NNNN-slug.html</p>
+      <p data-lang="en">Understand core economic mechanisms through visualization. SPA shows course summary; full content at NNNN-slug.html</p>
     </div>
     <div class="lesson-grid" id="lesson-grid">
       <!-- ===== 课程卡片占位 ===== -->
-      <!--
-      <div class="lesson-card" data-lesson="1">
+      <div class="lesson-card spotlight-card" data-lesson="1" style="position:relative;">
         <span class="card-num">第 1 课</span>
-        <span class="card-title">课程标题</span>
-        <span class="card-desc">一句话描述</span>
+        <span class="card-title">现代货币理论入门</span>
+        <span class="card-desc">主权货币的本质与财政空间重新定义</span>
       </div>
+      <!--
       <div class="lesson-card" data-lesson="2">
         <span class="card-num">第 2 课</span>
         <span class="card-title">课程标题</span>
@@ -396,8 +396,8 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
     <p class="cover-hook" data-lang="zh">引子</p>
     <p class="cover-hook" data-lang="en">Hook</p>
   </article>
-  <p data-lang="zh">内容...</p>
-  <p data-lang="en">Content...</p>
+  <p data-lang="zh"><strong>现代货币理论入门</strong> — 如果政府可以无限印钞，为什么还会有债务危机？传统经济学把政府比作家庭，但 MMT 指出：主权货币发行国不受预算硬约束。</p>
+  <p data-lang="en"><strong>Introduction to MMT</strong> — If the government can print unlimited money, why do debt crises exist? Traditional economics treats government like a household, but MMT argues sovereign issuers face no hard budget constraint.</p>
 </section>
 
 <!-- 复制上方 <section> 作为新课程模板，修改 id="lesson-NNN" 和内容 -->
