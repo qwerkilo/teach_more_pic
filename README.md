@@ -54,7 +54,7 @@ Skills: teach, grill-me, teach_more_pic, fireworks-tech-graph, knowledge-graph-m
 
 **26 个视觉组件**（完整索引见 SKILL.md）：
 
-- **#1-7 核心**：SVG 流程图 / 角色卡片 / CSS 时间线 / CSS 条形图 / 对比表 / SVG 容器 / PPT 质感（主题切换 + 滚动动画 + 键盘导航）
+- **#1-7 核心**：SVG 流程图 / 角色卡片 / CSS 时间线 / CSS 条形图 / 对比表 / SVG 容器 / PPT 质感（主题切换 + 语言切换 + 滚动动画 + 键盘导航 + 目录）
 - **#8-14 交互式**：折叠分步详解 / Tab 切换面板 / 图片对比滑块 / 交互式时间线 / 数据卡片网格 / 引文卡片 / 标注式图片
 - **#15-26 数据与辅助**：状态链 / 数值滚动动画 / 标签徽章组 / 告警条 / 热力图 / 步骤指示器 / 信息面板 / 对比表增强版 / 灯箱 / **ECharts 交互式图表**（柱状/饼/折线/堆叠，需下载 `libs/echarts.min.js`） / **Three.js 3D**（3D 数据可视化，需下载 `libs/three.min.js`） / 现代浏览器 API（原生折叠/模态/幻灯片/Popover）
 - **19 品牌主题** — 22 个 CSS 变量，`var(--accent/border/surface/...)` 自动跟随
@@ -79,11 +79,17 @@ powershell -ExecutionPolicy Bypass -File scripts/run-tests.ps1
 
 # 运行验证脚本单元测试
 python scripts/test_validate.py
+
+# JS 语法检查
+node -e "new Function(require('fs').readFileSync('file','r',encoding='utf-8').match(/<script>([\\s\\S]*?)<\\/script>/)[1])"
+
+# SVG XML 检查
+python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 ```
 
 ## 课程制作流程
 
-0. **使用 `grill-me` skill 拷问需求** — 澄清主题/受众/叙事矛盾/数据/风格偏好，确认后再继续
+0. **使用 `grill-me` skill 拷问需求** — 澄清主题/受众/叙事矛盾/数据/风格偏好/双语需求，确认后再继续
 1. 复制 `templates/lesson-starter.html` 作为新课程骨架 → 确认三幕大纲
 2. 从 SKILL.md 组件索引表选 4-7 个组件（每幕 1-3 个），使用决策指南匹配 → 确认组件清单
 3. 打开对应 `components/NN-name.md`，复制 ````html`/```css`/```js` 合并到模板中
