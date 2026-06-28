@@ -90,7 +90,7 @@ python scripts/test_validate.py
 4. SVG 保存为 `lessons/svg/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
 5. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
 6. SPA 集成：从 `templates/index-spa.html` 复制为 `index.html`，追加 `<section class="lesson-view" id="lesson-NNN">`
-7. 知识图谱：新项目从 `templates/kg-starter.html` 复制骨架；已有项目在 `kg-yuecai.html` 追加
+7. 知识图谱：新项目从 `templates/kg-starter.html` 复制骨架；已有项目在已有 `kg-*.html` 追加节点和关系
 
 ## 项目结构
 

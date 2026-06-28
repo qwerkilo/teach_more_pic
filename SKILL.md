@@ -224,7 +224,7 @@ Step 6: SPA 集成
 
 Step 7: 知识图谱更新
   - 新项目可从 `templates/kg-starter.html` 复制骨架，填入 `graphData.nodes[]` + `links[]`
-  - 已有图谱在 `kg-yuecai.html` 的 `graphData.nodes[]` 和 `links[]` 中追加新课程节点
+  - 已有图谱在已有 `kg-*.html` 中追加新课程节点和关系
   - 提取课程中的关键概念/术语作为节点，课程间的链接作为边
   - 🔴 验证：新节点 id 不与已有节点重复
   - 🛑 STOP：确认图谱显示正确后再进入 Step 5 配套产出（如有后续课）
