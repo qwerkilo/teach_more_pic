@@ -287,7 +287,8 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 .lang-btn { background: none; border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; font-size: 0.72rem; cursor: pointer; padding: 1px 5px; line-height: 1.4; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; font-family: inherit; font-weight: 600; letter-spacing: 0.03em; }
 .lang-btn:hover { opacity: 1; color: #ffffff; border-color: rgba(255,255,255,0.5); }
 [data-lang] { display: none; }
-[data-lang].active { display: revert; }
+[data-lang].active { display: inline; }
+h1[data-lang].active, h2[data-lang].active, p[data-lang].active, div[data-lang].active, section[data-lang].active, article[data-lang].active, aside[data-lang].active { display: block; }
 .cover-badge[data-lang].active { display: inline-block; }
 
 /* ===== 响应式 ===== */
@@ -309,7 +310,8 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <!-- ===== SPA 主容器 ===== -->
 <div id="app">
   <header class="site-header">
-    <h1>课程系列</h1>
+    <h1 data-lang="zh">课程系列</h1>
+    <h1 data-lang="en">Course Series</h1>
     <span class="meta" id="spa-meta"></span>
     <div class="header-actions">
       <button class="theme-btn" id="btn-cycle-theme" aria-label="切换主题" title="切换主题"></button>
@@ -449,7 +451,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   try {
     var la=['zh','en'];var li=la.indexOf(localStorage.getItem('lang'));if(li<0)li=0;
     var lb=document.querySelector('[data-lang-btn]');
-    function sw(l){document.querySelectorAll('[data-lang]').forEach(function(x){x.classList.toggle('active',x.dataset.lang===l);});try{localStorage.setItem('lang',l);}catch(e){}if(lb){lb.textContent=l==='zh'?'中':'EN';}}
+    function sw(l){document.querySelectorAll('[data-lang]').forEach(function(x){x.classList.toggle('active',x.dataset.lang===l);});try{localStorage.setItem('lang',l);}catch(e){}if(lb){lb.textContent=l==='zh'?'中':'EN';}updateMeta();}
     sw(la[li]);
     if(lb){lb.addEventListener('click',function(){li=(li+1)%la.length;sw(la[li]);});}
     document.addEventListener('keydown',function(e){if(e.key==='l'&&!e.ctrlKey&&!e.metaKey){li=(li+1)%la.length;sw(la[li]);}});
@@ -514,7 +516,12 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
   /* ===== 页面统计 ===== */
   var meta = document.getElementById('spa-meta');
-  if (meta) meta.textContent = views.length + ' 课';
+  function updateMeta() {
+    if (!meta) return;
+    var lang = 'zh'; try { var ls = localStorage.getItem('lang'); if (ls) lang = ls; } catch(e) {}
+    meta.textContent = lang === 'zh' ? (views.length + ' 课') : (views.length + ' lessons');
+  }
+  updateMeta();
 
   /* ===== hash 路由 ===== */
   window.addEventListener('hashchange', function() { navigateTo(location.hash); });

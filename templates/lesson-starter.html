@@ -247,7 +247,8 @@ button:active { transform: scale(0.98); }
 .lang-btn { background: none; border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; font-size: 0.72rem; cursor: pointer; padding: 1px 5px; line-height: 1.4; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; font-family: inherit; font-weight: 600; letter-spacing: 0.03em; }
 .lang-btn:hover { opacity: 1; color: #ffffff; border-color: rgba(255,255,255,0.5); }
 [data-lang] { display: none; }
-[data-lang].active { display: revert; }
+[data-lang].active { display: inline; }
+h1[data-lang].active, h2[data-lang].active, p[data-lang].active, div[data-lang].active, section[data-lang].active, article[data-lang].active, aside[data-lang].active { display: block; }
 .cover-badge[data-lang].active { display: inline-block; }
 .toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; }
 .toc-btn:hover { opacity: 1; color: #ffffff; }
