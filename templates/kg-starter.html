@@ -6,6 +6,7 @@
 <title>课程知识图谱</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<link rel="stylesheet" href="../libs/magicui-effects.css">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
@@ -39,6 +40,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
   margin-right: auto;
   letter-spacing: -0.01em;
 }
+.toolbar .noise-overlay { opacity: 0.015; mix-blend-mode: luminosity; }
+#app { position: relative; }
+.legend.border-glow::after { background: var(--card-bg); }
 
 .toolbar .meta {
   font-size: 0.78rem;
@@ -200,9 +204,10 @@ button[data-lang].lang-btn.active, button[data-lang].layout-btn.active, button[d
 </head>
 <body>
 <div id="app">
-  <div class="toolbar">
-    <h1 data-lang="zh">课程知识图谱</h1>
-    <h1 data-lang="en">Course Knowledge Graph</h1>
+  <div class="toolbar" style="position:relative;">
+    <div class="noise-overlay" style="opacity:0.015;mix-blend-mode:luminosity;"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="kg-noise"><feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="6" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="linear" slope="0.15"/><feFuncG type="linear" slope="0.15"/><feFuncB type="linear" slope="0.15"/></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(#kg-noise)" opacity="1"/></svg></div>
+    <h1 class="shiny-text" data-lang="zh">课程知识图谱</h1>
+    <h1 class="shiny-text" data-lang="en">Course Knowledge Graph</h1>
     <span class="meta" id="meta-stats"></span>
     <div class="group">
       <span class="label" data-lang="zh">布局</span>
@@ -223,7 +228,7 @@ button[data-lang].lang-btn.active, button[data-lang].layout-btn.active, button[d
   </div>
   <div style="position: relative; flex: 1; display: flex;">
     <div id="chart"></div>
-    <div class="legend" id="legend"></div>
+    <div class="legend border-glow" id="legend"></div>
     <div class="tooltip-card" id="tooltip"></div>
   </div>
 </div>
