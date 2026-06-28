@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程知识图谱</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--text-primary);
+  transition: background 0.3s ease;
+}
+
+.toolbar {
+  flex-shrink: 0;
+  padding: 14px 24px;
+  background: var(--toolbar-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.toolbar h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-right: auto;
+  letter-spacing: -0.01em;
+}
+
+.toolbar .meta {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-right: 8px;
+}
+
+.toolbar .group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbar .label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  margin-right: 4px;
+}
+
+.theme-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  padding: 0;
+  background: transparent;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+.theme-dot:hover { transform: scale(1.1); }
+.theme-dot.active { border-color: var(--text-primary); transform: scale(1.1); }
+.theme-dot[data-theme="dark-tech"]    { background: #0a0e27; }
+.theme-dot[data-theme="nature-fresh"] { background: #f0f7ee; }
+.theme-dot[data-theme="warm-sunset"]  { background: #1a1420; }
+.theme-dot[data-theme="ocean-deep"]   { background: #0b1a33; }
+
+.layout-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  border: 1px solid var(--border-color);
+  background: var(--button-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.layout-btn:hover { background: var(--button-hover-bg); }
+.layout-btn.active {
+  background: var(--button-active-bg);
+  border-color: var(--button-active-bg);
+  color: #fff;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  border: 1px solid var(--border-color);
+  background: var(--button-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.action-btn:hover { background: var(--button-hover-bg); }
+.action-btn i { margin-right: 4px; }
+
+#chart {
+  flex: 1;
+  width: 100%;
+}
+
+.legend {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  z-index: 10;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 240px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tooltip-card {
+  position: absolute;
+  z-index: 100;
+  background: var(--tooltip-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  max-width: 280px;
+}
+.tooltip-card.visible { opacity: 1; }
+.tooltip-card .tt-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+.tooltip-card .tt-meta {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 2rem;
+}
+.empty-state i { font-size: 2.5rem; opacity: 0.4; }
+
+@media (max-width: 640px) {
+  .toolbar { padding: 10px 14px; gap: 10px; }
+  .toolbar h1 { font-size: 1rem; width: 100%; margin-bottom: 4px; }
+  .toolbar .meta { display: none; }
+  .legend { bottom: 12px; left: 12px; padding: 8px 12px; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="toolbar">
+    <h1>课程知识图谱</h1>
+    <span class="meta" id="meta-stats"></span>
+    <div class="group">
+      <span class="label">布局</span>
+      <button class="layout-btn active" data-layout="force"><i class="fas fa-project-diagram"></i>力导向</button>
+      <button class="layout-btn" data-layout="radial"><i class="fas fa-bullseye"></i>辐射状</button>
+    </div>
+    <div class="group">
+      <span class="label">主题</span>
+      <button class="theme-dot active" data-theme="dark-tech" title="暗色科技"></button>
+      <button class="theme-dot" data-theme="nature-fresh" title="自然清新"></button>
+      <button class="theme-dot" data-theme="warm-sunset" title="暖阳落日"></button>
+      <button class="theme-dot" data-theme="ocean-deep" title="深海幽蓝"></button>
+    </div>
+    <button class="action-btn" id="btn-reset" title="重置视图"><i class="fas fa-undo"></i>重置</button>
+  </div>
+  <div style="position: relative; flex: 1; display: flex;">
+    <div id="chart"></div>
+    <div class="legend" id="legend"></div>
+    <div class="tooltip-card" id="tooltip"></div>
+  </div>
+</div>
+
+<script>
+// ===== 主题配置（勿改结构，可增删 theme 条目） =====
+const themes = {
+  "dark-tech": {
+    "name": "暗色科技",
+    "background": "#0a0e27",
+    "cardBg": "#111638",
+    "toolbarBg": "#111638",
+    "textPrimary": "#e0e0ff",
+    "textSecondary": "#8888aa",
+    "borderColor": "#1e2250",
+    "buttonBg": "#1a1f4e",
+    "buttonHoverBg": "#2a2f6e",
+    "buttonActiveBg": "#3a3f8e",
+    "tooltipBg": "rgba(17,22,56,0.95)",
+    "colors": ["#00d4ff","#7b2ff7","#ff6b6b","#ffd93d","#00ff88","#ff8c42","#b388ff","#64ffda"],
+    "lineColor": "rgba(100,180,255,0.35)",
+    "lineHighlight": "rgba(0,212,255,0.85)"
+  },
+  "nature-fresh": {
+    "name": "自然清新",
+    "background": "#f0f7ee",
+    "cardBg": "#ffffff",
+    "toolbarBg": "#ffffff",
+    "textPrimary": "#1b4332",
+    "textSecondary": "#52796f",
+    "borderColor": "#d8f3dc",
+    "buttonBg": "#d8f3dc",
+    "buttonHoverBg": "#b7e4c7",
+    "buttonActiveBg": "#95d5b2",
+    "tooltipBg": "rgba(255,255,255,0.95)",
+    "colors": ["#2d6a4f","#e07a5f","#3d405b","#81b29a","#f2cc8f","#264653","#e76f51","#6d6875"],
+    "lineColor": "rgba(45,106,79,0.3)",
+    "lineHighlight": "rgba(45,106,79,0.75)"
+  },
+  "warm-sunset": {
+    "name": "暖阳落日",
+    "background": "#1a1420",
+    "cardBg": "#2a1f30",
+    "toolbarBg": "#2a1f30",
+    "textPrimary": "#fde8d0",
+    "textSecondary": "#c9a87c",
+    "borderColor": "#3d2a4a",
+    "buttonBg": "#3d2a4a",
+    "buttonHoverBg": "#5a3d6a",
+    "buttonActiveBg": "#f59e0b",
+    "tooltipBg": "rgba(42,31,48,0.95)",
+    "colors": ["#fbbf24","#f97316","#ef4444","#a855f7","#ec4899","#fcd34d","#fb923c","#8b5cf6"],
+    "lineColor": "rgba(251,191,36,0.25)",
+    "lineHighlight": "rgba(251,191,36,0.7)"
+  },
+  "ocean-deep": {
+    "name": "深海幽蓝",
+    "background": "#0b1a33",
+    "cardBg": "#0f2244",
+    "toolbarBg": "#0f2244",
+    "textPrimary": "#caf0f8",
+    "textSecondary": "#90e0ef",
+    "borderColor": "#023e8a",
+    "buttonBg": "#023e8a",
+    "buttonHoverBg": "#0077b6",
+    "buttonActiveBg": "#0096c7",
+    "tooltipBg": "rgba(15,34,68,0.95)",
+    "colors": ["#48cae4","#ff6b6b","#ffd93d","#00ff88","#b388ff","#f77f00","#e0aaff","#00d4ff"],
+    "lineColor": "rgba(72,202,228,0.3)",
+    "lineHighlight": "rgba(72,202,228,0.75)"
+  }
+};
+
+const layouts = {
+  "force": {
+    "name": "力导向",
+    "icon": "fa-project-diagram",
+    "echarts": {
+      "layout": "force",
+      "force": { "repulsion": 300, "gravity": 0.1, "edgeLength": [80, 200], "friction": 0.6 },
+      "roam": true,
+      "draggable": true
+    }
+  },
+  "radial": {
+    "name": "辐射状",
+    "icon": "fa-bullseye",
+    "echarts": {
+      "layout": "circular",
+      "circular": { "rotateLabel": true },
+      "roam": true,
+      "draggable": true
+    }
+  }
+};
+
+// ===== 图谱数据（请修改此处：增删 nodes/links/categories） =====
+const graphData = {
+  "categories": ["课程", "概念"],
+  "nodes": [
+    // 课程节点
+    // { "id": "L1", "name": "第一课", "category": "课程", "weight": 100, "desc": "描述" },
+    // 概念节点
+    // { "id": "C1", "name": "概念名", "category": "概念", "weight": 65, "desc": "描述" },
+  ],
+  "links": [
+    // { "source": "L1", "target": "L2", "relation": "前置" },
+    // { "source": "L1", "target": "C1", "relation": "包含" },
+  ]
+};
+// ===== 图谱数据定义结束 =====
+
+(function() {
+  'use strict';
+
+  const themeNames = Object.keys(themes);
+  const layoutNames = Object.keys(layouts);
+  const initialThemeName = 'dark-tech';
+  const initialLayoutName = 'force';
+
+  let currentThemeName = (themeNames.indexOf(initialThemeName) >= 0) ? initialThemeName : themeNames[0];
+  let currentLayoutName = (layoutNames.indexOf(initialLayoutName) >= 0) ? initialLayoutName : layoutNames[0];
+
+  const categoryColorMap = {};
+  themes[currentThemeName].colors.forEach((c, i) => {
+    categoryColorMap[graphData.categories[i] || ('cat_' + i)] = c;
+  });
+  graphData.nodes.forEach((node, i) => {
+    const cats = graphData.categories;
+    let ci = cats.indexOf(node.category);
+    if (ci < 0) ci = i % themes[currentThemeName].colors.length;
+    node.__colorIdx = ci;
+  });
+
+  const root = document.documentElement;
+  function applyTheme(name) {
+    const t = themes[name];
+    if (!t) return;
+    currentThemeName = name;
+    root.style.setProperty('--background', t.background);
+    root.style.setProperty('--card-bg', t.cardBg);
+    root.style.setProperty('--toolbar-bg', t.toolbarBg);
+    root.style.setProperty('--text-primary', t.textPrimary);
+    root.style.setProperty('--text-secondary', t.textSecondary);
+    root.style.setProperty('--border-color', t.borderColor);
+    root.style.setProperty('--button-bg', t.buttonBg);
+    root.style.setProperty('--button-hover-bg', t.buttonHoverBg);
+    root.style.setProperty('--button-active-bg', t.buttonActiveBg);
+    root.style.setProperty('--tooltip-bg', t.tooltipBg);
+
+    graphData.nodes.forEach((node) => {
+      node.itemStyle = { color: t.colors[node.__colorIdx % t.colors.length] };
+      if (node.symbolSize === undefined) {
+        node.symbolSize = 18 + Math.round(node.weight / 5);
+      }
+      node.label = { color: t.textPrimary, show: true, position: 'right', fontSize: 11, fontWeight: 600 };
+    });
+
+    const linkColor = t.lineColor || 'rgba(255,255,255,0.3)';
+    graphData.links.forEach((link) => { link.lineStyle = { color: linkColor, width: 1, opacity: 0.8 }; });
+
+    document.querySelectorAll('.theme-dot').forEach((d) => d.classList.toggle('active', d.dataset.theme === name));
+    document.body.style.background = t.background;
+
+    renderLegend();
+    if (chart) chart.setOption(buildOption());
+  }
+
+  function applyLayout(name) {
+    const l = layouts[name];
+    if (!l) return;
+    currentLayoutName = name;
+    document.querySelectorAll('.layout-btn').forEach((b) => b.classList.toggle('active', b.dataset.layout === name));
+    if (chart) chart.setOption(buildOption(), true);
+  }
+
+  function buildOption() {
+    const layout = layouts[currentLayoutName].echarts;
+    return {
+      tooltip: {
+        trigger: 'item',
+        formatter: function(p) {
+          if (p.dataType === 'edge') return p.data.relation || '';
+          const n = p.data;
+          return '<b>' + n.name + '</b><br/>' +
+                 '<span style="opacity:0.7">' + n.category + ' · 权重 ' + n.weight + '</span>';
+        },
+        backgroundColor: themes[currentThemeName].tooltipBg,
+        borderColor: themes[currentThemeName].borderColor,
+        textStyle: { color: themes[currentThemeName].textPrimary }
+      },
+      animationDuration: 800,
+      animationEasingUpdate: 'cubicInOut',
+      series: [{
+        type: 'graph',
+        layout: layout.layout,
+        force: layout.force,
+        circular: layout.circular,
+        roam: layout.roam !== false,
+        draggable: layout.draggable !== false,
+        data: graphData.nodes,
+        links: graphData.links,
+        categories: graphData.categories.map((c, i) => ({
+          name: c,
+          itemStyle: { color: themes[currentThemeName].colors[i % themes[currentThemeName].colors.length] }
+        })),
+        emphasis: {
+          focus: 'adjacency',
+          lineStyle: { width: 3, color: themes[currentThemeName].lineHighlight || themes[currentThemeName].lineColor },
+          label: { fontWeight: 700 }
+        },
+        lineStyle: { color: 'source', curveness: 0.05, opacity: 0.8 },
+        label: { show: true, position: 'right', color: themes[currentThemeName].textPrimary, fontSize: 11 }
+      }]
+    };
+  }
+
+  function renderLegend() {
+    const el = document.getElementById('legend');
+    if (!el) return;
+    const t = themes[currentThemeName];
+    el.innerHTML = graphData.categories.map((c, i) =>
+      '<div class="legend-item"><span class="legend-dot" style="background:' + t.colors[i % t.colors.length] + '"></span>' + c + '</div>'
+    ).join('');
+  }
+
+  function updateMeta() {
+    const el = document.getElementById('meta-stats');
+    if (el) el.textContent = graphData.nodes.length + ' 节点 · ' + graphData.links.length + ' 关系 · ' + graphData.categories.length + ' 分类';
+  }
+
+  let chart = null;
+  function initChart() {
+    const dom = document.getElementById('chart');
+    if (typeof echarts === 'undefined') {
+      dom.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><div>ECharts 加载失败，请检查网络连接</div></div>';
+      return;
+    }
+    chart = echarts.init(dom);
+    chart.setOption(buildOption());
+
+    chart.on('mouseover', { dataType: 'node' }, function(p) {
+      const tip = document.getElementById('tooltip');
+      if (!tip) return;
+      tip.innerHTML = '<div class="tt-name">' + p.data.name + '</div>' +
+                      '<div class="tt-meta">' + p.data.category + ' · 权重 ' + p.data.weight + '</div>';
+      tip.classList.add('visible');
+      positionTooltip(p.event.event);
+    });
+    chart.on('mouseout', { dataType: 'node' }, function() {
+      const tip = document.getElementById('tooltip');
+      if (tip) tip.classList.remove('visible');
+    });
+
+    window.addEventListener('resize', () => chart && chart.resize());
+  }
+
+  function positionTooltip(e) {
+    const tip = document.getElementById('tooltip');
+    if (!tip || !e) return;
+    const x = (e.clientX || 0) + 14;
+    const y = (e.clientY || 0) - 10;
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+
+  document.addEventListener('mousemove', function(e) {
+    const tip = document.getElementById('tooltip');
+    if (tip && tip.classList.contains('visible')) {
+      tip.style.left = (e.clientX + 14) + 'px';
+      tip.style.top = (e.clientY - 10) + 'px';
+    }
+  });
+
+  document.querySelectorAll('.theme-dot').forEach((d) => {
+    d.addEventListener('click', () => applyTheme(d.dataset.theme));
+  });
+  document.querySelectorAll('.layout-btn').forEach((b) => {
+    b.addEventListener('click', () => applyLayout(b.dataset.layout));
+  });
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    if (chart) chart.dispatchAction({ type: 'restore' });
+  });
+
+  updateMeta();
+  applyTheme(currentThemeName);
+  applyLayout(currentLayoutName);
+  initChart();
+})();
+</script>
+</body>
+</html>

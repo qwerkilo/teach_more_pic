@@ -202,7 +202,8 @@ Step 6: SPA 集成
   - 🔴 如课程使用了 ECharts 组件（#26），将 `libs/echarts.min.js` 复制到目标项目的 `libs/` 目录
 
 Step 7: 知识图谱更新
-  - 在 `kg-yuecai.html` 的 `graphData.nodes[]` 和 `links[]` 中追加新课程节点
+  - 新项目可从 `templates/kg-starter.html` 复制骨架，填入 `graphData.nodes[]` + `links[]`
+  - 已有图谱在 `kg-yuecai.html` 的 `graphData.nodes[]` 和 `links[]` 中追加新课程节点
   - 提取课程中的关键概念/术语作为节点，课程间的链接作为边
   - 🔴 验证：新节点 id 不与已有节点重复
 ```

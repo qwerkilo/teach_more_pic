@@ -89,6 +89,7 @@ python scripts/test_validate.py
 3. 打开对应 `components/NN-name.md`，复制 ````html`/```css`/```js` 合并到模板中
 4. SVG 保存为 `lessons/svg/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
 5. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
+6. 知识图谱：新项目从 `templates/kg-starter.html` 复制骨架，填入节点和关系数据；已有项目在 `kg-yuecai.html` 中追加
 
 ## 项目结构
 
@@ -100,7 +101,7 @@ python scripts/test_validate.py
 │   ├── test_validate.py    验证脚本单元测试（29 项）（Popover/dialog 一致性检查）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（21 个 .html）
-├── templates/              5 个模板（4 SVG 骨架 + 1 课程起始 HTML）
+├── templates/              6 个模板（4 SVG 骨架 + 1 课程起始 HTML + 1 知识图谱骨架）
 ├── theme/19 个品牌 DESIGN.md  各品牌设计语言参考
 ├── test-prompts.json       测试提示词（12 个场景）
 └── results.tsv             darwin-skill 优化记录
