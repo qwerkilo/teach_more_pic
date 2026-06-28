@@ -234,8 +234,116 @@ button:active { transform: scale(0.98); }
 .summary-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
 .summary-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin-bottom: 0.6em; color: var(--accent); }
 
-/* ===== 组件 CSS 从此处插入（按前缀分组） ===== */
-/* INSERT: 从 components/NN-name.md 复制 CSS 到这里 */
+/* ============================================================ */
+/* ===== 组件 CSS 从此处插入（按前缀分组）                      ===== */
+/* ===== 🛑 以下为示例组件 CSS，替换课程内容时按需保留/删除  ===== */
+/* ============================================================ */
+
+/* 角色卡片 (#2) */
+.rc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.rc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem; text-align: center; transition: box-shadow 0.2s ease; }
+.rc-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+.rc-icon { font-size: 2rem; margin-bottom: 0.4em; display: block; }
+.rc-name { font-weight: 700; font-size: 0.95rem; display: block; margin-bottom: 0.2em; }
+.rc-desc { font-size: 0.82rem; color: var(--muted); }
+
+/* CSS 时间线 (#3) */
+.tl { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+.tl::before { content: ''; position: absolute; left: 8px; top: 4px; bottom: 4px; width: 2px; background: var(--border); }
+.tl-item { position: relative; padding: 0 0 1.2em 0.8em; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-dot { position: absolute; left: -1.5rem; top: 0.3em; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+.tl-date { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+.tl-text { font-size: 0.9rem; margin: 0.2em 0 0; }
+
+/* CSS 条形图 (#4) */
+.bar-chart { margin: 1.5rem 0; }
+.bar-item { display: flex; align-items: center; gap: 10px; margin-bottom: 0.6em; }
+.bar-label { width: 70px; font-size: 0.82rem; font-weight: 600; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; height: 24px; background: var(--surface); border-radius: 12px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 0.72rem; font-weight: 600; color: #fff; transition: width 1s ease; }
+
+/* 对比表 (#5) */
+.cmp-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.85rem; }
+.cmp-table th, .cmp-table td { padding: 0.6em 0.8em; border: 1px solid var(--border); text-align: left; }
+.cmp-table th { background: var(--accent); color: var(--accent-text); font-weight: 600; }
+.cmp-table tr:nth-child(even) td { background: var(--surface); }
+.cmp-table .cmp-yes { color: var(--success); font-weight: 700; }
+.cmp-table .cmp-no { color: var(--error); }
+
+/* 折叠式分步详解 (#8) */
+.sd-item { margin-bottom: 0.5em; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.sd-trigger { display: block; width: 100%; padding: 0.8em 1em; background: var(--surface); border: none; text-align: left; font-size: 0.9rem; font-weight: 600; font-family: inherit; cursor: pointer; color: var(--text); transition: background 0.2s ease; }
+.sd-trigger:hover { background: var(--surface-raised); }
+.sd-content { height: 0; overflow: hidden; transition: height 0.3s ease; background: var(--bg); }
+.sd-content > div { padding: 0.8em 1em; font-size: 0.85rem; }
+
+/* Tab 切换面板 (#9) */
+.tab-bar { display: flex; gap: 2px; margin: 1.5rem 0 0; overflow-x: auto; }
+.tab-btn { padding: 0.5em 1.2em; font-size: 0.82rem; font-weight: 600; font-family: inherit; border: none; border-radius: var(--radius) var(--radius) 0 0; background: var(--surface); color: var(--muted); cursor: pointer; transition: background 0.2s ease, color 0.2s ease; white-space: nowrap; }
+.tab-btn:hover { background: var(--surface-raised); color: var(--text); }
+.tab-btn.active { background: var(--accent); color: var(--accent-text); }
+.tab-panel { display: none; padding: 1em; background: var(--bg); border: 1px solid var(--border); border-radius: 0 var(--radius) var(--radius) var(--radius); font-size: 0.85rem; }
+.tab-panel.active { display: block; }
+
+/* 数据卡片网格 (#12) */
+.dg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.dg-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem; text-align: center; }
+.dg-icon { font-size: 1.5rem; display: block; margin-bottom: 0.3em; }
+.dg-value { font-size: 1.5rem; font-weight: 800; color: var(--accent); display: block; font-variant-numeric: tabular-nums; }
+.dg-label { font-size: 0.78rem; color: var(--muted); margin-top: 0.2em; display: block; }
+
+/* 引用/引文卡片 (#13) */
+.qc-card { margin: 1.5rem 0; padding: 1.2em 1.5em; background: var(--surface); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; }
+.qc-text { font-size: 0.95rem; font-style: italic; margin: 0 0 0.5em; }
+.qc-author { font-size: 0.82rem; color: var(--muted); font-style: normal; }
+.qc-author::before { content: '— '; }
+
+/* 状态链 (#15) */
+.sc-chain { display: flex; justify-content: space-between; align-items: flex-start; margin: 1.5rem 0; padding: 0 1rem; gap: 4px; }
+.sc-step { flex: 1; text-align: center; position: relative; padding-top: 1.8em; }
+.sc-step::before { content: ''; position: absolute; top: 0.7em; left: calc(50% + 12px); right: calc(-50% + 12px); height: 2px; background: var(--border); z-index: 0; }
+.sc-step:last-child::before { display: none; }
+.sc-dot { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); z-index: 1; }
+.sc-step.done .sc-dot { background: var(--success); border-color: var(--success); }
+.sc-step.current .sc-dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); }
+.sc-label { font-size: 0.78rem; margin-top: 0.3em; display: block; color: var(--muted); }
+.sc-step.current .sc-label { color: var(--text); font-weight: 600; }
+.sc-step.done .sc-label { color: var(--success); }
+
+/* 数值滚动动画 (#16) — 见 JS 部分 */
+/* 标签/徽章组 (#17) */
+.tag-group { display: flex; flex-wrap: wrap; gap: 6px; margin: 1rem 0; }
+.tag { display: inline-block; padding: 0.2em 0.8em; border-radius: 20px; font-size: 0.78rem; font-weight: 600; background: color-mix(in srgb, var(--accent) 15%, var(--bg)); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+
+/* 提示框/告警条 (#18) */
+.callout { margin: 1.2rem 0; padding: 0.8em 1em; border-radius: var(--radius); font-size: 0.88rem; display: flex; align-items: flex-start; gap: 10px; }
+.callout-icon { font-size: 1.1rem; line-height: 1.4; flex-shrink: 0; }
+.callout.info { background: color-mix(in srgb, var(--accent) 8%, var(--bg)); border-left: 4px solid var(--accent); }
+.callout.warning { background: color-mix(in srgb, var(--warning) 10%, var(--bg)); border-left: 4px solid var(--warning); }
+.callout.error { background: color-mix(in srgb, var(--error) 8%, var(--bg)); border-left: 4px solid var(--error); }
+.callout.success { background: color-mix(in srgb, var(--success) 8%, var(--bg)); border-left: 4px solid var(--success); }
+
+/* 步骤指示器 (#20) */
+.si-bar { display: flex; justify-content: center; gap: 0.5rem; margin: 1.5rem 0; }
+.si-step { display: flex; align-items: center; gap: 6px; padding: 0.4em 0.8em; border-radius: 20px; font-size: 0.82rem; font-weight: 600; background: var(--surface); color: var(--muted); }
+.si-step.active { background: var(--accent); color: var(--accent-text); }
+.si-step.done { background: color-mix(in srgb, var(--success) 15%, var(--bg)); color: var(--success); }
+.si-num { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; background: currentColor; color: var(--bg); font-weight: 700; }
+.si-step.done .si-num { background: var(--success); color: #fff; }
+.si-step.active .si-num { background: var(--accent-text); color: var(--accent); }
+
+/* 全屏模态/灯箱 (#23) */
+.lbox-trigger { cursor: pointer; display: inline-block; padding: 0.4em 1em; background: var(--accent); color: var(--accent-text); border-radius: var(--radius); font-size: 0.85rem; border: none; font-family: inherit; font-weight: 600; transition: opacity 0.2s ease; }
+.lbox-trigger:hover { opacity: 0.85; }
+.lbox-overlay { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
+.lbox-overlay.open { display: flex; }
+.lbox-content { background: var(--bg); border-radius: var(--radius); padding: 1.5rem; max-width: 500px; width: 90%; position: relative; max-height: 80vh; overflow-y: auto; }
+.lbox-close { position: absolute; top: 8px; right: 12px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--muted); }
+
+/* ===== 🛑 上方为组件示例 CSS，替换课程内容时按需保留/删除 ===== */
+/* ============================================================ */
+/* INSERT: 从 components/NN-name.md 复制 CSS 到这里（组件 CSS 可追加在下方） */
 
 /* ===== Magic UI 装饰效果（同步自 libs/magicui-effects.css，见 libs/ 为最新版） ===== */
 @keyframes bg-spin { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -358,6 +466,39 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <p data-lang="en" style="margin:0;font-size:0.95rem;"><strong>Key Insight</strong>: Sovereign currency issuers ≠ households. Taxes aren't about "raising money"—they regulate inflation.</p>
 </div>
 
+<!-- ===== 🛑 组件示例 HTML — 替换为实际课程内容 ===== -->
+
+<!-- 角色卡片 (#2) 🛑 替换角色/描述 -->
+<div class="rc-grid">
+  <div class="rc-card spotlight-card" style="position:relative;"><span class="rc-icon">🏛️</span><span class="rc-name" data-lang="zh">财政部</span><span class="rc-name" data-lang="en">Treasury</span><span class="rc-desc" data-lang="zh">负责发债与支出</span><span class="rc-desc" data-lang="en">Issues debt & spending</span></div>
+  <div class="rc-card spotlight-card" style="position:relative;"><span class="rc-icon">🏦</span><span class="rc-name" data-lang="zh">央行</span><span class="rc-name" data-lang="en">Central Bank</span><span class="rc-desc" data-lang="zh">设定利率与货币供给</span><span class="rc-desc" data-lang="en">Sets rates & money supply</span></div>
+  <div class="rc-card spotlight-card" style="position:relative;"><span class="rc-icon">📊</span><span class="rc-name" data-lang="zh">商业银行</span><span class="rc-name" data-lang="en">Commercial Banks</span><span class="rc-desc" data-lang="zh">信贷创造的中介</span><span class="rc-desc" data-lang="en">Credit intermediation</span></div>
+</div>
+
+<!-- 状态链 (#15) 🛑 替换步骤 -->
+<div class="sc-chain">
+  <div class="sc-step done"><div class="sc-dot"></div><span class="sc-label" data-lang="zh">政府支出</span><span class="sc-label" data-lang="en">Gov Spending</span></div>
+  <div class="sc-step current"><div class="sc-dot"></div><span class="sc-label" data-lang="zh">货币创造</span><span class="sc-label" data-lang="en">Money Creation</span></div>
+  <div class="sc-step"><div class="sc-dot"></div><span class="sc-label" data-lang="zh">税收回收</span><span class="sc-label" data-lang="en">Tax Withdrawal</span></div>
+</div>
+
+<!-- 标签/徽章组 (#17) 🛑 替换标签 -->
+<div class="tag-group">
+  <span class="tag">主权货币</span>
+  <span class="tag">财政赤字</span>
+  <span class="tag">通货膨胀</span>
+  <span class="tag">量化宽松</span>
+  <span class="tag">部门余额</span>
+</div>
+
+<!-- 数值滚动动画 (#16) 🛑 替换数值 -->
+<div class="dg-grid">
+  <div class="dg-card"><span class="dg-icon">🇺🇸</span><span class="dg-value" data-countup="31">0</span><span class="dg-label" data-lang="zh">美国国债 (万亿)</span><span class="dg-label" data-lang="en">US Debt (Trillion)</span></div>
+  <div class="dg-card"><span class="dg-icon">💰</span><span class="dg-value" data-countup="120">0</span><span class="dg-label" data-lang="zh">M2 货币供给 (万亿)</span><span class="dg-label" data-lang="en">M2 Money Supply (T)</span></div>
+  <div class="dg-card"><span class="dg-icon">📈</span><span class="dg-value" data-countup="3.4">0</span><span class="dg-label" data-lang="zh">GDP 增速 (%)</span><span class="dg-label" data-lang="en">GDP Growth (%)</span></div>
+</div>
+
+<!-- ===== 🛑 上方为组件示例，下方可继续插入其他组件 ===== -->
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 第二章：危机爆发 ===== -->
@@ -378,6 +519,38 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <span class="btn-hover">→</span>
 </button>
 
+<!-- ===== 🛑 组件示例 HTML — 替换为实际课程内容 ===== -->
+
+<!-- CSS 时间线 (#3) 🛑 替换事件 -->
+<div class="tl">
+  <div class="tl-item"><div class="tl-dot"></div><span class="tl-date">2008.09</span><p class="tl-text" data-lang="zh">雷曼兄弟倒闭，全球金融海啸</p><p class="tl-text" data-lang="en">Lehman collapse, global financial tsunami</p></div>
+  <div class="tl-item"><div class="tl-dot"></div><span class="tl-date">2008.11</span><p class="tl-text" data-lang="zh">美联储启动 QE1，购买 1.25 万亿 MBS</p><p class="tl-text" data-lang="en">Fed launches QE1, buys $1.25T MBS</p></div>
+  <div class="tl-item"><div class="tl-dot"></div><span class="tl-date">2010.11</span><p class="tl-text" data-lang="zh">QE2：购买 6000 亿国债</p><p class="tl-text" data-lang="en">QE2: $600B Treasury purchases</p></div>
+  <div class="tl-item"><div class="tl-dot"></div><span class="tl-date">2012.09</span><p class="tl-text" data-lang="zh">QE3：无限期每月 400 亿 MBS</p><p class="tl-text" data-lang="en">QE3: open-ended $40B/month MBS</p></div>
+</div>
+
+<!-- CSS 条形图 (#4) 🛑 替换数据 -->
+<div class="bar-chart">
+  <div class="bar-item"><span class="bar-label">美国</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--accent);">100%</div></div></div>
+  <div class="bar-item"><span class="bar-label">日本</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--accent);">85%</div></div></div>
+  <div class="bar-item"><span class="bar-label">欧盟</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--accent);">60%</div></div></div>
+  <div class="bar-item"><span class="bar-label">中国</span><div class="bar-track"><div class="bar-fill" style="width:45%;background:var(--warning);">45%</div></div></div>
+</div>
+
+<!-- 提示框/告警条 (#18) 🛑 替换消息 -->
+<div class="callout warning"><span class="callout-icon">⚠️</span><div><strong data-lang="zh">注意</strong><strong data-lang="en">Note</strong>: <span data-lang="zh">国债/GDP 比率并非衡量财政健康的最佳指标——关键是利率 vs 增长率之差。</span><span data-lang="en">Debt/GDP is not the best measure of fiscal health—what matters is the interest rate vs growth rate gap.</span></div></div>
+
+<!-- 对比表 (#5) 🛑 替换行列 -->
+<table class="cmp-table">
+  <thead><tr><th data-lang="zh">指标</th><th data-lang="en">Metric</th><th>传统观点</th><th>MMT 观点</th></tr></thead>
+  <tbody>
+    <tr><td data-lang="zh">财政赤字</td><td data-lang="en">Fiscal Deficit</td><td>坏、应削减</td><td>中性、是部门余额的结果</td></tr>
+    <tr><td data-lang="zh">政府债务</td><td data-lang="en">Gov Debt</td><td>传给下一代</td><td>非主权货币发行国的约束</td></tr>
+    <tr><td data-lang="zh">税收</td><td data-lang="en">Taxation</td><td>为支出筹钱</td><td>控制通胀 + 驱动货币需求</td></tr>
+  </tbody>
+</table>
+
+<!-- ===== 🛑 上方为组件示例，下方可继续插入其他组件 ===== -->
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 第三章：转折与遗产 ===== -->
@@ -393,6 +566,46 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
 <p><span class="typing-cursor" data-lang="zh">关键问题：如果政府真的不需要税收来"买单"，为什么还要征税？</span><span class="typing-cursor" data-lang="en">Key question: If government doesn't need taxes to "pay for" spending, why tax at all?</span></p>
 
+<!-- ===== 🛑 组件示例 HTML — 替换为实际课程内容 ===== -->
+
+<!-- 折叠式分步详解 (#8) 🛑 替换步骤 -->
+<div class="sd-item"><button class="sd-trigger" onclick="!function(t){var c=t.nextElementSibling,o=t.closest('.sd-item').dataset.expanded==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});t.closest('.sd-item').dataset.expanded='false';t.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});t.closest('.sd-item').dataset.expanded='true';t.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}})(this)"><span data-lang="zh">▶ 第一步：政府支出</span><span data-lang="en">▶ Step 1: Gov Spending</span></button><div class="sd-content"><div><p data-lang="zh">财政部在央行开设账户，签发支票即创造货币。</p><p data-lang="en">The Treasury creates money by writing checks from its central bank account.</p></div></div></div>
+<div class="sd-item"><button class="sd-trigger" onclick="!function(t){var c=t.nextElementSibling,o=t.closest('.sd-item').dataset.expanded==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});t.closest('.sd-item').dataset.expanded='false';t.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});t.closest('.sd-item').dataset.expanded='true';t.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}})(this)"><span data-lang="zh">▶ 第二步：货币流通</span><span data-lang="en">▶ Step 2: Money Circulation</span></button><div class="sd-content"><div><p data-lang="zh">货币在经济体中流转，形成购买力。</p><p data-lang="en">Money circulates in the economy, creating purchasing power.</p></div></div></div>
+<div class="sd-item"><button class="sd-trigger" onclick="!function(t){var c=t.nextElementSibling,o=t.closest('.sd-item').dataset.expanded==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});t.closest('.sd-item').dataset.expanded='false';t.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});t.closest('.sd-item').dataset.expanded='true';t.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}})(this)"><span data-lang="zh">▶ 第三步：税收回收</span><span data-lang="en">▶ Step 3: Tax Withdrawal</span></button><div class="sd-content"><div><p data-lang="zh">税收从经济体中回收货币，防止过热。</p><p data-lang="en">Taxes withdraw money from the economy to prevent overheating.</p></div></div></div>
+
+<!-- 引用/引文卡片 (#13) 🛑 替换引言 -->
+<div class="qc-card">
+  <p class="qc-text" data-lang="zh">"赤字是结果，不是原因。财政余额是私人部门净储蓄的镜像。"</p>
+  <p class="qc-text" data-lang="en">"The deficit is a result, not a cause. Fiscal balances are the mirror of private sector net saving."</p>
+  <cite class="qc-author">Stephanie Kelton</cite>
+</div>
+
+<!-- Tab 切换面板 (#9) 🛑 替换标签页 -->
+<div class="tab-bar" role="tablist">
+  <button class="tab-btn active" data-tab="tab-a" role="tab" onclick="document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});document.getElementById(this.dataset.tab).classList.add('active');"><span data-lang="zh">传统学派</span><span data-lang="en">Traditional</span></button>
+  <button class="tab-btn" data-tab="tab-b" role="tab" onclick="document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});document.getElementById(this.dataset.tab).classList.add('active');"><span data-lang="zh">MMT 学派</span><span data-lang="en">MMT School</span></button>
+</div>
+<div class="tab-panel active" id="tab-a"><p data-lang="zh">政府必须像家庭一样平衡预算；赤字会导致通货膨胀和债务危机。</p><p data-lang="en">Government must balance its budget like a household; deficits cause inflation and debt crises.</p></div>
+<div class="tab-panel" id="tab-b"><p data-lang="zh">主权货币发行国不受预算硬约束；赤字是私人部门净储蓄的正常结果。</p><p data-lang="en">Sovereign issuers face no hard budget constraint; deficits are the normal result of private sector net saving.</p></div>
+
+<!-- 全屏模态/灯箱 (#23) 🛑 替换内容 -->
+<button class="lbox-trigger" onclick="document.getElementById('demo-lbox').classList.add('open');"><span data-lang="zh">打开演示弹窗</span><span data-lang="en">Open Demo Modal</span></button>
+<div class="lbox-overlay" id="demo-lbox" onclick="if(event.target===this)this.classList.remove('open');">
+  <div class="lbox-content"><button class="lbox-close" onclick="this.closest('.lbox-overlay').classList.remove('open');">&times;</button>
+    <p data-lang="zh"><strong>MMT 核心公式</strong>：政府赤字 = 私人部门盈余 + 贸易赤字。这不是巧合，而是会计恒等式。</p>
+    <p data-lang="en"><strong>MMT Core Identity</strong>: Gov Deficit = Private Sector Surplus + Trade Deficit. This is not a coincidence—it's an accounting identity.</p>
+  </div>
+</div>
+
+<!-- 步骤指示器 (#20) 🛑 替换步骤 -->
+<div class="si-bar">
+  <div class="si-step done"><span class="si-num">1</span><span data-lang="zh">支出</span><span data-lang="en">Spend</span></div>
+  <div class="si-step active"><span class="si-num">2</span><span data-lang="zh">流通</span><span data-lang="en">Circulate</span></div>
+  <div class="si-step"><span class="si-num">3</span><span data-lang="zh">征税</span><span data-lang="en">Tax</span></div>
+  <div class="si-step"><span class="si-num">4</span><span data-lang="zh">发债</span><span data-lang="en">Bond</span></div>
+</div>
+
+<!-- ===== 🛑 上方为组件示例，下方可继续插入其他组件 ===== -->
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 总结页 ===== -->
@@ -561,8 +774,35 @@ var n=e.key==='ArrowRight'?Math.min(c+1,h2s.length-1):Math.max(c-1,0);if(n>=0&&h
 })();
 </script>
 
-<!-- ===== 组件 JS 从此处插入（可选） ===== -->
-<!-- INSERT: 从 components/NN-name.md 复制 JS 到这里 -->
+<!-- ===== 🛑 组件示例 JS — 替换课程内容时按需保留/删除 ===== -->
+
+<!-- 数值滚动动画 (#16) 🛑 替换目标值 -->
+<script>
+(function(){
+  var els = document.querySelectorAll('[data-countup]');
+  if (!els.length) return;
+  var io = new IntersectionObserver(function(es) {
+    es.forEach(function(e) {
+      if (e.isIntersecting) {
+        var target = parseFloat(e.dataset.countup);
+        var start = performance.now();
+        var dur = 1500;
+        function step(now) {
+          var t = Math.min((now - start) / dur, 1);
+          var val = t < 1 ? target * (1 - Math.pow(1 - t, 3)) : target;
+          e.textContent = target % 1 === 0 ? Math.round(val).toLocaleString() : val.toFixed(1);
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+        io.unobserve(e);
+      }
+    });
+  }, { threshold: 0.3 });
+  els.forEach(function(el) { io.observe(el); });
+})();
+</script>
+<!-- ===== 🛑 上方为组件示例 JS ===== -->
+<!-- INSERT: 从 components/NN-name.md 复制 JS 到这里（可追加在下方） -->
 
 </body>
 </html>
