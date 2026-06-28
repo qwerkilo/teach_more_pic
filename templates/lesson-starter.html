@@ -407,6 +407,7 @@ button:active { transform: scale(0.98); }
 [data-lang] { display: none; }
 [data-lang].active { display: inline; }
 h1[data-lang].active, h2[data-lang].active, p[data-lang].active, div[data-lang].active, section[data-lang].active, article[data-lang].active, aside[data-lang].active { display: block; }
+td[data-lang].active, th[data-lang].active { display: table-cell; }
 .cover-badge[data-lang].active { display: inline-block; }
 .toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; }
 .toc-btn:hover { opacity: 1; color: #ffffff; }
@@ -484,11 +485,11 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
 <!-- 标签/徽章组 (#17) 🛑 替换标签 -->
 <div class="tag-group">
-  <span class="tag">主权货币</span>
-  <span class="tag">财政赤字</span>
-  <span class="tag">通货膨胀</span>
-  <span class="tag">量化宽松</span>
-  <span class="tag">部门余额</span>
+  <span class="tag">#主权货币</span>
+  <span class="tag">#财政赤字</span>
+  <span class="tag">#通货膨胀</span>
+  <span class="tag">#量化宽松</span>
+  <span class="tag">#部门余额</span>
 </div>
 
 <!-- 数值滚动动画 (#16) 🛑 替换数值 -->
@@ -570,9 +571,9 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <!-- ===== 🛑 组件示例 HTML — 替换为实际课程内容 ===== -->
 
 <!-- 折叠式分步详解 (#8) 🛑 替换步骤 -->
-<div class="sd-item"><button class="sd-trigger" onclick="!function(t){var c=t.nextElementSibling,o=t.closest('.sd-item').dataset.expanded==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});t.closest('.sd-item').dataset.expanded='false';t.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});t.closest('.sd-item').dataset.expanded='true';t.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}})(this)"><span data-lang="zh">▶ 第一步：政府支出</span><span data-lang="en">▶ Step 1: Gov Spending</span></button><div class="sd-content"><div><p data-lang="zh">财政部在央行开设账户，签发支票即创造货币。</p><p data-lang="en">The Treasury creates money by writing checks from its central bank account.</p></div></div></div>
-<div class="sd-item"><button class="sd-trigger" onclick="!function(t){var c=t.nextElementSibling,o=t.closest('.sd-item').dataset.expanded==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});t.closest('.sd-item').dataset.expanded='false';t.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});t.closest('.sd-item').dataset.expanded='true';t.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}})(this)"><span data-lang="zh">▶ 第二步：货币流通</span><span data-lang="en">▶ Step 2: Money Circulation</span></button><div class="sd-content"><div><p data-lang="zh">货币在经济体中流转，形成购买力。</p><p data-lang="en">Money circulates in the economy, creating purchasing power.</p></div></div></div>
-<div class="sd-item"><button class="sd-trigger" onclick="!function(t){var c=t.nextElementSibling,o=t.closest('.sd-item').dataset.expanded==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});t.closest('.sd-item').dataset.expanded='false';t.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});t.closest('.sd-item').dataset.expanded='true';t.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}})(this)"><span data-lang="zh">▶ 第三步：税收回收</span><span data-lang="en">▶ Step 3: Tax Withdrawal</span></button><div class="sd-content"><div><p data-lang="zh">税收从经济体中回收货币，防止过热。</p><p data-lang="en">Taxes withdraw money from the economy to prevent overheating.</p></div></div></div>
+<div class="sd-item"><button class="sd-trigger" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第一步：政府支出</span><span data-lang="en">▶ Step 1: Gov Spending</span></button><div class="sd-content"><div><p data-lang="zh">财政部在央行开设账户，签发支票即创造货币。</p><p data-lang="en">The Treasury creates money by writing checks from its central bank account.</p></div></div></div>
+<div class="sd-item"><button class="sd-trigger" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第二步：货币流通</span><span data-lang="en">▶ Step 2: Money Circulation</span></button><div class="sd-content"><div><p data-lang="zh">货币在经济体中流转，形成购买力。</p><p data-lang="en">Money circulates in the economy, creating purchasing power.</p></div></div></div>
+<div class="sd-item"><button class="sd-trigger" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第三步：税收回收</span><span data-lang="en">▶ Step 3: Tax Withdrawal</span></button><div class="sd-content"><div><p data-lang="zh">税收从经济体中回收货币，防止过热。</p><p data-lang="en">Taxes withdraw money from the economy to prevent overheating.</p></div></div></div>
 
 <!-- 引用/引文卡片 (#13) 🛑 替换引言 -->
 <div class="qc-card">
