@@ -284,6 +284,10 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 .tp-item:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
 .tp-item.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 20%, #222); color: #ffffff; font-weight: 600; }
 .tp-item::before { content: ''; width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; background: var(--tp-color); border: 1px solid rgba(255,255,255,0.15); }
+.lang-btn { background: none; border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; font-size: 0.72rem; cursor: pointer; padding: 1px 5px; line-height: 1.4; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; font-family: inherit; font-weight: 600; letter-spacing: 0.03em; }
+.lang-btn:hover { opacity: 1; color: #ffffff; border-color: rgba(255,255,255,0.5); }
+[data-lang] { display: none; }
+[data-lang].active { display: inherit; }
 
 /* ===== 响应式 ===== */
 @media (max-width: 640px) {
@@ -367,6 +371,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <!-- ===== 底部工具栏 ===== -->
 <div class="ui-toolbar">
   <button class="tp-btn-toggle" aria-label="切换主题" title="切换主题"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="7" r="2" fill="currentColor"/><path d="M4 15l4-4"/></svg></button>
+  <button class="lang-btn" data-lang-btn aria-label="切换语言" title="切换语言" type="button">中</button>
 </div>
 <nav class="tp-panel">
   <div class="tp-grid" role="listbox" aria-label="选择主题">
@@ -425,6 +430,24 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   try {
     document.addEventListener('keydown', function(e) {
       if (e.key === 't' && !e.ctrlKey && !e.metaKey) { applyTheme(t[(i + 1) % t.length]); }
+    });
+  } catch(e) {}
+
+  /* ===== 语言切换 ===== */
+  try {
+    var L = ['zh','en'];
+    var lc = L.indexOf(localStorage.getItem('lang'));
+    if (lc < 0) lc = 0;
+    var lb = document.querySelector('[data-lang-btn]');
+    function setLang(l) {
+      document.querySelectorAll('[data-lang]').forEach(function(x) { x.classList.toggle('active', x.dataset.lang === l); });
+      try { localStorage.setItem('lang', l); } catch(e) {}
+      if (lb) lb.textContent = l === 'zh' ? '中' : 'EN';
+    }
+    setLang(L[lc]);
+    if (lb) lb.addEventListener('click', function() { lc = (lc + 1) % L.length; setLang(L[lc]); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'l' && !e.ctrlKey && !e.metaKey) { lc = (lc + 1) % L.length; setLang(L[lc]); }
     });
   } catch(e) {}
 

@@ -8,7 +8,8 @@ description: >
   Complements the base `teach` skill — run both.
   Triggers: "visual lesson", "redesign lesson", "add diagrams", "图表", "流程图",
   "SVG", "diagram", "timeline", "infographic", "可视化", "图示", "数据可视化", "图表",
-  "流程图", "时间线", "交互式", "数据卡片", "热力图", "对比表".
+  "流程图", "时间线", "交互式", "数据卡片", "热力图", "对比表",
+  "中英双语", "language switch", "语言切换", "bilingual".
 disable-model-invocation: true
 argument-hint: "What lesson to create or redesign?"
 ---
@@ -26,7 +27,8 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 ## 核心约定
 
 - **无构建系统**：纯 HTML/CSS/JS，无 package.json、无 npm 命令。修改后直接浏览器打开。
-- **全中文**：课程内容、UI 标签、SVG 文本全部中文。SVG 中文字体需显式指定 font-family（含中文字体名）。
+- **中英双语**：课程内容、UI 标签、SVG 文本须同时包含中文和英文版本，通过语言切换按钮切换。默认显示中文。
+- SVG 中文字体需显式指定 font-family（含中文字体名）。
 - 课程文件命名：`lessons/NNNN-slug.html`（4 位编号 + 英文短名），SVG 同名同目录。
 - 跨课链接：`<a href="NNNN-slug.html">`（无前导 `/`，无完整 URL）。
 
@@ -123,6 +125,7 @@ c.addEventListener('transitionend',function h(){c.removeEventListener('transitio
 - 主题切换使用 `localStorage`（主题名存储为 `theme` key）
 - 闭包体结尾 `})();` 之前不能有多余字符
 - 修改 toolbar 按钮或添加新功能时需同步 3 个文件（模板、SPA、KG）
+- 语言切换使用 L 键或右下工具栏语言按钮，切换中日英（`zh`/`en`），通过 `data-lang` 属性控制显示/隐藏，`localStorage`（key: `lang`）持久化
 
 ### 组件选择决策指南
 
@@ -249,6 +252,8 @@ Step 7: 知识图谱更新
 | `index.html` 中课程区块未显示 | `<section>` 插在了 `<body>` 外部 | 确认在 `</body>` 前插入，不是 `</html>` 之后 |
 | JS 报错 `})` unexpected | IIFE 内嵌套 function + if 时括号顺序错误：外层 function body `}`，内层 if body `}`，最后 `)` 闭调用 | 检查 `});` vs `}})` 顺序 |
 | 浏览器缓存旧 JS 不生效 | 刷新页面时未清缓存 | Ctrl+F5 强制刷新 |
+| 语言切换后内容错位 | 中英文段落数量不一致或未成对标记 `data-lang` | 每段内容同时包裹 `[data-lang="zh"]` 和 `[data-lang="en"]`，确保两个版本段落数相同 |
+| 语言切换按钮无反应 | `lang` 变量循环索引越界 | 确认语言数组（`['zh','en']`）与 localStorage key 一致，L 键监听独立于 T 键 |
 | 组件特定的其他问题 | 见对应 `components/NN-name.md` 中的降级说明 | — |
 
 ## 写作风格
@@ -277,6 +282,7 @@ Step 7: 知识图谱更新
 | 11 | 编造不存在的统计数据或引文来源 | 损害课程可信度 | 无可靠数据时用模拟数据并标注 `mock-data` 类 |
 | 12 | 硬编码颜色覆盖 theme CSS 变量 | 主题切换后颜色不变 | 颜色值统一使用 `var(--accent)`、`var(--border)` 等 CSS 变量 |
 | 13 | 使用 emoji 作为结构图标（导航、工具栏、目录） | 风格不统一，窄屏错位 | 使用对应的 SVG 图标组件 |
+| 14 | 只写中文不写英文版本 | 违反中英双语约定 | 每段内容同时提供中英文 `data-lang` 成对标记 |
 
 ## 错误检查清单
 
@@ -290,6 +296,8 @@ Step 7: 知识图谱更新
 - [ ] Quiz 数据属性正确（`data-correct="true"` v.s. `"false"`）
 - [ ] 外部链接的 SVG src 路径正确
 - [ ] 课程间链接使用相对路径
+- [ ] 中英文内容成对标记（`data-lang="zh"` + `data-lang="en"`）
+- [ ] 语言切换按钮和 L 键快捷键存在
 
 验证自动化：`python scripts/validate-lesson.py lessons/NNNN-slug.html` — 自动检查 SVG 路径/XML 有效性/颜色对比度、quiz 正确数/完整度、h1 数量、data-anim 语法、容器宽度、相对路径、PPT JS（主题+导航）存在性。
 
