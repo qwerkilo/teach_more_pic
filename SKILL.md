@@ -1,7 +1,7 @@
 ---
 name: teach_more_pic
 description: >
-   SVG + CSS + ECharts + D3.js + Three.js visual-heavy HTML lessons.
+  SVG + CSS + ECharts + D3.js + Three.js visual-heavy HTML lessons.
   Use when creating new lessons or redesigning existing ones for visual variety.
   Complements the base `teach` skill — run both.
   Does NOT: generate text content, write quiz questions, manage learning records, or build EPUB files.
