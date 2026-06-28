@@ -11,3 +11,6 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-06-28T14:30	306f6b7	teach_more_pic	82.3	85.8	keep	D8	Step3 添加最终 HTML 结构示例	dry_run
 2026-06-28T14:35	ecc8f8b	teach_more_pic	85.8	86.0	keep	D1	frontmatter 补充 NOT scope + 新触发器	dry_run
 2026-06-28T14:40	3637db9	teach_more_pic	86.0	86.6	keep	D4	STOP 改为等待用户"确认"回复 + 修改循环	dry_run
+2026-06-28T16:10	fb704eb	teach_more_pic	86.6	88.4	keep	D3+D9	失败模式 3→4 列加超时判定；反例 14→18 条 ECharts/CDN/D3	dry_run
+2026-06-28T15:00	fb704eb	teach_more_pic	88.4	88.8	keep	D2/D6	Step7 STOP 修正 + 资源速查表	dry_run
+2026-06-28T15:05	2c37a09	teach_more_pic	88.8	89.5	keep	D5/D6	CDN URLs + INSERT 注释位 + 资源表	dry_run
