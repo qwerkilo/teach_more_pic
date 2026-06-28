@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨库组合示例 — D3 + Three.js + ECharts</title>
+<script src="../libs/d3.min.js"></script>
+<script src="../libs/three.min.js"></script>
+<script src="../libs/echarts.min.js"></script>
+<script>if(typeof d3==='undefined')document.write('<script src="https://d3js.org/d3.v7.min.js"><\/script>')</script>
+<script>if(typeof THREE==='undefined')document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>')</script>
+<script>if(typeof echarts==='undefined')document.write('<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"><\/script>')</script>
+<style>
+:root{--bg:#faf9f7;--text:#1a1a1a;--accent:#c0392b;--surface:#f5f0eb;--border:#ddd8d0;--muted:#888;--radius:8px;--font:"Noto Serif CJK SC",Georgia,serif}
+body{font-family:var(--font);background:var(--bg);color:var(--text);max-width:960px;margin:0 auto;padding:2rem;-webkit-font-smoothing:antialiased}
+h1{border-bottom:2px solid var(--accent);padding-bottom:.5em}
+h2{margin-top:2em}
+.box{background:var(--surface);border-radius:var(--radius);margin:1rem 0;padding:8px;overflow:hidden}
+p{color:var(--muted);font-size:.9rem;margin:.5em 0}
+</style>
+</head>
+<body>
+
+<h1>跨库组合示例</h1>
+<p>同一页面中 D3.js 处理数据 + Three.js 渲染 3D + ECharts 展示 2D 图表。</p>
+
+<h2>示例一：D3 力导向布局 → Three.js 3D 场景</h2>
+<p>D3.js 计算力导向布局坐标，Three.js 在 3D 空间中渲染为可旋转的球体网络。</p>
+<div class="box"><div id="hybrid-d3-three" style="width:100%;height:450px;"></div></div>
+
+<h2>示例二：D3 数据预处理 → ECharts 堆叠柱状图</h2>
+<p>D3.js 对原始数据进行聚合/排序/归一化，ECharts 将处理后的数据渲染为堆叠柱状图。</p>
+<div class="box"><div id="hybrid-d3-echarts" style="width:100%;height:400px;"></div></div>
+
+<h2>示例三：D3 比例尺 → Three.js 3D 柱状图 → ECharts 折线趋势</h2>
+<p>D3 的 scale 函数将数值映射到颜色和高度，Three.js 渲染 3D 柱体，ECharts 同步展示折线趋势。</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+  <div class="box"><div id="hybrid-three-bars" style="width:100%;height:350px;"></div></div>
+  <div class="box"><div id="hybrid-echarts-line" style="width:100%;height:350px;"></div></div>
+</div>
+
+<noscript><p style="text-align:center;padding:2rem;">需要 JavaScript</p></noscript>
+
+<script>
+/* ===== 示例一：D3 力导向 → Three.js 3D ===== */
+(function(){
+  var el = document.getElementById('hybrid-d3-three');
+  if (!el || typeof d3 === 'undefined' || typeof THREE === 'undefined') return;
+  var w = el.clientWidth || 800, h = 450;
+
+  // D3: 计算 2D 力导向布局
+  var nodes = [
+    {id:'A',label:'金融',r:1.2},{id:'B',label:'地产',r:1.0},{id:'C',label:'科技',r:1.1},
+    {id:'D',label:'消费',r:0.9},{id:'E',label:'能源',r:1.0},{id:'F',label:'医疗',r:0.8},
+  ];
+  var links = [
+    {s:'A',t:'B'},{s:'A',t:'C'},{s:'A',t:'E'},{s:'B',t:'D'},
+    {s:'C',t:'D'},{s:'C',t:'F'},{s:'C',t:'E'},{s:'D',t:'F'},
+  ];
+  var sim = d3.forceSimulation(nodes)
+    .force('link',d3.forceLink(links).id(function(d){return d.id;}).distance(150).strength(0.3))
+    .force('charge',d3.forceManyBody().strength(-120))
+    .force('center',d3.forceCenter(0,0))
+    .stop();
+
+  // 迭代收敛
+  for(var k=0;k<120;k++) sim.tick();
+
+  // Three.js: 在 3D 空间渲染
+  var scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(45,w/h,1,100);
+  cam.position.set(6,4,8).lookAt(0,0,0);
+  var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  renderer.setSize(w,h);renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  el.innerHTML='';el.appendChild(renderer.domElement);
+
+  var colors=[0xe74c3c,0x3498db,0x2ecc71,0xf39c12,0x9b59b6,0x1abc9c];
+  var group=new THREE.Group();
+  nodes.forEach(function(n,i){
+    var geo=new THREE.SphereGeometry(n.r*0.8,24,16);
+    var mat=new THREE.MeshStandardMaterial({color:colors[i],roughness:0.3,metalness:0.1,emissive:colors[i],emissiveIntensity:0.15});
+    var mesh=new THREE.Mesh(geo,mat);
+    mesh.position.set(n.x,n.y,0);
+    // 在 z 轴随机偏移增加立体感
+    mesh.position.z=(Math.random()-0.5)*1.5;
+    group.add(mesh);
+  });
+  links.forEach(function(l){
+    var a=nodes.find(function(n){return n.id===l.s;}),b=nodes.find(function(n){return n.id===l.t;});
+    if(!a||!b)return;
+    var points=[new THREE.Vector3(a.x,a.y,(Math.random()-0.5)*1.5),new THREE.Vector3(b.x,b.y,(Math.random()-0.5)*1.5)];
+    var geo=new THREE.BufferGeometry().setFromPoints(points);
+    var mat=new THREE.LineBasicMaterial({color:0x888888,transparent:true,opacity:0.3});
+    group.add(new THREE.Line(geo,mat));
+  });
+  scene.add(group);
+
+  var light1=new THREE.DirectionalLight(0xffffff,1);light1.position.set(5,10,7);scene.add(light1);
+  var light2=new THREE.DirectionalLight(0xffffff,0.4);light2.position.set(-5,-3,-7);scene.add(light2);
+  scene.add(new THREE.AmbientLight(0x404060));
+
+  function animate(){requestAnimationFrame(animate);group.rotation.y+=0.003;group.rotation.x+=0.001;renderer.render(scene,cam);}
+  animate();
+})();
+
+/* ===== 示例二：D3 数据预处理 → ECharts 堆叠柱状图 ===== */
+(function(){
+  var el = document.getElementById('hybrid-d3-echarts');
+  if (!el || typeof d3 === 'undefined' || typeof echarts === 'undefined') return;
+  var w = el.clientWidth || 800, h = 400;
+
+  // D3: 原始数据 → 聚合 + 排序 + 归一化
+  var raw = [
+    {year:2020,cat:'A',val:120},{year:2020,cat:'B',val:80},{year:2020,cat:'C',val:50},
+    {year:2021,cat:'A',val:135},{year:2021,cat:'B',val:95},{year:2021,cat:'C',val:60},
+    {year:2022,cat:'A',val:150},{year:2022,cat:'B',val:110},{year:2022,cat:'C',val:45},
+    {year:2023,cat:'A',val:170},{year:2023,cat:'B',val:100},{year:2023,cat:'C',val:55},
+    {year:2024,cat:'A',val:190},{year:2024,cat:'B',val:130},{year:2024,cat:'C',val:70},
+  ];
+  // D3: 聚合为 ECharts 格式
+  var years=d3.groups(raw,function(d){return d.year;}).map(function(g){return g[0];});
+  var cats=d3.groups(raw,function(d){return d.cat;}).map(function(g){return g[0];});
+  var totals=raw.reduce(function(acc,d){acc[d.year]=(acc[d.year]||0)+d.val;return acc;},{});
+  var maxTotal=d3.max(Object.values(totals));
+  // 归一化到 0-100
+  var processed=d3.groups(raw,function(d){return d.year;}).map(function(g){
+    var year=g[0],items=g[1];
+    var total=items.reduce(function(s,i){return s+i.val;},0);
+    var ratio=total/maxTotal;
+    return {year:year,ratio:+ratio.toFixed(3),items:d3.sort(items,function(d){return -d.val;})};
+  });
+
+  var echartData = processed.map(function(p){
+    var row={year:String(p.year)};
+    cats.forEach(function(c){var item=p.items.find(function(i){return i.cat===c;});row[c]=item?+((item.val/maxTotal)*100).toFixed(1):0;});
+    return row;
+  });
+
+  var chart=echarts.init(el);
+  chart.setOption({
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+    legend:{data:cats},
+    grid:{left:'10%',right:'10%',bottom:'12%',top:'10%',containLabel:true},
+    xAxis:{type:'category',data:years,axisLabel:{fontSize:12}},
+    yAxis:{type:'value',name:'归一化占比 %',nameLocation:'middle',nameGap:40},
+    series:cats.map(function(c,i){return{
+      name:c,type:'bar',stack:'total',emphasis:{focus:'series'},
+      data:echartData.map(function(d){return d[c];}),
+      itemStyle:{color:['#e74c3c','#3498db','#2ecc71'][i]}
+    };})
+  });
+  window.addEventListener('resize',function(){chart.resize();});
+})();
+
+/* ===== 示例三：D3 比例尺 → Three.js 3D 柱状图 → ECharts 折线 ===== */
+(function(){
+  var el3d = document.getElementById('hybrid-three-bars');
+  var elLine = document.getElementById('hybrid-echarts-line');
+  if (!el3d || !elLine || typeof d3 === 'undefined' || typeof THREE === 'undefined' || typeof echarts === 'undefined') return;
+
+  // D3: 生成数据 + 比例尺
+  var data=[];
+  for(var y=2015;y<=2024;y++) data.push({year:y,val:20+Math.random()*50+Math.sin((y-2015)*0.8)*15});
+
+  var colorScale=d3.scaleSequential(d3.interpolateRdYlBu).domain([d3.min(data,function(d){return d.val;}),d3.max(data,function(d){return d.val;})]);
+  var barH=d3.scaleLinear().domain([d3.min(data,function(d){return d.val;})-5,d3.max(data,function(d){return d.val;})+5]).range([0.3,3]);
+
+  // Three.js: 3D 柱状图
+  var w=el3d.clientWidth||380,h=350;
+  var scene3=new THREE.Scene(),cam3=new THREE.PerspectiveCamera(40,w/h,0.1,50);
+  cam3.position.set(6,4,8).lookAt(0,0,0);
+  var ren3=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  ren3.setSize(w,h);ren3.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  el3d.innerHTML='';el3d.appendChild(ren3.domElement);
+
+  var grp3=new THREE.Group();
+  data.forEach(function(d,i){
+    var bw=0.35,color=new THREE.Color(colorScale(d.val));
+    var geo=new THREE.BoxGeometry(bw,barH(d.val),bw);
+    var mat=new THREE.MeshStandardMaterial({color:color,roughness:0.4,metalness:0.1});
+    var mesh=new THREE.Mesh(geo,mat);
+    mesh.position.set((i-data.length/2)*0.6,barH(d.val)/2,0);
+    grp3.add(mesh);
+  });
+  scene3.add(grp3);
+  scene3.add(new THREE.AmbientLight(0xffffff,0.5));
+  var dl=new THREE.DirectionalLight(0xffffff,0.8);dl.position.set(5,10,7);scene3.add(dl);
+  function anim3(){requestAnimationFrame(anim3);grp3.rotation.y+=0.005;ren3.render(scene3,cam3);}
+  anim3();
+
+  // ECharts: 折线趋势（同数据）
+  var chartLine=echarts.init(elLine);
+  chartLine.setOption({
+    tooltip:{trigger:'axis'},
+    grid:{left:'12%',right:'8%',bottom:'12%',top:'8%',containLabel:true},
+    xAxis:{type:'category',data:data.map(function(d){return String(d.year);}),axisLabel:{fontSize:11}},
+    yAxis:{type:'value',name:'数值',nameLocation:'middle',nameGap:40},
+    series:[{
+      type:'line',data:data.map(function(d){return+ d.val.toFixed(1);}),
+      smooth:true,lineStyle:{width:3},areaStyle:{opacity:0.15},
+      itemStyle:{color:'#3498db'},
+      markPoint:{data:[{type:'max',name:'最高'},{type:'min',name:'最低'}]}
+    }]
+  });
+  window.addEventListener('resize',function(){chartLine.resize();});
+})();
+</script>
+</body>
+</html>
