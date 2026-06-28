@@ -345,7 +345,6 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <!-- ===== 课程容器（切换前隐藏） ===== -->
 <!-- 每课一个独立的 <section>，用 id="lesson-NNN" 索引 -->
 <!-- 注意：SPA 内的 lesson section 只放简介和概览，完整内容（含测验、SVG、互动组件）请保留在对应的 lessons/NNNN-slug.html 中，用户通过各课程独立页面查看 -->
-<!--
 <section class="lesson-view" id="lesson-1">
   <div class="lesson-nav">
     <button class="back-btn" data-back>&larr; 返回目录</button>
@@ -367,6 +366,8 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <p data-lang="en">Content...</p>
 </section>
 
+<!-- 复制上方 <section> 作为新课程模板，修改 id="lesson-NNN" 和内容 -->
+<!--
 <section class="lesson-view" id="lesson-2">
   <div class="lesson-nav">
     <button class="back-btn" data-back>&larr; 返回目录</button>
