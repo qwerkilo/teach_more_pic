@@ -6,20 +6,16 @@
 
 ## 核心策略
 
-```mermaid
-flowchart LR
-  A[内容是什么？] --> B{有可量化数据？}
-  B -->|Yes| C{ECharts / D3 / Three}
-  B -->|No| D{流程 / 时序 / 对比？}
-  C --> E[主视觉锚点]
-  E --> F[搭配 2-4 个轻量组件<br>#5 #8 #12 #13 #18]
-  D --> G{展示类型}
-  G -->|流程| H[SVG 流程 #1 / 折叠 #8]
-  G -->|时序| I[时间线 #3 #11 / 状态链 #15]
-  G -->|对比| J[对比表 #5 #22 / Tab #9]
+```
+内容 → 有可量化数据？→ Yes → ECharts/D3/Three 主视觉锚点 → 搭配 2-4 个轻量组件
+                       → No  → 流程?→ SVG 流程 #1 / 折叠 #8
+                               → 时序?→ 时间线 #3 #11 / 状态链 #15
+                               → 对比?→ 对比表 #5 #22 / Tab #9
 ```
 
 **铁律**：每课至少 1 个 ECharts/Three.js/D3.js 作为主视觉锚点 + 2-4 个轻量组件（卡片/折叠/告警条等）+ 零或多个 Magic UI 装饰效果。
+
+**参考起点**：`examples/` 下 27 个独立示例可直接打开预览，`templates/` 下 4 个有效 SVG 模板（流程图/循环图/对比图/时间线）可作为 SVG 创作基底。
 
 ## 象限一：解释与拆解
 
@@ -29,6 +25,8 @@ flowchart LR
 | 多视角/多方案对比 | Tab 面板 (#9) | 对比表 (#22) | 二 |
 | 资金/逻辑流向 | SVG 流程图 (#1) | 标注图片 (#14) | 一 |
 | 零 JS 折叠/展开 | 原生折叠 (#26a) | — | 各幕 |
+
+> 参考示例：`examples/flowchart-demo.html`、`examples/step-detail-demo.html`、`examples/tab-demo.html`
 
 ## 象限二：数据与统计
 
@@ -48,6 +46,8 @@ ECharts 4 子类型是数据可视化的首选引擎，D3.js 适合复杂自定�
 | 单组数据对比 | CSS 条形图 (#4) | 柱状图 (#24a) | 二 |
 | 多方案多维度对比 | 对比表增强版 (#22) | Tab 面板 (#9) | 三 |
 
+> 参考示例：`examples/bar-chart-demo.html`、`examples/echarts-demo.html`、`examples/d3-demo.html`、`examples/heatmap-demo.html`、`examples/cmp-table-basic-demo.html`、`examples/cmp-table-demo.html`
+
 ## 象限三：时间与过程
 
 | 场景 | 首选 | 备选 | 推荐幕 |
@@ -56,6 +56,8 @@ ECharts 4 子类型是数据可视化的首选引擎，D3.js 适合复杂自定�
 | 事件序列（5+ 个） | 交互式时间线 (#11) | 状态链 (#15) | 二 |
 | 流程阶段/进度 | 状态链 (#15) | 步骤指示器 (#20) | 三 |
 | 步骤引导 | 步骤指示器 (#20) | 状态链 (#15) | 一 |
+
+> 参考示例：`examples/timeline-css-demo.html`、`examples/timeline-demo.html`、`examples/status-chain-demo.html`、`examples/step-indicator-demo.html`
 
 ## 象限四：引用与强调
 

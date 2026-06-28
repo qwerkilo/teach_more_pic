@@ -118,10 +118,16 @@
 用于幕与幕之间或关键转折处，让某句核心论断单独占据一整个视区高度：
 
 ```html
-<div class="quote-spread">
+<div class="quote-spread" data-lang="zh">
   <blockquote>
     <p>"主权货币发行国不会因为本币债务而破产——正如美元不会因为美国人欠美元而违约。"</p>
     <cite>— Stephanie Kelton, 《赤字神话》</cite>
+  </blockquote>
+</div>
+<div class="quote-spread" data-lang="en" style="display:none;">
+  <blockquote>
+    <p>"A sovereign currency issuer cannot go bankrupt in its own currency — just as the US dollar cannot default because Americans owe dollars."</p>
+    <cite>— Stephanie Kelton, The Deficit Myth</cite>
   </blockquote>
 </div>
 ```
@@ -140,9 +146,13 @@
 在需要强调某个关键数据时使用——让一个数字占据视觉焦点：
 
 ```html
-<div class="num-spotlight">
+<div class="num-spotlight" data-lang="zh">
   <span class="num-value">$28<span class="num-unit">万亿</span></span>
   <p class="num-label">美国国债总额（2024）</p>
+</div>
+<div class="num-spotlight" data-lang="en" style="display:none;">
+  <span class="num-value">$28<span class="num-unit">trillion</span></span>
+  <p class="num-label">U.S. National Debt (2024)</p>
 </div>
 ```
 
@@ -160,26 +170,35 @@
 用于术语解释、背景补充等次要内容，不打断正文流：
 
 ```html
-<aside class="info-sidebar">
-  <h4>💡 什么是"主权货币"？</h4>
+<aside class="info-sidebar" data-lang="zh">
+  <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="vertical-align:middle;margin-right:4px;color:var(--accent);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+  <h4>什么是"主权货币"？</h4>
   <p>主权货币是指由国家政府发行、不承诺兑换为任何特定数量黄金或其他货币的货币。美元、日元、人民币都是主权货币。</p>
+</aside>
+<aside class="info-sidebar" data-lang="en" style="display:none;">
+  <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="vertical-align:middle;margin-right:4px;color:var(--accent);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+  <h4>What is "Sovereign Currency"?</h4>
+  <p>A sovereign currency is one issued by a national government that does not promise convertibility into a fixed amount of gold or other currency. The US dollar, Japanese yen, and Chinese yuan are all sovereign currencies.</p>
 </aside>
 ```
 
 ```css
 .info-sidebar { float: right; width: 280px; margin: 0.5em 0 0.5em 1.5em; padding: 1rem; background: var(--surface); border-radius: var(--radius, 8px); border: 1px solid var(--border); font-size: 0.85rem; }
-.info-sidebar h4 { font-size: 0.9rem; margin-bottom: 0.4em; }
+.info-sidebar h4 { font-size: 0.9rem; margin-bottom: 0.4em; display: flex; align-items: center; gap: 4px; }
 .info-sidebar p { color: var(--muted); line-height: 1.5; }
+.sidebar-icon { flex-shrink: 0; }
 @media (max-width: 600px) { .info-sidebar { float: none; width: 100%; margin: 1em 0; } }
 ```
 
-**效果**：右浮动侧边栏、窄屏自动降级为行内块。
+**效果**：右浮动侧边栏、SVG 图标替代 emoji、窄屏自动降级为行内块。
 
 ## 使用规则
 
-- **封面页**：每课必须使用（替换当前课程开头的 info-box 开场）
-- **章节分隔页**：三幕叙事时使用，放在第一幕和第二幕之间、第二幕和第三幕之间
-- **总结卡片**：每课必须使用（测验前，3 张）
-- **全宽引文页**：可选，用于关键论断强调
-- **关键数字页**：可选，用于数据密集型课程
-- **信息面板侧边栏**：可选，用于补充性背景知识
+- **封面页**：✅ 每课必须（替换课程开头的 info-box，中英双语）
+- **章节分隔页**：✅ 每幕之间必须（第一/二、第二/三幕之间，中英双语）
+- **总结卡片**：✅ 每课必须（测验前，3 张，中英双语）
+- **全宽引文页**：可选（关键论断强调）
+- **关键数字页**：可选（数据密集型课程）
+- **信息面板侧边栏**：可选（补充性背景知识）
+
+> 所有可选页面类型也需提供中英双语版本（`data-lang="zh"` + `data-lang="en"`），方式同上述模板。
