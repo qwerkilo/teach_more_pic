@@ -275,7 +275,7 @@ Step 8: 本地 HTTP 服务器（可选）
   - 自动打开浏览器到 `index.html`（有 SPA 时）或第一课
   - 按 Q 键停止服务器
   - Python 内置 `http.server`，无需额外依赖
-  - Linux/macOS 替代：`python3 -m http.server 8000 && open http://localhost:8000/lessons/NNNN-slug.html`
+  - Linux/macOS：复制 `templates/start-server.sh`，运行 `bash start-server.sh`，后台静默运行（nohup），PID 写入 `.server.pid`；停止 `kill $(cat .server.pid) && rm .server.pid`
 ```
 
 ## 文件资源速查
