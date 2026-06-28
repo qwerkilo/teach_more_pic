@@ -59,6 +59,10 @@ test("inline svg: with wrapper passes", not v.check_inline_svg(
 test("inline svg: no wrapper fails", len(v.check_inline_svg('<svg xmlns="..."></svg>')) > 0)
 test("inline svg: icon svg passes", not v.check_inline_svg(
     '<button><svg width="16" height="16" viewBox="0 0 20 20"></svg></button>'))
+test("inline svg: 24px icon passes", not v.check_inline_svg(
+    '<span><svg width="24" height="24" viewBox="0 0 24 24"></svg></span>'))
+test("inline svg: 28px icon passes", not v.check_inline_svg(
+    '<span><svg width="28" height="28" viewBox="0 0 24 24"></svg></span>'))
 test("inline svg: pie chart in figure passes", not v.check_inline_svg(
     '<figure class="svg-fig"><svg viewBox="0 0 100 100" width="240"></svg></figure>'))
 test("inline svg: pie chart no figure fails", len(v.check_inline_svg(
