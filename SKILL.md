@@ -97,6 +97,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - 每课按内容自然选用合适的组件，每个 h2 章节至少 1 个视觉组件；可用 4-7 个组件，但不超过 8 个
 - 新增组件：先在 `components/` 下创建文件，再更新此索引表
 - 颜色语义全局统一：蓝=正常，橙=触发，红=崩溃，绿=救助
+- **ECharts (#24)、Three.js (#25)、D3.js (#27) 可组合使用**：例如 D3.js 计算力导向布局后由 Three.js 渲染 3D 场景；或 D3.js 数据预处理后交给 ECharts 图表呈现。组合时只需确认各库的 CDN/本地文件均已加载即可。
 
 ### 视觉设计纪律
 
