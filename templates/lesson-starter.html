@@ -404,7 +404,8 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
       if (!correct) {
         q.querySelector('.quiz-option[data-correct="true"]').classList.add('correct');
       }
-      q.querySelector('.quiz-feedback').textContent = correct ? '✓ 正确！' : '✗ 不正确。正确答案已标出。';
+      var ql='zh';try{var qs=localStorage.getItem('lang');if(qs)ql=qs;}catch(e){}
+      q.querySelector('.quiz-feedback').textContent = correct ? (ql==='zh'?'✓ 正确！':'✓ Correct!') : (ql==='zh'?'✗ 不正确。正确答案已标出。':'✗ Incorrect. The correct answer is highlighted.');
     });
   });
 })();
