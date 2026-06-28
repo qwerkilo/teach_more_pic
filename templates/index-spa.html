@@ -174,7 +174,7 @@
 /* ===== SPA 全局样式 ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: var(--lh); min-height: 100vh; font-variant-numeric: tabular-nums; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: var(--lh); min-height: 100vh; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ===== 主布局 ===== */
@@ -200,7 +200,7 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 /* ===== 落地页（课程列表） ===== */
 .landing-view { padding: 0 0 3rem; }
 .landing-hero { text-align: center; padding: 3rem 0 2rem; }
-.landing-hero h2 { font-size: 1.6rem; font-weight: 700; font-family: var(--font-h); }
+.landing-hero h2 { font-size: 1.6rem; font-weight: 700; font-family: var(--font-h); letter-spacing: -0.01em; }
 .landing-hero p { color: var(--muted); margin-top: 0.5rem; max-width: 540px; margin-left: auto; margin-right: auto; }
 .lesson-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -208,23 +208,22 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 }
 .lesson-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.2rem; cursor: pointer;
+  border-radius: var(--radius); padding: 1.4rem; cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
   display: flex; flex-direction: column; gap: 0.4rem;
+  -webkit-font-smoothing: antialiased;
 }
-.lesson-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
-.lesson-card:active { transform: scale(0.98); }
+.lesson-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.lesson-card:active { transform: scale(0.97); }
 .lesson-card .card-num {
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em;
   color: var(--accent); text-transform: uppercase;
 }
-.lesson-card .card-title { font-size: 1rem; font-weight: 700; font-family: var(--font-h); }
-.lesson-card .card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.lesson-card .card-title { font-size: 1rem; font-weight: 700; font-family: var(--font-h); letter-spacing: -0.01em; }
+.lesson-card .card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; margin-top: 0.2em; }
 
 /* ===== 课程视图（SPA 切换） ===== */
-.lesson-view {
-  display: none; padding: 0 0 4rem;
-}
+.lesson-view { display: none; padding: 0 0 4rem; }
 .lesson-view.active { display: block; }
 
 .lesson-nav {
@@ -233,39 +232,40 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
   border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.5rem;
 }
 .back-btn {
-  background: none; border: 1px solid var(--border); border-radius: 6px;
-  padding: 0.4em 0.8em; font-size: 0.85rem; cursor: pointer;
+  background: none; border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 0.5em 1em; min-height: 40px; font-size: 0.85rem; cursor: pointer;
   color: var(--text); transition: background 0.15s ease;
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; gap: 6px; font-family: inherit;
 }
 .back-btn:hover { background: var(--surface-raised); }
 .back-btn:active { transform: scale(0.98); }
 .lesson-nav .lesson-title { font-size: 0.9rem; font-weight: 600; color: var(--muted); }
-.lesson-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; padding: 0.3em 0.6em; border: 1px solid var(--border); border-radius: 6px; transition: background 0.15s ease; }
+.lesson-link { font-size: 0.82rem; color: var(--accent); text-decoration: none; padding: 0.4em 0.8em; border: 1px solid var(--border); border-radius: var(--radius); transition: background 0.15s ease; min-height: 40px; display: inline-flex; align-items: center; }
 .lesson-link:hover { background: var(--surface-raised); }
-.lesson-link i { margin-right: 4px; }
 
 /* ===== 课程内页面排版（与 lesson-starter 一致） ===== */
-.lesson-view .cover-page { text-align: center; padding: 3rem 1rem; margin-bottom: 2rem; border-bottom: 2px solid var(--accent); }
-.lesson-view .cover-badge { display: inline-block; padding: 0.2em 1em; background: var(--accent); color: var(--accent-text); border-radius: 3px; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 1em; }
+.lesson-view .cover-page { text-align: center; padding: 3rem 1.5rem; margin-bottom: 2rem; border-bottom: 2px solid var(--accent); position: relative; }
+.lesson-view .cover-page::after { content: ''; position: absolute; bottom: -2px; left: 25%; right: 25%; height: 2px; background: var(--accent); opacity: 0.3; }
+.lesson-view .cover-badge { display: inline-block; padding: 0.25em 1.2em; background: var(--accent); color: var(--accent-text); border-radius: 20px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 1em; }
 .lesson-view .cover-subtitle { font-size: 1.1rem; color: var(--muted); margin-top: 0.5em; }
 .lesson-view .cover-hook { font-size: 0.95rem; color: var(--muted); margin-top: 1em; font-style: italic; }
-.lesson-view h1 { font-size: var(--h1-size); font-family: var(--font-h); margin-top: 2rem; text-wrap: pretty; }
+.lesson-view h1 { font-size: var(--h1-size); font-family: var(--font-h); margin-top: 2rem; text-wrap: pretty; letter-spacing: -0.01em; }
 .lesson-view h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-border); padding-bottom: 0.3em; margin-top: 2em; text-wrap: pretty; }
-.lesson-view p { margin: 1em 0; }
-.lesson-view .section-divider { text-align: center; padding: 3rem 1rem; margin: 3rem 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.lesson-view .divider-num { display: inline-block; padding: 0.1em 0.8em; background: var(--accent); color: var(--accent-text); border-radius: 3px; font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 0.5em; }
-.lesson-view .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
-.lesson-view .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; }
-.lesson-view .summary-icon { font-size: 1.5rem; display: block; margin-bottom: 0.3em; }
-.lesson-view .quiz-section { margin: 2rem 0; }
-.lesson-view .quiz-question { margin: 1.5em 0; }
-.lesson-view .quiz-q-text { font-weight: 600; margin-bottom: 0.5em; }
-.lesson-view .quiz-option { display: block; width: 100%; padding: 0.5em 1em; margin: 0.3em 0; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); text-align: left; cursor: pointer; font-size: 0.9rem; }
-.lesson-view .quiz-option:hover { background: var(--surface-raised); }
-.lesson-view .quiz-option.correct { background: #d4edda; border-color: #28a745; }
-.lesson-view .quiz-option.wrong { background: #f8d7da; border-color: #dc3545; }
-.lesson-view .quiz-feedback { font-size: 0.85rem; margin-top: 0.3em; min-height: 1.2em; color: var(--muted); }
+.lesson-view p { margin: 1.2em 0; }
+.lesson-view .section-divider { text-align: center; padding: 3rem 1rem; margin: 3.5rem 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; }
+.lesson-view .section-divider::before { content: ''; position: absolute; top: -1px; left: 30%; right: 30%; height: 2px; background: var(--accent); opacity: 0.2; }
+.lesson-view .divider-num { display: inline-block; padding: 0.15em 1em; background: var(--accent); color: var(--accent-text); border-radius: 20px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; margin-bottom: 0.5em; }
+.lesson-view .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2.5rem 0; }
+.lesson-view .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.lesson-view .summary-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin-bottom: 0.6em; color: var(--accent); }
+.lesson-view .quiz-section { margin: 2.5rem 0; }
+.lesson-view .quiz-question { margin: 1.8em 0; padding: 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.lesson-view .quiz-q-text { font-weight: 600; margin-bottom: 0.8em; font-size: 0.95rem; }
+.lesson-view .quiz-option { display: block; width: 100%; min-height: 44px; padding: 0.6em 1.2em; margin: 0.4em 0; border: 1.5px solid var(--border); border-radius: var(--radius); background: var(--bg); text-align: left; cursor: pointer; font-size: 0.9rem; font-family: inherit; transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+.lesson-view .quiz-option:hover { background: var(--surface-raised); border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); }
+.lesson-view .quiz-option.correct { background: color-mix(in srgb, var(--success) 12%, var(--bg)); border-color: var(--success); color: var(--success); font-weight: 600; }
+.lesson-view .quiz-option.wrong { background: color-mix(in srgb, var(--error) 10%, var(--bg)); border-color: var(--error); color: var(--error); }
+.lesson-view .quiz-feedback { font-size: 0.85rem; margin-top: 0.5em; min-height: 1.5em; color: var(--muted); padding-left: 0.2em; }
 
 /* ===== 动画 ===== */
 .lesson-view [data-anim] { opacity: 0; transform: translateY(var(--anim-y)); transition: opacity var(--anim-dur) ease-out, transform var(--anim-dur) ease-out; }

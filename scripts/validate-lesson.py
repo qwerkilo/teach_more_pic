@@ -177,9 +177,9 @@ def check_inline_svg(html):
         code_end = html.find("```", pos)
         if code_start != -1 and code_end != -1:
             continue
-        # Check if it's an icon SVG (width <= 20)
+        # Check if it's an icon SVG (width <= 28 for UI icons)
         wm = re.search(r'width="(\d+)"', attrs)
-        if wm and int(wm.group(1)) <= 20:
+        if wm and int(wm.group(1)) <= 28:
             continue
         if not has_figure:
             issues.append("Inline <svg> found without .svg-fig wrapper")
