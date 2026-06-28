@@ -321,24 +321,27 @@ const layouts = {
 };
 
 // ===== 图谱数据（请修改此处：增删 nodes/links/categories） =====
+const catNames = { "zh": ["课程", "概念"], "en": ["Course", "Concept"] };
+const catMap = { "课程": "Course", "概念": "Concept" };
 const rawNodes = [
-  { "id": "L1", "nameZh": "课程 1", "nameEn": "Lesson 1", "category": "课程", "weight": 80, "desc": "示例课程节点" },
-  { "id": "C1", "nameZh": "核心概念", "nameEn": "Core Concept", "category": "概念", "weight": 60, "desc": "示例概念节点" },
+  { "id": "L1", "nameZh": "课程 1", "nameEn": "Lesson 1", "categoryZh": "课程", "categoryEn": "Course", "weight": 80, "desc": "示例课程节点" },
+  { "id": "C1", "nameZh": "核心概念", "nameEn": "Core Concept", "categoryZh": "概念", "categoryEn": "Concept", "weight": 60, "desc": "示例概念节点" },
 ];
 const rawLinks = [
   { "source": "L1", "target": "C1", "relation": "包含" },
 ];
-const rawCats = ["课程", "概念"];
-const catNames = { "zh": ["课程", "概念"], "en": ["Course", "Concept"] };
 function buildGraphData(lang) {
   var l = lang || 'zh';
   return {
-    "categories": catNames[l] || catNames['zh'],
+    "categories": (catNames[l] || catNames['zh']).slice(),
     "nodes": rawNodes.map(function(n) {
-      var o = {};
-      Object.keys(n).forEach(function(k) { o[k] = n[k]; });
-      o.name = n['name' + (l === 'en' ? 'En' : 'Zh')] || n.nameZh;
-      return o;
+      return {
+        "id": n.id,
+        "name": n['name' + (l === 'en' ? 'En' : 'Zh')],
+        "category": n['category' + (l === 'en' ? 'En' : 'Zh')],
+        "weight": n.weight,
+        "desc": n.desc
+      };
     }),
     "links": rawLinks
   };
@@ -468,32 +471,6 @@ var graphData = buildGraphData('zh');
     el.textContent = graphData.nodes.length + (isEn ? ' nodes · ' : ' 节点 · ') + graphData.links.length + (isEn ? ' edges · ' : ' 关系 · ') + graphData.categories.length + (isEn ? ' cats' : ' 分类');
   }
 
-  // ===== 语言切换 =====
-  var langBtn = document.querySelector('[data-lang-btn]');
-  var langs = ['zh','en'];
-  var langIdx = langs.indexOf(localStorage.getItem('lang')); if (langIdx < 0) langIdx = 0;
-  function setLang(l) {
-    document.querySelectorAll('[data-lang]').forEach(function(x) { x.classList.toggle('active', x.dataset.lang === l); });
-    try { localStorage.setItem('lang', l); } catch(e) {}
-    if (langBtn) langBtn.textContent = l === 'zh' ? '中' : 'EN';
-    graphData = buildGraphData(l);
-    graphData.nodes.forEach(function(node) {
-      var t = themes[currentThemeName];
-      var cats = graphData.categories;
-      var ci = cats.indexOf(node.category);
-      if (ci < 0) ci = rawNodes.indexOf(rawNodes.filter(function(n){return n.id===node.id;})[0]) % t.colors.length;
-      node.itemStyle = { color: t.colors[ci % t.colors.length] };
-      node.symbolSize = 18 + Math.round(node.weight / 5);
-      node.label = { color: t.textPrimary, show: true, position: 'right', fontSize: 11, fontWeight: 600 };
-    });
-    updateMeta();
-    renderLegend();
-    if (chart) chart.setOption(buildOption(), true);
-  }
-  setLang(langs[langIdx]);
-  if (langBtn) langBtn.addEventListener('click', function() { langIdx = (langIdx + 1) % langs.length; setLang(langs[langIdx]); });
-  document.addEventListener('keydown', function(e) { if (e.key === 'l' && !e.ctrlKey && !e.metaKey) { langIdx = (langIdx + 1) % langs.length; setLang(langs[langIdx]); } });
-
   let chart = null;
   function initChart() {
     const dom = document.getElementById('chart');
@@ -547,6 +524,32 @@ var graphData = buildGraphData('zh');
   document.getElementById('btn-reset').addEventListener('click', () => {
     if (chart) chart.dispatchAction({ type: 'restore' });
   });
+
+  // ===== 语言切换（初始化图表后绑定） =====
+  var langBtn = document.querySelector('[data-lang-btn]');
+  var langs = ['zh','en'];
+  var langIdx = langs.indexOf(localStorage.getItem('lang')); if (langIdx < 0) langIdx = 0;
+  function setLang(l) {
+    document.querySelectorAll('[data-lang]').forEach(function(x) { x.classList.toggle('active', x.dataset.lang === l); });
+    try { localStorage.setItem('lang', l); } catch(e) {}
+    if (langBtn) langBtn.textContent = l === 'zh' ? '中' : 'EN';
+    graphData = buildGraphData(l);
+    graphData.nodes.forEach(function(node, idx) {
+      var t = themes[currentThemeName];
+      var cats = graphData.categories;
+      var ci = cats.indexOf(node.category);
+      if (ci < 0) ci = idx % t.colors.length;
+      node.itemStyle = { color: t.colors[ci % t.colors.length] };
+      node.symbolSize = 18 + Math.round(node.weight / 5);
+      node.label = { color: t.textPrimary, show: true, position: 'right', fontSize: 11, fontWeight: 600 };
+    });
+    updateMeta();
+    renderLegend();
+    if (chart) chart.setOption(buildOption(), true);
+  }
+  if (langBtn) langBtn.addEventListener('click', function() { langIdx = (langIdx + 1) % langs.length; setLang(langs[langIdx]); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'l' && !e.ctrlKey && !e.metaKey) { langIdx = (langIdx + 1) % langs.length; setLang(langs[langIdx]); } });
+  setLang(langs[langIdx]);
 
   updateMeta();
   applyTheme(currentThemeName);

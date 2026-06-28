@@ -289,13 +289,13 @@ def _check_kg_nodes(nodes_text, cats, require_name=True):
         weights = []
         for i, nobj in enumerate(node_objs):
             has_id = '"id"' in nobj
-            has_cat = '"category"' in nobj
+            has_cat = '"category"' in nobj or ('"categoryZh"' in nobj and '"categoryEn"' in nobj)
             if require_name and '"name"' not in nobj and '"nameZh"' not in nobj:
                 issues.append(f"Node #{i+1}: missing 'name' (or 'nameZh'/'nameEn' for bilingual)")
             if not has_id:
                 issues.append(f"Node #{i+1}: missing 'id'")
             if not has_cat:
-                issues.append(f"Node #{i+1}: missing 'category'")
+                issues.append(f"Node #{i+1}: missing 'category' (or 'categoryZh'/'categoryEn' for bilingual)")
             nid = re.search(r'"id"\s*:\s*"([^"]+)"', nobj)
             if nid:
                 if nid.group(1) in node_ids:
