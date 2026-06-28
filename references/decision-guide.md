@@ -81,6 +81,22 @@
 | 无 JS 的卡片轮播 | CSS 幻灯片 (#26c) | 第二幕 |
 | 无 JS 的弹出提示 | Popover 提示 (#26d) | 各幕 |
 
+## 象限七：装饰效果（Magic UI CSS，零依赖）
+
+通过 `libs/magicui-effects.css` 引入，纯 CSS 装饰效果，无需额外 JS：
+
+| 效果 | CSS 类 | 说明 | 适合位置 |
+|---|---|---|---|
+| 光泽扫光 | `.shiny-text` | 文本扫光动画，背景渐变动画 | 封面 badge、标题 |
+| 噪点纹理 | `.noise-overlay` | SVG feTurbulence 噪点叠加 | 封面、工具栏背景 |
+| 圆点网格 | `.dot-bg` | CSS radial-gradient 平铺 | 章节分隔区 |
+| 直线网格 | `.grid-bg` | CSS linear-gradient 双线网格 | 封面、图表背景 |
+| 流星雨 | `.meteors-container` + `.meteor` | CSS @keyframes 流星滑落 | 封面装饰 |
+| 边框发光 | `.border-glow` | conic-gradient 旋转边框 | 数据卡片、图例 |
+| 辉光悬停 | `.glare-hover` | 背景渐变过渡，鼠标悬停触发 | 卡片交互 |
+| 渐变文字 | `.gradient-text` | 多色渐变流动动画 | 标题强调 |
+| 模糊淡入 | `data-anim="blur"` | 滚动触发模糊→清晰 | 正文段落动画 |
+
 ## ECharts + Three.js + D3.js 优先策略
 
 每课至少应包含 1 个 ECharts / Three.js / D3.js 组件，以提升视觉品质：

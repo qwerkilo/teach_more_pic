@@ -250,6 +250,12 @@ test("lib deps: d3.js local passes", not v.check_lib_deps(
 test("lib deps: d3.js no lib fails", len(v.check_lib_deps(
     '<html>d3.forceSimulation()</html>', 'C:\\nonexistent')) > 0)
 
+# ==== magicui CSS effects ====
+test("data-anim: blur is valid", not v.check_data_anim_syntax('<html><div data-anim="blur"></div></html>'))
+test("data-anim: fade-up is still valid", not v.check_data_anim_syntax('<html><div data-anim="fade-up"></div></html>'))
+test("data-anim: unknown value fails", len(v.check_data_anim_syntax('<html><div data-anim="foobar"></div></html>')) > 0)
+test("magicui: shiny-text class detected", not v.check_data_anim_syntax('<html><span class="shiny-text">hi</span></html>'))
+
 # ==== Results ====
 print(f"\n{PASS} passed, {FAIL} failed")
 if FAIL > 0:

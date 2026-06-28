@@ -1,33 +1,48 @@
 /* ===== Magic UI CSS Effects 纯 CSS 版 ===== */
 /* 供所有组件和课程模板引用。用法：<link rel="stylesheet" href="libs/magicui-effects.css"> */
+/* 新增效果应先加到这里再更新模板。 */
 
-/* Shiny Text — 光泽扫光 */
-.shiny-text { background: linear-gradient(110deg, var(--text) 30%, var(--accent) 50%, var(--text) 70%); background-size: 200% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 4s cubic-bezier(0.6,0.6,0,1) infinite; }
+/* ===== 1. Shiny Text — 光泽扫光 ===== */
+.shiny-text { background: linear-gradient(110deg, var(--text) 30%, var(--accent) 50%, var(--text) 70%); background-size: 200% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine var(--shine-duration, 4s) cubic-bezier(0.6,0.6,0,1) infinite; }
 @keyframes shine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 
-/* Noise Texture — SVG 噪点 */
+/* ===== 2. Noise Texture — SVG 噪点纹理 ===== */
 .noise-overlay { position: absolute; inset: 0; z-index: 0; opacity: 0.04; pointer-events: none; overflow: hidden; mix-blend-mode: multiply; }
 .noise-overlay svg { width: 100%; height: 100%; }
+.cover-page .noise-overlay { opacity: 0.03; }
 
-/* Dot Pattern 背景 */
-.dot-bg { background-image: radial-gradient(circle, var(--border, #ddd) 1px, transparent 1px); background-size: 20px 20px; }
+/* ===== 3. Dot Pattern — 圆点网格 ===== */
+.dot-bg { background-image: radial-gradient(circle, var(--border, rgba(128,128,128,0.3)) 1px, transparent 1px); background-size: 20px 20px; }
 
-/* Meteors — 流星 */
+/* ===== 4. Grid Pattern — 直线网格 ===== */
+.grid-bg { background-image: linear-gradient(var(--border, rgba(128,128,128,0.15)) 1px, transparent 1px), linear-gradient(90deg, var(--border, rgba(128,128,128,0.15)) 1px, transparent 1px); background-size: 40px 40px; }
+
+/* ===== 5. Meteors — 流星雨 ===== */
 .meteors-container { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-.meteor { position: absolute; width: 1px; height: 1px; background: var(--accent, #888); border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,0.05); animation: meteor linear infinite; opacity: 0; }
+.meteor { position: absolute; width: 1px; height: 1px; background: var(--accent, #888); border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,0.05); animation: meteor var(--meteor-duration, 5s) var(--meteor-delay, 0s) linear infinite; opacity: 0; }
 .meteor::after { content: ''; position: absolute; top: 50%; transform: translateY(-50%); width: 60px; height: 1px; background: linear-gradient(to right, var(--accent, #888), transparent); opacity: 0.5; }
-@keyframes meteor { 0% { transform: rotate(var(--angle)) translateX(0); opacity: 0; } 5% { opacity: 1; } 30% { opacity: 1; } 100% { transform: rotate(var(--angle)) translateX(-500px); opacity: 0; } }
+@keyframes meteor { 0% { transform: rotate(var(--angle, -215deg)) translateX(0); opacity: 0; } 5% { opacity: 1; } 30% { opacity: 1; } 100% { transform: rotate(var(--angle, -215deg)) translateX(-500px); opacity: 0; } }
 
-/* Border Glow — 边框发光 */
+/* ===== 6. Border Glow — 旋转边框发光 ===== */
 .border-glow { position: relative; overflow: hidden; }
-.border-glow::before { content: ''; position: absolute; inset: -50%; z-index: 0; background: conic-gradient(from 0deg, transparent, var(--accent, #c0392b), transparent 60%); animation: border-spin 3s linear infinite; opacity: 0.35; }
+.border-glow::before { content: ''; position: absolute; inset: -50%; z-index: 0; background: conic-gradient(from 0deg, transparent, var(--glow-color, var(--accent, #c0392b)), transparent 60%); animation: border-spin var(--glow-duration, 3s) linear infinite; opacity: var(--glow-opacity, 0.35); }
 .border-glow::after { content: ''; position: absolute; inset: 1px; background: var(--surface, #f5f0eb); border-radius: inherit; z-index: 1; }
 .border-glow > * { position: relative; z-index: 2; }
 @keyframes border-spin { to { transform: rotate(360deg); } }
 
-/* Blur Fade */
+/* ===== 7. Glare Hover — 对角辉光悬停 ===== */
+.glare-hover { position: relative; overflow: hidden; }
+.glare-hover::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(var(--glare-angle, -45deg), transparent 60%, color-mix(in srgb, var(--glare-color, var(--accent, #fff)) 40%, transparent) 70%, transparent 100%); background-size: var(--glare-size, 250%) var(--glare-size, 250%), 100% 100%; background-position: -100% -100%, 0 0; transition: background-position var(--glare-duration, 650ms) ease-in-out; }
+.glare-hover:hover::before { background-position: 100% 100%, 0 0; }
+.glare-hover > * { position: relative; z-index: 2; }
+
+/* ===== 8. Blur Fade — 模糊淡入（data-anim 扩展） ===== */
 [data-anim="blur"] { opacity: 0; filter: blur(8px); transform: translateY(12px); transition: opacity 0.5s ease-out, filter 0.5s ease-out, transform 0.5s ease-out; }
 [data-anim="blur"].in-view { opacity: 1; filter: blur(0); transform: translateY(0); }
 
-/* 减少动画 */
-@media (prefers-reduced-motion: reduce) { .shiny-text { background: none; -webkit-text-fill-color: unset; } .border-glow::before, .border-glow::after { display: none; } .meteor { display: none; } [data-anim="blur"] { opacity: 1; filter: none; transform: none; } }
+/* ===== 9. Gradient Text — 渐变色流动 ===== */
+.gradient-text { background: linear-gradient(90deg, var(--grad-from, var(--accent, #e74c3c)), var(--grad-via, #8e44ad), var(--grad-to, var(--accent, #e74c3c))); background-size: var(--grad-size, 300%) 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradient-flow var(--grad-duration, 4s) ease infinite; }
+@keyframes gradient-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+/* ===== 减少动画偏好 ===== */
+@media (prefers-reduced-motion: reduce) { .shiny-text { background: none; -webkit-text-fill-color: unset; } .border-glow::before, .border-glow::after { display: none; } .meteor { display: none; } [data-anim="blur"] { opacity: 1; filter: none; transform: none; } .gradient-text { background: none; -webkit-text-fill-color: unset; } }
