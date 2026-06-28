@@ -104,8 +104,8 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 ├── SKILL.md               ← 唯一入口文档，所有规则在此
 ├── components/             各组件独立文件（26 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
-│   ├── validate-lesson.py  课程验证脚本（17 项检查，含 SPA 集成 + 知识图谱结构）
-│   ├── test_validate.py    验证脚本单元测试（61 项，覆盖全部 17 项检查）
+│   ├── validate-lesson.py  课程验证脚本（18 项检查，含双语 + SPA + KG）
+│   ├── test_validate.py    验证脚本单元测试（66 项，覆盖全部 18 项检查）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（22 个 .html）
 ├── libs/                   外部库（echarts.min.js、three.min.js）

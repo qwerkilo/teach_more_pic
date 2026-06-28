@@ -383,6 +383,29 @@ def check_kg_structure(html, path):
     return issues
 
 
+def check_bilingual(html):
+    """Check for bilingual content with data-lang and language toggle."""
+    issues = []
+    has_zh = 'data-lang="zh"' in html
+    has_en = 'data-lang="en"' in html
+    has_toggle = 'data-lang-btn' in html
+    has_l_key = "key==='l'" in html or 'key==="l"' in html
+
+    if not has_zh and not has_en:
+        return []  # Not bilingual, skip (legacy lessons)
+
+    if not has_zh:
+        issues.append("Missing data-lang=\"zh\" (Chinese content)")
+    if not has_en:
+        issues.append("Missing data-lang=\"en\" (English content)")
+    if not has_toggle:
+        issues.append("Missing language toggle button ([data-lang-btn])")
+    if not has_l_key:
+        issues.append("Missing L key handler for language switching")
+
+    return issues
+
+
 def check_lib_deps(html, base_dir):
     """Verify ECharts and Three.js lib files exist when used."""
     issues = []
@@ -433,6 +456,7 @@ def run_all(path):
             ("tabular-nums alignment", check_tabular_nums(html)),
             ("Semantic HTML elements", check_semantic_html(html)),
             ("Library deps (ECharts/Three.js)", check_lib_deps(html, base_dir)),
+            ("Bilingual (data-lang zh/en + toggle)", check_bilingual(html)),
             ("SPA integration (lesson-view section)", check_spa_integration(html, path)),
         ]
     else:

@@ -197,6 +197,18 @@ test("kg: weight over 100 fails", len(v.check_kg_structure(
     '"links": [{"source":"L1","target":"L1","relation":"x"}]'
     '};', "")) > 0)
 
+# ==== check_bilingual ====
+test("bilingual: no data-lang skips", not v.check_bilingual("<html><p>no lang attributes</p></html>"))
+test("bilingual: zh+en+btn+key passes", not v.check_bilingual(
+    '<html data-lang="zh"><span data-lang="zh">中</span><span data-lang="en">EN</span>'
+    '<button data-lang-btn></button>key==="l"</html>'))
+test("bilingual: missing en fails", len(v.check_bilingual(
+    '<html><span data-lang="zh">中</span><button data-lang-btn></button>key==="l"</html>')) > 0)
+test("bilingual: missing toggle fails", len(v.check_bilingual(
+    '<html><span data-lang="zh">中</span><span data-lang="en">EN</span>key==="l"</html>')) > 0)
+test("bilingual: missing l key fails", len(v.check_bilingual(
+    '<html><span data-lang="zh">中</span><span data-lang="en">EN</span><button data-lang-btn></button></html>')) > 0)
+
 # ==== check_lib_deps ====
 test("lib deps: no echarts/three.js passes", not v.check_lib_deps(
     '<html><p>hello</p></html>', '.'))
