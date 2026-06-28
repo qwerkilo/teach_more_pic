@@ -435,21 +435,13 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
   /* ===== 语言切换 ===== */
   try {
-    var L = ['zh','en'];
-    var lc = L.indexOf(localStorage.getItem('lang'));
-    if (lc < 0) lc = 0;
-    var lb = document.querySelector('[data-lang-btn]');
-    function setLang(l) {
-      document.querySelectorAll('[data-lang]').forEach(function(x) { x.classList.toggle('active', x.dataset.lang === l); });
-      try { localStorage.setItem('lang', l); } catch(e) {}
-      if (lb) lb.textContent = l === 'zh' ? '中' : 'EN';
-    }
-    setLang(L[lc]);
-    if (lb) lb.addEventListener('click', function() { lc = (lc + 1) % L.length; setLang(L[lc]); });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'l' && !e.ctrlKey && !e.metaKey) { lc = (lc + 1) % L.length; setLang(L[lc]); }
-    });
-  } catch(e) {}
+    var la=['zh','en'];var li=la.indexOf(localStorage.getItem('lang'));if(li<0)li=0;
+    var lb=document.querySelector('[data-lang-btn]');
+    function sw(l){document.querySelectorAll('[data-lang]').forEach(function(x){x.classList.toggle('active',x.dataset.lang===l);});try{localStorage.setItem('lang',l);}catch(e){}if(lb){lb.textContent=l==='zh'?'中':'EN';}}
+    sw(la[li]);
+    if(lb){lb.addEventListener('click',function(){li=(li+1)%la.length;sw(la[li]);});}
+    document.addEventListener('keydown',function(e){if(e.key==='l'&&!e.ctrlKey&&!e.metaKey){li=(li+1)%la.length;sw(la[li]);}});
+  } catch(e){}
 
   /* ===== SPA 导航 ===== */
   var views = document.querySelectorAll('.lesson-view');

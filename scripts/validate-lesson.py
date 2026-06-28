@@ -41,10 +41,14 @@ def check_quiz_correct_count(html):
 
 
 def check_h1_count(html):
-    """Each lesson must have exactly one h1."""
+    """Each lesson must have exactly one h1 (or one per language with data-lang)."""
     h1s = re.findall(r"<h1[^>]*>", html)
+    lang_h1s = re.findall(r'<h1[^>]*data-lang=["\']([^"\']+)["\']', html)
+    if lang_h1s:
+        if len(h1s) == len(set(lang_h1s)):
+            return []
     if len(h1s) != 1:
-        return [f"Found {len(h1s)} h1 tags (expected 1)"]
+        return [f"Found {len(h1s)} h1 tags (expected 1, or 1 per language with data-lang)"]
     return []
 
 
