@@ -251,7 +251,7 @@ button:active { transform: scale(0.98); }
 @keyframes meteor { 0% { transform: rotate(var(--angle, -215deg)) translateX(0); opacity: 0; } 5% { opacity: 1; } 30% { opacity: 1; } 100% { transform: rotate(var(--angle, -215deg)) translateX(-500px); opacity: 0; } }
 .border-glow { position: relative; overflow: hidden; }
 .border-glow::before { content: ''; position: absolute; inset: -50%; z-index: 0; background: conic-gradient(from 0deg, transparent, var(--glow-color, var(--accent, #c0392b)), transparent 60%); animation: border-spin var(--glow-duration, 3s) linear infinite; opacity: var(--glow-opacity, 0.35); }
-.border-glow::after { content: ''; position: absolute; inset: 1px; background: var(--surface, #f5f0eb); border-radius: inherit; z-index: 1; }
+.border-glow::after { content: ''; position: absolute; inset: 1px; background: var(--surface, #f5f0eb); border-radius: inherit; z-index: 1; pointer-events: none; }
 .border-glow > * { position: relative; z-index: 2; }
 @keyframes border-spin { to { transform: rotate(360deg); } }
 .glare-hover { position: relative; overflow: hidden; }
