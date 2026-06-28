@@ -278,90 +278,49 @@ def check_spa_integration(html, path):
     return issues
 
 
-def check_kg_structure(html, path):
-    """Validate knowledge graph data structure."""
+def _check_kg_nodes(nodes_text, cats, require_name=True):
+    """Shared node validation (old and new format)."""
     issues = []
-
-    # Only check files containing graphData
-    block_match = re.search(
-        r'const\s+graphData\s*=\s*\{', html
-    )
-    if not block_match:
-        return []  # Not a KG file, skip
-
-    # Extract categories (array of strings)
-    cats = []
-    cat_match = re.search(
-        r'"categories"\s*:\s*\[([^\]]+)\]', html
-    )
-    if not cat_match:
-        issues.append("graphData: missing 'categories' array")
-    else:
-        cats = re.findall(r'"([^"]+)"', cat_match.group(1))
-        if len(cats) < 1:
-            issues.append("graphData: 'categories' array is empty (need at least 1)")
-
-    # Extract nodes (array of objects)
-    nodes_match = re.search(
-        r'"nodes"\s*:\s*\[(.+?)\]', html, re.DOTALL
-    )
-    if not nodes_match:
-        issues.append("graphData: missing 'nodes' array")
-        return issues
-
-    nodes_text = nodes_match.group(1)
     node_ids = []
     node_objs = re.findall(r'\{(.+?)\}', nodes_text, re.DOTALL)
-    node_count = len(node_objs)
-    if node_count < 1:
-        issues.append("graphData: 'nodes' array is empty (need at least 1)")
+    if len(node_objs) < 1:
+        issues.append("nodes array is empty (need at least 1)")
     else:
         weights = []
         for i, nobj in enumerate(node_objs):
             has_id = '"id"' in nobj
-            has_name = '"name"' in nobj
             has_cat = '"category"' in nobj
+            if require_name and '"name"' not in nobj and '"nameZh"' not in nobj:
+                issues.append(f"Node #{i+1}: missing 'name' (or 'nameZh'/'nameEn' for bilingual)")
             if not has_id:
                 issues.append(f"Node #{i+1}: missing 'id'")
-            if not has_name:
-                issues.append(f"Node #{i+1}: missing 'name'")
             if not has_cat:
                 issues.append(f"Node #{i+1}: missing 'category'")
             nid = re.search(r'"id"\s*:\s*"([^"]+)"', nobj)
             if nid:
                 if nid.group(1) in node_ids:
-                    issues.append(f"graphData: duplicate node id=\"{nid.group(1)}\"")
+                    issues.append(f"Duplicate node id=\"{nid.group(1)}\"")
                 node_ids.append(nid.group(1))
-                # Validate category is in categories list
                 ncat = re.search(r'"category"\s*:\s*"([^"]+)"', nobj)
                 if ncat and cats and ncat.group(1) not in cats:
-                    issues.append(
-                        f"Node \"{nid.group(1)}\": category \"{ncat.group(1)}\" "
-                        f"not in categories list"
-                    )
+                    issues.append(f"Node \"{nid.group(1)}\": category \"{ncat.group(1)}\" not in categories list")
             nwt = re.search(r'"weight"\s*:\s*(\d+)', nobj)
             if nwt:
                 weights.append(int(nwt.group(1)))
-        # Check weight distribution
         if weights:
             if max(weights) > 100:
-                issues.append("graphData: some node weights exceed 100")
+                issues.append("Some node weights exceed 100")
             if min(weights) < 0:
-                issues.append("graphData: negative node weights found")
+                issues.append("Negative node weights found")
+    return issues, node_ids
 
-    # Extract links (array of objects)
-    links_match = re.search(
-        r'"links"\s*:\s*\[(.+?)\]', html, re.DOTALL
-    )
-    if not links_match:
-        issues.append("graphData: missing 'links' array")
-        return issues
 
-    links_text = links_match.group(1)
+def _check_kg_links(links_text, node_ids):
+    """Shared link validation."""
+    issues = []
     link_objs = re.findall(r'\{(.+?)\}', links_text, re.DOTALL)
-    link_count = len(link_objs)
-    if link_count < 1:
-        issues.append("graphData: 'links' array is empty (need at least 1)")
+    if len(link_objs) < 1:
+        issues.append("links array is empty (need at least 1)")
     else:
         for i, lobj in enumerate(link_objs):
             has_src = '"source"' in lobj
@@ -379,6 +338,75 @@ def check_kg_structure(html, path):
                 issues.append(f"Link #{i+1}: source \"{lsrc.group(1)}\" references unknown node")
             if ltgt and ltgt.group(1) not in node_ids:
                 issues.append(f"Link #{i+1}: target \"{ltgt.group(1)}\" references unknown node")
+    return issues
+
+
+def check_kg_structure(html, path):
+    """Validate knowledge graph data structure (old + bilingual format)."""
+    issues = []
+    has_graphdata = 'graphData' in html and ('rawNodes' in html or 'const graphData' in html)
+    has_bilingual = bool(re.search(r'(?:const|var|let)\s+rawNodes\s*=', html)) and bool(re.search(r'(?:const|var|let)\s+rawLinks\s*=', html))
+
+    if not has_graphdata:
+        return []
+
+    # ===== New bilingual format (rawNodes with nameZh/nameEn) =====
+    if has_bilingual:
+        # Check rawNodes
+        rn_match = re.search(r'(?:const|var|let)\s+rawNodes\s*=\s*\[(.+?)\]', html, re.DOTALL)
+        if not rn_match:
+            issues.append("bilingual KG: missing 'rawNodes' array")
+        else:
+            rn_text = rn_match.group(1)
+            # Check for nameZh + nameEn on each node
+            rn_objs = re.findall(r'\{(.+?)\}', rn_text, re.DOTALL)
+            for i, nobj in enumerate(rn_objs):
+                if 'nameZh' not in nobj:
+                    issues.append(f"rawNodes #{i+1}: missing 'nameZh'")
+                if 'nameEn' not in nobj:
+                    issues.append(f"rawNodes #{i+1}: missing 'nameEn'")
+            # Extract categories from catNames
+            cats = []
+            cn_match = re.search(r'"zh"\s*:\s*\[([^\]]+)\]', html)
+            if cn_match:
+                cats = re.findall(r'"([^"]+)"', cn_match.group(1))
+            sub_issues, node_ids = _check_kg_nodes(rn_text, cats)
+            issues.extend(['bilingual KG: ' + s for s in sub_issues])
+
+        # Check rawLinks
+        rl_match = re.search(r'(?:const|var|let)\s+rawLinks\s*=\s*\[(.+?)\]', html, re.DOTALL)
+        if not rl_match:
+            issues.append("bilingual KG: missing 'rawLinks' array")
+        else:
+            sub_issues = _check_kg_links(rl_match.group(1), node_ids if 'node_ids' in dir() else [])
+            issues.extend(['bilingual KG: ' + s for s in sub_issues])
+        return issues
+
+    # ===== Old inline format (const graphData = { ... }) =====
+    cats = []
+    cat_match = re.search(r'"categories"\s*:\s*\[([^\]]+)\]', html)
+    if not cat_match:
+        issues.append("graphData: missing 'categories' array")
+    else:
+        cats = re.findall(r'"([^"]+)"', cat_match.group(1))
+        if len(cats) < 1:
+            issues.append("graphData: 'categories' array is empty")
+
+    nodes_match = re.search(r'"nodes"\s*:\s*\[(.+?)\]', html, re.DOTALL)
+    if not nodes_match:
+        issues.append("graphData: missing 'nodes' array")
+        return issues
+
+    sub_issues, node_ids = _check_kg_nodes(nodes_match.group(1), cats)
+    issues.extend(['graphData: ' + s for s in sub_issues])
+
+    links_match = re.search(r'"links"\s*:\s*\[(.+?)\]', html, re.DOTALL)
+    if not links_match:
+        issues.append("graphData: missing 'links' array")
+        return issues
+
+    sub_issues = _check_kg_links(links_match.group(1), node_ids)
+    issues.extend(['graphData: ' + s for s in sub_issues])
 
     return issues
 

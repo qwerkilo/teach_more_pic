@@ -196,6 +196,21 @@ test("kg: weight over 100 fails", len(v.check_kg_structure(
     '"nodes": [{"id":"L1","name":"A","category":"课程","weight":150}],'
     '"links": [{"source":"L1","target":"L1","relation":"x"}]'
     '};', "")) > 0)
+test("kg: bilingual format with nameZh/nameEn passes", not v.check_kg_structure(
+    'var rawNodes=[{"id":"L1","nameZh":"课","nameEn":"Lesson","category":"课程","weight":50}];'
+    'var rawLinks=[{"source":"L1","target":"L1","relation":"x"}];'
+    'var catNames={"zh":["课程"],"en":["Course"]};'
+    'var graphData={};', ""))
+test("kg: bilingual missing nameEn fails", len(v.check_kg_structure(
+    'var rawNodes=[{"id":"L1","nameZh":"课","category":"课程","weight":50}];'
+    'var rawLinks=[{"source":"L1","target":"L1","relation":"x"}];'
+    'var catNames={"zh":["课程"],"en":["Course"]};'
+    'var graphData={};', "")) > 0)
+test("kg: bilingual missing nameZh fails", len(v.check_kg_structure(
+    'var rawNodes=[{"id":"L1","nameEn":"Lesson","category":"课程","weight":50}];'
+    'var rawLinks=[{"source":"L1","target":"L1","relation":"x"}];'
+    'var catNames={"zh":["课程"],"en":["Course"]};'
+    'var graphData={};', "")) > 0)
 
 # ==== check_bilingual ====
 test("bilingual: no data-lang skips", not v.check_bilingual("<html><p>no lang attributes</p></html>"))
