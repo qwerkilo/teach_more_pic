@@ -23,6 +23,13 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - ECharts 5.x: download to `libs/echarts.min.js` for offline chart support (#26)
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
 
+## 核心约定
+
+- **无构建系统**：纯 HTML/CSS/JS，无 package.json、无 npm 命令。修改后直接浏览器打开。
+- **全中文**：课程内容、UI 标签、SVG 文本全部中文。SVG 中文字体需显式指定 font-family（含中文字体名）。
+- 课程文件命名：`lessons/NNNN-slug.html`（4 位编号 + 英文短名），SVG 同名同目录。
+- 跨课链接：`<a href="NNNN-slug.html">`（无前导 `/`，无完整 URL）。
+
 ## 课程叙事框架
 
 每课采用三幕叙事结构，避免"知识点串联"的枯燥感：
@@ -109,6 +116,13 @@ c.addEventListener('transitionend',function h(){c.removeEventListener('transitio
 ```
 
 替换其中的 `XX` 为对应组件的前缀（`sd`、`tli`）即可复用。两个组件文件中的 JS 代码均基于此模板。新增类似折叠组件时直接复制此模式。**注意**：`transitionend` 事件确保动画完成后将 `height` 恢复为 `auto`，防止内容变化（如字体渲染）后高度穿帮。
+
+### PPT 增强 JS 注意事项
+
+- 所有 JS 在课程 HTML 末尾 `<script>` 内，单个 IIFE 包裹，每个功能块包在 `try{}catch(e){}` 内
+- 主题切换使用 `localStorage`（主题名存储为 `theme` key）
+- 闭包体结尾 `})();` 之前不能有多余字符
+- 修改 toolbar 按钮或添加新功能时需同步 3 个文件（模板、SPA、KG）
 
 ### 组件选择决策指南
 
@@ -228,10 +242,13 @@ Step 7: 知识图谱更新
 | IntersectionObserver 不触发动画 | 元素可能在首屏内 | 首屏前 2 个视觉元素不加 `data-anim` |
 | 主题切换后 h2 下划线颜色不变 | CSS 中使用固定色而非 `var(--accent)` | 确保使用 `border-bottom-color: var(--accent)` |
 | SVG viewBox 比例不匹配 width/height | 图片被不等比例拉伸 | 确保 viewBox 宽高比 = width/height 比 |
+| Theme panel / TOC panel 点击外部不关闭 | `click` 事件未正确委托 | 在 document 上监听 click，排除 toolbar/panel 区域 |
 | 折叠组件 `height` 从 `auto` 过渡 | CSS transition 无效 | JS 中先测量 scrollHeight 再设 px，恢复 auto |
 | ECharts 图表空白（echarts 未定义） | `libs/echarts.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
 | SPA 中课程 `id` 冲突 | 两个 `<section>` 用了相同 `id` | 使用 `id="lesson-NNN"` 格式，NNN 为课程编号 |
 | `index.html` 中课程区块未显示 | `<section>` 插在了 `<body>` 外部 | 确认在 `</body>` 前插入，不是 `</html>` 之后 |
+| JS 报错 `})` unexpected | IIFE 内嵌套 function + if 时括号顺序错误：外层 function body `}`，内层 if body `}`，最后 `)` 闭调用 | 检查 `});` vs `}})` 顺序 |
+| 浏览器缓存旧 JS 不生效 | 刷新页面时未清缓存 | Ctrl+F5 强制刷新 |
 | 组件特定的其他问题 | 见对应 `components/NN-name.md` 中的降级说明 | — |
 
 ## 写作风格
@@ -275,3 +292,5 @@ Step 7: 知识图谱更新
 - [ ] 课程间链接使用相对路径
 
 验证自动化：`python scripts/validate-lesson.py lessons/NNNN-slug.html` — 自动检查 SVG 路径/XML 有效性/颜色对比度、quiz 正确数/完整度、h1 数量、data-anim 语法、容器宽度、相对路径、PPT JS（主题+导航）存在性。
+
+JS 语法检查：`node -e "new Function(require('fs').readFileSync('file','r',encoding='utf-8').match(/<script>([\\s\\S]*?)<\\/script>/)[1])"`
