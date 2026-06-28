@@ -28,7 +28,8 @@ h1 { font-size: 1.6rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5em; }
 .demo-after { background: linear-gradient(135deg, #f093fb, #f5576c); }
 </style>
 </head>
-<body>
+<body style="position:relative;">
+<div class="noise-overlay"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="cmp-noise"><feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="6" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="linear" slope="0.15"/><feFuncG type="linear" slope="0.15"/><feFuncB type="linear" slope="0.15"/></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(#cmp-noise)" opacity="1"/></svg></div>
 
 <h1 class="shiny-text">图片前后对比滑块 — 组件示例</h1>
 

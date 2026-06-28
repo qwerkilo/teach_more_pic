@@ -20,24 +20,24 @@ h2{margin-top:2em}
 p{color:var(--muted);font-size:.9rem;margin:.5em 0}
 </style>
 </head>
-<body>
+<body class="grid-bg">
 
 <h1>跨库组合示例</h1>
 <p>同一页面中 D3.js 处理数据 + Three.js 渲染 3D + ECharts 展示 2D 图表。</p>
 
 <h2>示例一：D3 力导向布局 → Three.js 3D 场景</h2>
 <p>D3.js 计算力导向布局坐标，Three.js 在 3D 空间中渲染为可旋转的球体网络。</p>
-<div class="box"><div id="hybrid-d3-three" style="width:100%;height:450px;"></div></div>
+<div class="box border-glow"><div id="hybrid-d3-three" style="width:100%;height:450px;"></div></div>
 
 <h2>示例二：D3 数据预处理 → ECharts 堆叠柱状图</h2>
 <p>D3.js 对原始数据进行聚合/排序/归一化，ECharts 将处理后的数据渲染为堆叠柱状图。</p>
-<div class="box"><div id="hybrid-d3-echarts" style="width:100%;height:400px;"></div></div>
+<div class="box border-glow"><div id="hybrid-d3-echarts" style="width:100%;height:400px;"></div></div>
 
 <h2>示例三：D3 比例尺 → Three.js 3D 柱状图 → ECharts 折线趋势</h2>
 <p>D3 的 scale 函数将数值映射到颜色和高度，Three.js 渲染 3D 柱体，ECharts 同步展示折线趋势。</p>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-  <div class="box"><div id="hybrid-three-bars" style="width:100%;height:350px;"></div></div>
-  <div class="box"><div id="hybrid-echarts-line" style="width:100%;height:350px;"></div></div>
+  <div class="box border-glow"><div id="hybrid-three-bars" style="width:100%;height:350px;"></div></div>
+  <div class="box border-glow"><div id="hybrid-echarts-line" style="width:100%;height:350px;"></div></div>
 </div>
 
 <noscript><p style="text-align:center;padding:2rem;">需要 JavaScript</p></noscript>
