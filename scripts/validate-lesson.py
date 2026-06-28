@@ -64,7 +64,7 @@ def check_h1_count(html):
 
 def check_data_anim_syntax(html):
     """data-anim values should be valid."""
-    valid = {"fade-up", "fade", "slide-left"}
+    valid = {"fade-up", "fade", "slide-left", "blur"}
     anims = re.findall(r'data-anim="([^"]+)"', html)
     bad = [a for a in anims if a not in valid]
     if bad:
@@ -176,6 +176,10 @@ def check_inline_svg(html):
         code_start = html.rfind("```", 0, pos)
         code_end = html.find("```", pos)
         if code_start != -1 and code_end != -1:
+            continue
+        # Check if it's inside a noise-overlay (decorative SVG texture)
+        before = html[max(0,pos-200):pos]
+        if 'noise-overlay' in before:
             continue
         # Check if it's an icon SVG (width <= 28 for UI icons)
         wm = re.search(r'width="(\d+)"', attrs)

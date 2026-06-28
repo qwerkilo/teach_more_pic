@@ -237,6 +237,32 @@ button:active { transform: scale(0.98); }
 /* ===== 组件 CSS 从此处插入（按前缀分组） ===== */
 /* INSERT: 从 components/NN-name.md 复制 CSS 到这里 */
 
+/* ===== Magic UI 效果 ===== */
+/* Shiny Text — 光泽扫光效果 */
+.shiny-text { background: linear-gradient(110deg, var(--text) 30%, var(--accent) 50%, var(--text) 70%); background-size: 200% 100%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 4s cubic-bezier(0.6,0.6,0,1) infinite; }
+@keyframes shine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+/* Noise Texture — SVG 噪点纹理容器 */
+.noise-overlay { position: absolute; inset: 0; z-index: 0; opacity: 0.04; pointer-events: none; overflow: hidden; mix-blend-mode: multiply; }
+.noise-overlay svg { width: 100%; height: 100%; }
+.cover-page .noise-overlay { opacity: 0.03; }
+/* Dot Pattern 背景 */
+.dot-bg { background-image: radial-gradient(circle, var(--border) 1px, transparent 1px); background-size: 20px 20px; }
+/* Meteors — 流星雨效果 */
+.meteors-container { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.meteor { position: absolute; width: 1px; height: 1px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,0.05); animation: meteor linear infinite; opacity: 0; }
+.meteor::after { content: ''; position: absolute; top: 50%; transform: translateY(-50%); width: 60px; height: 1px; background: linear-gradient(to right, var(--accent), transparent); opacity: 0.5; }
+@keyframes meteor { 0% { transform: rotate(var(--angle)) translateX(0); opacity: 0; } 5% { opacity: 1; } 30% { opacity: 1; } 100% { transform: rotate(var(--angle)) translateX(-500px); opacity: 0; } }
+/* Border Glow — 卡片边框发光 */
+.border-glow { position: relative; overflow: hidden; }
+.border-glow::before { content: ''; position: absolute; inset: -50%; z-index: 0; background: conic-gradient(from 0deg, transparent, var(--accent), transparent 60%); animation: border-spin 3s linear infinite; opacity: 0.4; }
+.border-glow::after { content: ''; position: absolute; inset: 1px; background: var(--surface); border-radius: inherit; z-index: 1; }
+.border-glow > * { position: relative; z-index: 2; }
+@keyframes border-spin { to { transform: rotate(360deg); } }
+/* Blur Fade — 模糊淡入动画（增强 data-anim） */
+[data-anim="blur"] { opacity: 0; filter: blur(8px); transform: translateY(12px); transition: opacity 0.5s ease-out, filter 0.5s ease-out, transform 0.5s ease-out; }
+[data-anim="blur"].in-view { opacity: 1; filter: blur(0); transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .shiny-text { background: none; -webkit-text-fill-color: unset; } .border-glow::before { display: none; } .border-glow::after { display: none; } [data-anim="blur"] { opacity: 1; filter: none; } .meteor { display: none; } }
+
 /* ===== 底部工具栏（z-index 层级: toolbar=999, panel=998, overlay=1000） ===== */
 .ui-toolbar { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(20,20,20,0.88); backdrop-filter: blur(6px); border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 .tp-btn-toggle, .toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; }
@@ -279,8 +305,15 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
 <!-- ===== 封面页（中英文示例） ===== -->
 <article class="cover-page">
-  <div class="cover-badge" data-lang="zh">第 N 课</div>
-  <div class="cover-badge" data-lang="en">Lesson N</div>
+  <div class="noise-overlay">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="noise-filter"><feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="6" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="linear" slope="0.15"/><feFuncG type="linear" slope="0.15"/><feFuncB type="linear" slope="0.15"/></feComponentTransfer></filter>
+      <rect width="100%" height="100%" filter="url(#noise-filter)" opacity="1"/>
+    </svg>
+  </div>
+  <div class="meteors-container"></div>
+  <div class="cover-badge shiny-text" data-lang="zh">第 N 课</div>
+  <div class="cover-badge shiny-text" data-lang="en">Lesson N</div>
   <h1 data-lang="zh">标题</h1>
   <h1 data-lang="en">Title</h1>
   <p class="cover-subtitle" data-lang="zh">副标题——核心问题或结论</p>
@@ -471,6 +504,7 @@ document.querySelector('.tp-panel').classList.remove('open');});});
 try{document.querySelector('.tp-btn-toggle').addEventListener('click',function(){
 document.querySelector('.tp-panel').classList.toggle('open');});
 }catch(e){}
+try{var mc=document.querySelector('.meteors-container');if(mc){for(var mi=0;mi<15;mi++){var m=document.createElement('div');m.className='meteor';m.style.setProperty('--angle',-215+'deg');m.style.left=Math.random()*innerWidth+'px';m.style.animationDelay=(Math.random()*1+0.2)+'s';m.style.animationDuration=(Math.floor(Math.random()*8+2))+'s';mc.appendChild(m);}}}catch(e){}
 try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){i=(i+1)%t.length;d.dataset.theme=t[i];
 try{localStorage.setItem('theme',t[i]);}catch(e){}
 document.querySelectorAll('.tp-item').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
