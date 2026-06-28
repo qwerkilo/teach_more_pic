@@ -88,10 +88,10 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 21 | 信息面板 | `components/21-信息面板.md` | 右侧滑入抽屉 |
 | 22 | 对比表增强版 | `components/22-对比表增强版.md` | 粘性表头 + 斑马纹 + 排序 |
 | 23 | 全屏模态/灯箱 | `components/23-全屏模态灯箱.md` | 点击放大全屏展示 |
-| 24 | ECharts 交互式图表集 | `components/26-ECharts 交互式图表集.md` | 柱状图/饼图/折线图/堆叠图，ECharts 引擎，交互式 |
-| 25 | Three.js 3D 组件 | `components/27-Three.js 3D组件.md` | 3D 场景/柱状图/地理可视化，Three.js 引擎 |
+| 24 | ECharts 交互式图表集 | `components/26-ECharts 交互式图表集.md` | 柱状图/饼图/折线图/堆叠图，ECharts 引擎，交互式 (CDN: cdn.jsdelivr.net/npm/echarts) |
+| 25 | Three.js 3D 组件 | `components/27-Three.js 3D组件.md` | 3D 场景/柱状图/地理可视化，Three.js 引擎 (CDN: cdnjs.cloudflare.com/ajax/libs/three.js) |
 | 26 | 现代浏览器 API | `components/25-现代浏览器API组件.md` | 原生折叠/原生模态/CSS 幻灯片/Popover |
-| 27 | D3.js 数据可视化 | `components/28-D3.js 数据可视化.md` | 力导向图/旭日图/桑基图，D3.js 引擎，自定义图表 |
+| 27 | D3.js 数据可视化 | `components/28-D3.js 数据可视化.md` | 力导向图/旭日图/桑基图，D3.js 引擎 (CDN: d3js.org/d3.v7.min.js，桑基图需额外 d3-sankey) |
 
 ### 使用规则
 
@@ -205,7 +205,8 @@ Step 3: 写 HTML
     3. 重复的 `:root` 变量声明只需保留一份
     4. `@media` 查询放各组件的 CSS 块末尾
   - 将各组件 HTML 结构分散到课程正文对应位置——流程图放第一幕、数据卡片和引文放第二幕、对比表放第三幕等
-  - 各组件 JS 代码合并到课程末尾 `<script>` 块中（放在 PPT 增强 JS 之前或之后均可）
+  - 各组件 JS 代码合并到课程末尾 `<script>` 块中：**组件 JS 放在 `<!-- ===== 组件 JS 从此处插入（可选） ===== -->` 注释之后**（在 PPT 增强 JS 下方），确保 PPT 增强 JS 始终最先加载
+  - CSS 放在 `/* ===== 组件 CSS 从此处插入（按前缀分组） ===== */` 注释之上，与模板 CSS 在同一 `<style>` 块内
   - 每幕之间的"视觉停顿"法则：每 2-3 段文本后插入一个视觉元素
   - 阅读节奏：核心内容用交互式组件（Tab/折叠/时间线），数据用卡片/条形图/热力图，引用用引文卡片，提示用告警条
   - **课程间互相链接使用相对路径**：如 `<a href="NNNN-slug.html">`，不要加前导 `/` 或完整 URL
@@ -265,8 +266,22 @@ Step 7: 知识图谱更新
   - 提取课程中的关键概念/术语作为节点，课程间的链接作为边
   - 节点名使用 `nameZh`/`nameEn` 双字段，图谱通过 L 键切换语言
   - 🔴 验证：新节点 id 不与已有节点重复
-  - 🛑 STOP：确认图谱显示正确后再进入 Step 5 配套产出（如有后续课）
+  - 🛑 STOP：确认图谱显示正确后再提交最终成果
 ```
+
+## 文件资源速查
+
+| 路径 | 用途 | 工作流中引用处 |
+|---|---|---|
+| `templates/lesson-starter.html` | 课程骨架模板（所有课程的起点） | Step 3 |
+| `templates/index-spa.html` | SPA 课程集线器模板 | Step 6 |
+| `templates/kg-starter.html` | 知识图谱模板（双语 nameZh/nameEn） | Step 7 |
+| `components/NN-name.md` | 组件代码 + 降级说明（27 个） | Step 2/3 |
+| `references/decision-guide.md` | 组件选择决策矩阵 + 组合示例 | Step 2 |
+| `references/page-types.md` | 封面/分隔页/总结页 HTML/CSS 代码 | 可选页面类型 |
+| `scripts/validate-lesson.py` | 课程验证脚本（18 项检查） | Step 4 |
+| `scripts/test_validate.py` | 验证脚本单元测试（74 项） | 开发 |
+| `libs/` | 离线包（echarts/three/d3/d3-sankey） | Step 6 |
 
 ## 失败模式与异常处理
 
