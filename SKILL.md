@@ -270,29 +270,34 @@ Step 7: 知识图谱更新
 
 ## 失败模式与异常处理
 
-| 触发条件 | 一线修复 | 仍失败兜底 |
-|---|---|---|
-| SVG 无法正确显示（浏览器空白） | 检查 SVG XML 语法；检查 viewBox 与 width/height 比例一致 | 降级为纯 CSS 流程图或外部链接 |
-| SVG 内联到 HTML 后排版错乱 | 检查 `<figure class="svg-fig">` 容器：`svg { max-width: 100%; height: auto; }` | 降级为 `<img src="NNNN-slug.svg">` 外部引用 |
-| 条形图 width 导致数据溢出容器 | 检查所有 `bar-fill` 的 width 值 ≤ 100% | 改用 `text-overflow: ellipsis` |
-| CSS 时间线在窄屏上跑偏 | 确保 `.tl-dot` 使用 `position: absolute` + `left` 固定 | 转为水平折叠式 |
-| 角色卡片中文显示乱码 | 确认 SVG 中 font-family 包含中文字体 | 用内联 font-family |
-| 测验 `<button>` 的 `data-correct` 属性写反 | 用 `grep 'data-correct="true"'` 确认每题恰好 1 个 | 手动核验 |
-| fireworks-tech-graph 不可用时 | 手动编写 SVG 或修改已有模板 | 用 CSS 伪元素制作简化版 |
-| SVG 中文字体不渲染 | 确认 `<style>` 内 font-family 包含中文字体 | 在 `<style>` 内层加 text font-family |
-| IntersectionObserver 不触发动画 | 元素可能在首屏内 | 首屏前 2 个视觉元素不加 `data-anim` |
-| 主题切换后 h2 下划线颜色不变 | CSS 中使用固定色而非 `var(--accent)` | 确保使用 `border-bottom-color: var(--accent)` |
-| SVG viewBox 比例不匹配 width/height | 图片被不等比例拉伸 | 确保 viewBox 宽高比 = width/height 比 |
-| Theme panel / TOC panel 点击外部不关闭 | `click` 事件未正确委托 | 在 document 上监听 click，排除 toolbar/panel 区域 |
-| 折叠组件 `height` 从 `auto` 过渡 | CSS transition 无效 | JS 中先测量 scrollHeight 再设 px，恢复 auto |
-| ECharts 图表空白（echarts 未定义） | `libs/echarts.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
-| SPA 中课程 `id` 冲突 | 两个 `<section>` 用了相同 `id` | 使用 `id="lesson-NNN"` 格式，NNN 为课程编号 |
-| `index.html` 中课程区块未显示 | `<section>` 插在了 `<body>` 外部 | 确认在 `</body>` 前插入，不是 `</html>` 之后 |
-| JS 报错 `})` unexpected | IIFE 内嵌套 function + if 时括号顺序错误：外层 function body `}`，内层 if body `}`，最后 `)` 闭调用 | 检查 `});` vs `}})` 顺序 |
-| 浏览器缓存旧 JS 不生效 | 刷新页面时未清缓存 | Ctrl+F5 强制刷新 |
-| 语言切换后内容错位 | 中英文段落数量不一致或未成对标记 `data-lang` | 每段内容同时包裹 `[data-lang="zh"]` 和 `[data-lang="en"]`，确保两个版本段落数相同 |
-| 语言切换按钮无反应 | `lang` 变量循环索引越界 | 确认语言数组（`['zh','en']`）与 localStorage key 一致，L 键监听独立于 T 键 |
-| 组件特定的其他问题 | 见对应 `components/NN-name.md` 中的降级说明 | — |
+| 触发条件 | 超时判定 | 一线修复 | 仍失败兜底 |
+|---|---|---|---|
+| SVG 无法正确显示（浏览器空白） | 打开浏览器检查 → 5s 内无渲染 | 检查 SVG XML 语法；检查 viewBox 与 width/height 比例一致 | 降级为纯 CSS 流程图或外部链接 |
+| SVG 内联到 HTML 后排版错乱 | 页面加载后立即可见 → 无需等待 | 检查 `<figure class="svg-fig">` 容器：`svg { max-width: 100%; height: auto; }` | 降级为 `<img src="NNNN-slug.svg">` 外部引用 |
+| 条形图 width 导致数据溢出容器 | 页面加载后立即可见 → 无需等待 | 检查所有 `bar-fill` 的 width 值 ≤ 100% | 改用 `text-overflow: ellipsis` |
+| CSS 时间线在窄屏上跑偏 | 桌面端正常、窄屏异常 → 调整窗口可复现 | 确保 `.tl-dot` 使用 `position: absolute` + `left` 固定 | 转为水平折叠式 |
+| 角色卡片中文显示乱码 | 页面加载后立即可见 → 无需等待 | 确认 SVG 中 font-family 包含中文字体 | 用内联 font-family |
+| 测验 `<button>` 的 `data-correct` 属性写反 | 点击选项后反馈文字错误 | 用 `grep 'data-correct="true"'` 确认每题恰好 1 个 | 手动核验 |
+| fireworks-tech-graph 不可用时 | 调用后无输出 > 10s | 手动编写 SVG 或修改已有模板 | 用 CSS 伪元素制作简化版 |
+| SVG 中文字体不渲染 | 页面加载后立即可见 → 无需等待 | 确认 `<style>` 内 font-family 包含中文字体 | 在 `<style>` 内层加 text font-family |
+| IntersectionObserver 不触发动画 | 滚动到元素位置 2s 后仍无动画 | 移除该元素的 `data-anim` 属性 | 首屏前 2 个视觉元素不加 `data-anim` |
+| 主题切换后 h2 下划线颜色不变 | 按下 T 键后立即可见 | CSS 中使用固定色而非 `var(--accent)` | 确保使用 `border-bottom-color: var(--accent)` |
+| SVG viewBox 比例不匹配 width/height | 页面加载后立即可见 → 无需等待 | 图片被不等比例拉伸 | 确保 viewBox 宽高比 = width/height 比 |
+| Theme panel / TOC panel 点击外部不关闭 | 点击面板外部 1s 后面板未关闭 | `click` 事件未正确委托 | 在 document 上监听 click，排除 toolbar/panel 区域 |
+| 折叠组件 `height` 从 `auto` 过渡 | 点击展开/折叠时过渡不平滑 | CSS transition 无效 | JS 中先测量 scrollHeight 再设 px，恢复 auto |
+| ECharts 图表空白（echarts 未定义） | 页面加载 3s 后图表区域空白 | `libs/echarts.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
+| Three.js 场景空白（THREE 未定义） | 页面加载 3s 后 3D 区域空白 | `libs/three.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
+| D3.js 图表空白（d3 未定义） | 页面加载 3s 后 D3 区域空白 | `libs/d3.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
+| D3.js 桑基图空白（d3.sankey 未定义） | 页面加载 3s 后桑基图区域空白 | `libs/d3-sankey.min.js` 未加载 | 确认文件已复制到 `libs/`，或改用 CDN 加载 |
+| ECharts CDN 可访问但本地 libs 版本过旧 | API 调用报错（如 `setOption is not a function`） | 检查版本号，本地与 CDN 同步 | 暂时切 CDN，重新下载 libs 覆盖 |
+| 三个图表库同时加载时内存/性能问题 | 页面帧率 < 30fps 持续 5s 以上 | 延迟加载非首屏图表；减少动画复杂度 | 禁用不必要的图表动画 |
+| SPA 中课程 `id` 冲突 | 路由跳转后显示错误的课程 | 两个 `<section>` 用了相同 `id` | 使用 `id="lesson-NNN"` 格式，NNN 为课程编号 |
+| `index.html` 中课程区块未显示 | 路由跳转后空白页 | `<section>` 插在了 `<body>` 外部 | 确认在 `</body>` 前插入，不是 `</html>` 之后 |
+| JS 报错 `})` unexpected | 打开浏览器控制台有红色报错 | IIFE 内嵌套 function + if 时括号顺序错误：外层 function body `}`，内层 if body `}`，最后 `)` 闭调用 | 检查 `});` vs `}})` 顺序 |
+| 浏览器缓存旧 JS 不生效 | 修改后刷新页面功能不变 | 刷新页面时未清缓存 | Ctrl+F5 强制刷新 |
+| 语言切换后内容错位 | 按下 L 键后有中文残余或排版错乱 | 中英文段落数量不一致或未成对标记 `data-lang` | 每段内容同时包裹 `[data-lang="zh"]` 和 `[data-lang="en"]`，确保两个版本段落数相同 |
+| 语言切换按钮无反应 | 按下 L 键后按钮文字不变 | `lang` 变量循环索引越界 | 确认语言数组（`['zh','en']`）与 localStorage key 一致，L 键监听独立于 T 键 |
+| 组件特定的其他问题 | — | 见对应 `components/NN-name.md` 中的降级说明 | — |
 
 ## 写作风格
 
@@ -321,6 +326,10 @@ Step 7: 知识图谱更新
 | 12 | 硬编码颜色覆盖 theme CSS 变量 | 主题切换后颜色不变 | 颜色值统一使用 `var(--accent)`、`var(--border)` 等 CSS 变量 |
 | 13 | 使用 emoji 作为结构图标（导航、工具栏、目录） | 风格不统一，窄屏错位 | 使用对应的 SVG 图标组件 |
 | 14 | 只写中文不写英文版本 | 违反中英双语约定 | 每段内容同时提供中英文 `data-lang` 成对标记 |
+| 15 | 课程依赖 CDN 而未预下载 libs 离线包 | 离线或网络差时图表全部空白，用户看到残缺页面 | 始终先复制本 skill `libs/` 下所有文件到目标项目 `libs/`，CDN 仅作为降级 |
+| 16 | ECharts/Three.js/D3.js libs 一个加载了一个没加载 | 一种图表渲染正常，另一种空白（如 ECharts 有图、D3 空白） | 逐一确认 `libs/` 下对应的 `.min.js` 存在；三个库无关，不会自动依赖加载 |
+| 17 | 混合示例中用了 D3 数据处理 + Three.js 渲染，但忘记加载 Three.js | 页面打开 3s 后 3D 区域空白，控制台报 THREE is not defined | 课程用到几个图表库就必须加载几个 libs 文件，无自动传递依赖 |
+| 18 | CDN 失效后页面完全空白（因 libs 未预下载） | 刷新页面后所有图表区域空白持续 5s+ | 强制要求每个图表库同时配置本地文件 + CDN 降级 `<script>if(...)document.write(...)` 双保险 |
 
 ## 错误检查清单
 
