@@ -52,11 +52,11 @@ Skills: teach, grill-me, teach_more_pic, fireworks-tech-graph, knowledge-graph-m
 
 ## 能力
 
-**26 个视觉组件**（完整索引见 SKILL.md）：
+**27 个视觉组件**（完整索引见 SKILL.md）：
 
 - **#1-7 核心**：SVG 流程图 / 角色卡片 / CSS 时间线 / CSS 条形图 / 对比表 / SVG 容器 / PPT 质感（主题切换 + 语言切换 + 滚动动画 + 键盘导航 + 目录）
 - **#8-14 交互式**：折叠分步详解 / Tab 切换面板 / 图片对比滑块 / 交互式时间线 / 数据卡片网格 / 引文卡片 / 标注式图片
-- **#15-26 数据与辅助**：状态链 / 数值滚动动画 / 标签徽章组 / 告警条 / 热力图 / 步骤指示器 / 信息面板 / 对比表增强版 / 灯箱 / **ECharts 交互式图表**（柱状/饼/折线/堆叠，需下载 `libs/echarts.min.js`） / **Three.js 3D**（3D 数据可视化，需下载 `libs/three.min.js`） / 现代浏览器 API（原生折叠/模态/幻灯片/Popover）
+- **#15-27 数据与辅助**：状态链 / 数值滚动动画 / 标签徽章组 / 告警条 / 热力图 / 步骤指示器 / 信息面板 / 对比表增强版 / 灯箱 / **ECharts 交互式图表**（柱状/饼/折线/堆叠，需 `libs/echarts.min.js`） / **Three.js 3D**（3D 可视化，需 `libs/three.min.js`） / **D3.js 自定义图表**（力导向图/旭日图/桑基图，需 `libs/d3.min.js`） / 现代浏览器 API（原生折叠/模态/幻灯片/Popover）
 - **19 品牌主题** — 22 个 CSS 变量，`var(--accent/border/surface/...)` 自动跟随
 - **主题切换动画** — 0.35s 平滑过渡，`prefers-reduced-motion` 自动禁用
 
@@ -94,21 +94,22 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 2. 从 SKILL.md 组件索引表选 4-7 个组件（每幕 1-3 个），使用决策指南匹配 → 确认组件清单
 3. 打开对应 `components/NN-name.md`，复制 ````html`/```css`/```js` 合并到模板中
 4. SVG 保存为 `lessons/svg/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
-5. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
-6. SPA 集成：从 `templates/index-spa.html` 复制为 `index.html`，追加 `<section class="lesson-view" id="lesson-NNN">`
+5. **`libs/` 依赖**：ECharts 组件需复制 `libs/echarts.min.js`；Three.js 需 `libs/three.min.js`；D3.js 需 `libs/d3.min.js`
+6. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
+7. SPA 集成：从 `templates/index-spa.html` 复制为 `index.html`，追加 `<section class="lesson-view" id="lesson-NNN">`
 7. 知识图谱：新项目从 `templates/kg-starter.html` 复制到项目根目录为 `kg-项目名.html`（双语 `nameZh`/`nameEn` + L 键切换）；已有项目在已有 `kg-*.html` 中追加节点和关系
 
 ## 项目结构
 
 ```
 ├── SKILL.md               ← 唯一入口文档，所有规则在此
-├── components/             各组件独立文件（26 个 .md），含 HTML/CSS/JS/降级说明
+├── components/             各组件独立文件（27 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
 │   ├── validate-lesson.py  课程验证脚本（18 项检查，含双语 + SPA + KG）
 │   ├── test_validate.py    验证脚本单元测试（71 项，覆盖全部 18 项检查）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（22 个 .html）
-├── libs/                   外部库（echarts.min.js、three.min.js）
+├── libs/                   外部库（echarts.min.js、three.min.js、d3.min.js）
 ├── references/             参考附件（决策指南、页面类型模板）
 ├── templates/              7 个模板（4 SVG 骨架 + 1 课程起始 HTML + 1 知识图谱骨架 + 1 SPA 入口）
 ├── theme/19 个品牌 DESIGN.md  各品牌设计语言参考

@@ -435,7 +435,7 @@ def check_bilingual(html):
 
 
 def check_lib_deps(html, base_dir):
-    """Verify ECharts and Three.js lib files exist when used."""
+    """Verify ECharts, Three.js, D3.js lib files exist when used."""
     issues = []
     if re.search(r'echarts\.init\(', html):
         has_local = os.path.exists(os.path.join(base_dir, "libs", "echarts.min.js"))
@@ -447,6 +447,11 @@ def check_lib_deps(html, base_dir):
         has_cdn = "cdnjs.cloudflare.com/ajax/libs/three.js" in html
         if not has_local and not has_cdn:
             issues.append("Three.js usage found but no libs/three.min.js or CDN link")
+    if re.search(r'd3\.(forceSimulation|hierarchy|sankey|select)\b', html):
+        has_local = os.path.exists(os.path.join(base_dir, "libs", "d3.min.js"))
+        has_cdn = "d3js.org/d3" in html
+        if not has_local and not has_cdn:
+            issues.append("D3.js usage found but no libs/d3.min.js or CDN link")
     return issues
 
 

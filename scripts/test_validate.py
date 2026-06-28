@@ -243,6 +243,12 @@ test("lib deps: echarts no lib fails", len(v.check_lib_deps(
     '<html>echarts.init()</html>', 'C:\\nonexistent')) > 0)
 test("lib deps: three.js no lib fails", len(v.check_lib_deps(
     '<html>new THREE.Scene()</html>', 'C:\\nonexistent')) > 0)
+test("lib deps: d3.js CDN passes", not v.check_lib_deps(
+    '<html><script src="https://d3js.org/d3.v7.min.js"></script>d3.forceSimulation()</html>', '.'))
+test("lib deps: d3.js local passes", not v.check_lib_deps(
+    '<html>d3.select("body")</html>', '.'))
+test("lib deps: d3.js no lib fails", len(v.check_lib_deps(
+    '<html>d3.forceSimulation()</html>', 'C:\\nonexistent')) > 0)
 
 # ==== Results ====
 print(f"\n{PASS} passed, {FAIL} failed")

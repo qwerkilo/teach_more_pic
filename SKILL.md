@@ -47,7 +47,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 
 ## 视觉组件工具箱
 
-26 个组件，每个组件的 HTML/CSS/JS 代码和用法规则在 `components/NN-name.md` 中。此处只列索引。
+27 个组件，每个组件的 HTML/CSS/JS 代码和用法规则在 `components/NN-name.md` 中。此处只列索引。
 
 ### 核心组件（#1-7）
 
@@ -73,7 +73,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 13 | 引用/引文卡片 | `components/13-引用引文卡片.md` | 左侧竖条 + 引文 + 署名 |
 | 14 | 标注式图片 | `components/14-标注式图片.md` | 图片上数字标注点弹出说明 |
 
-### 数据与辅助组件（#15-26）
+### 数据与辅助组件（#15-27）
 
 | # | 组件 | 文件 | 说明 |
 |---|---|---|---|
@@ -89,6 +89,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 24 | ECharts 交互式图表集 | `components/26-ECharts 交互式图表集.md` | 柱状图/饼图/折线图/堆叠图，ECharts 引擎，交互式 |
 | 25 | Three.js 3D 组件 | `components/27-Three.js 3D组件.md` | 3D 场景/柱状图/地理可视化，Three.js 引擎 |
 | 26 | 现代浏览器 API | `components/25-现代浏览器API组件.md` | 原生折叠/原生模态/CSS 幻灯片/Popover |
+| 27 | D3.js 数据可视化 | `components/28-D3.js 数据可视化.md` | 力导向图/旭日图/桑基图，D3.js 引擎，自定义图表 |
 
 ### 使用规则
 
