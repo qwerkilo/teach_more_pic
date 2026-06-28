@@ -22,8 +22,7 @@ h2 { margin-top: 2em; text-wrap: pretty; }
 .force-link { stroke: var(--border); stroke-width: 1px; stroke-opacity: 0.5; }
 .sunburst-arc { stroke: #fff; stroke-width: 1.5px; cursor: pointer; transition: opacity 0.2s ease; }
 .sunburst-arc:hover { opacity: 0.8; }
-.d3-tip { position: fixed; background: rgba(0,0,0,0.85); color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 0.85rem; pointer-events: none; z-index: 999; opacity: 0; transition: opacity 0.12s ease; }
-.d3-tip.visible { opacity: 1; }
+.sunburst-label { text-shadow: 0 1px 3px rgba(0,0,0,0.5); pointer-events: none; }
 </style>
 </head>
 <body>
@@ -124,13 +123,21 @@ h2 { margin-top: 2em; text-wrap: pretty; }
   var partition = d3.partition().size([2 * Math.PI, r]);
   partition(root);
 
-  var tip = document.getElementById('d3-tip');
   svg.selectAll('path').data(root.descendants()).join('path')
     .attr('class','sunburst-arc').attr('d',arc)
-    .attr('fill',function(d){ while(d.depth>1)d=d.parent; return color(d.data.name); })
-    .on('mouseover',function(e,d){ tip.textContent = d.data.name + '  ' + d.value + '%'; tip.style.left = (e.pageX + 12) + 'px'; tip.style.top = (e.pageY - 8) + 'px'; tip.classList.add('visible'); })
-    .on('mousemove',function(e){ tip.style.left = (e.pageX + 12) + 'px'; tip.style.top = (e.pageY - 8) + 'px'; })
-    .on('mouseout',function(){ tip.classList.remove('visible'); });
+    .attr('fill',function(d){ while(d.depth>1)d=d.parent; return color(d.data.name); });
+
+  // 直接显示数值文字标签（始终可见）
+  var midAngle = function(d){ return d.x0 + (d.x1 - d.x0) / 2; };
+  var midRadius = function(d){ return d.y0 + (d.y1 - d.y0) / 2; };
+  svg.selectAll('.sunburst-label').data(root.descendants().filter(function(d){return d.depth>0;})).join('text')
+    .attr('class','sunburst-label').attr('text-anchor','middle').attr('dominant-baseline','middle')
+    .attr('transform',function(d){ var a=midAngle(d), r=midRadius(d); return 'rotate('+(a*180/Math.PI-90)+') translate('+r+',0) rotate('+(-(a*180/Math.PI-90))+')'; })
+    .attr('font-size',function(d){ return d.depth===1?'13px':'11px'; })
+    .attr('fill','#fff').attr('font-weight',function(d){return d.depth===1?'700':'400';})
+    .style('text-shadow','0 1px 2px rgba(0,0,0,0.5)')
+    .attr('pointer-events','none')
+    .text(function(d){ return d.data.name + ' ' + d.value + '%'; });
 })();
 
 /* ===== 27c — 桑基图 ===== */
