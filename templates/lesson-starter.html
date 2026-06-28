@@ -302,7 +302,7 @@ button:active { transform: scale(0.98); }
 /* 状态链 (#15) */
 .sc-chain { display: flex; justify-content: space-between; align-items: flex-start; margin: 1.5rem 0; padding: 0 1rem; gap: 4px; }
 .sc-step { flex: 1; text-align: center; position: relative; padding-top: 1.8em; }
-.sc-step::before { content: ''; position: absolute; top: 0.7em; left: calc(50% + 12px); right: calc(-50% + 12px); height: 2px; background: var(--border); z-index: 0; }
+.sc-step::before { content: ''; position: absolute; top: 0.7em; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 0; }
 .sc-step:last-child::before { display: none; }
 .sc-dot { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); z-index: 1; }
 .sc-step.done .sc-dot { background: var(--success); border-color: var(--success); }
@@ -462,16 +462,16 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <p data-lang="en">Traditional economics treats government like a household that must balance its budget. MMT argues: sovereign currency issuers (like the US, Japan, UK) cannot "go bankrupt"—they can always create new money to repay debt in their own currency.</p>
 
 <div class="neon-card" style="margin:1.5rem 0;">
-  <p data-lang="zh" style="margin:0;font-size:0.95rem;"><strong>核心洞察</strong>：主权货币发行国 ≠ 家庭。税收不是为了"筹钱"，而是为了控制通胀。</p>
-  <p data-lang="en" style="margin:0;font-size:0.95rem;"><strong>Key Insight</strong>: Sovereign currency issuers ≠ households. Taxes aren't about "raising money"—they regulate inflation.</p>
+  <div><p data-lang="zh" style="margin:0;font-size:0.95rem;"><strong>核心洞察</strong>：主权货币发行国 ≠ 家庭。税收不是为了"筹钱"，而是为了控制通胀。</p>
+  <p data-lang="en" style="margin:0;font-size:0.95rem;"><strong>Key Insight</strong>: Sovereign currency issuers ≠ households. Taxes aren't about "raising money"—they regulate inflation.</p></div>
 </div>
 
 <!-- ===== 🛑 组件示例 HTML — 替换为实际课程内容 ===== -->
 
 <!-- 角色卡片 (#2) 🛑 替换角色/描述 -->
 <div class="rc-grid">
-  <div class="rc-card spotlight-card" style="position:relative;"><span class="rc-icon">🏛️</span><span class="rc-name" data-lang="zh">财政部</span><span class="rc-name" data-lang="en">Treasury</span><span class="rc-desc" data-lang="zh">负责发债与支出</span><span class="rc-desc" data-lang="en">Issues debt & spending</span></div>
-  <div class="rc-card spotlight-card" style="position:relative;"><span class="rc-icon">🏦</span><span class="rc-name" data-lang="zh">央行</span><span class="rc-name" data-lang="en">Central Bank</span><span class="rc-desc" data-lang="zh">设定利率与货币供给</span><span class="rc-desc" data-lang="en">Sets rates & money supply</span></div>
+  <div class="rc-card spotlight-card" style="position:relative;"><span class="rc-icon">🏛️</span><span class="rc-name" data-lang="zh">财政部</span><span class="rc-name" data-lang="en">Treasury</span><span class="rc-desc" data-lang="zh">负责发债与支出</span><span class="rc-desc" data-lang="en">Issues debt &amp; spending</span></div>
+  <div class="rc-card spotlight-card" style="position:relative;"><span class="rc-icon">🏦</span><span class="rc-name" data-lang="zh">央行</span><span class="rc-name" data-lang="en">Central Bank</span><span class="rc-desc" data-lang="zh">设定利率与货币供给</span><span class="rc-desc" data-lang="en">Sets rates &amp; money supply</span></div>
   <div class="rc-card spotlight-card" style="position:relative;"><span class="rc-icon">📊</span><span class="rc-name" data-lang="zh">商业银行</span><span class="rc-name" data-lang="en">Commercial Banks</span><span class="rc-desc" data-lang="zh">信贷创造的中介</span><span class="rc-desc" data-lang="en">Credit intermediation</span></div>
 </div>
 
@@ -535,6 +535,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <div class="bar-item"><span class="bar-label">日本</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--accent);">85%</div></div></div>
   <div class="bar-item"><span class="bar-label">欧盟</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--accent);">60%</div></div></div>
   <div class="bar-item"><span class="bar-label">中国</span><div class="bar-track"><div class="bar-fill" style="width:45%;background:var(--warning);">45%</div></div></div>
+  <div class="bar-item"><span class="bar-label" data-lang="zh">英国</span><span class="bar-label" data-lang="en">UK</span><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--accent);">30%</div></div></div>
 </div>
 
 <!-- 提示框/告警条 (#18) 🛑 替换消息 -->
@@ -558,7 +559,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <span class="divider-num" data-lang="zh">第三幕</span>
   <span class="divider-num" data-lang="en">Act III</span>
   <h2 data-lang="zh">转折与遗产</h2>
-  <h2 data-lang="en">Turning Point & Legacy</h2>
+  <h2 data-lang="en">Turning Point &amp; Legacy</h2>
 </section>
 
 <p data-lang="zh">MMT 的真正遗产不在于"印钞"，而在于重新定义财政空间：只要经济还有闲置资源（失业、闲置产能），政府就可以借债支出。这为下一课《就业保障计划》埋下了伏笔。</p>
