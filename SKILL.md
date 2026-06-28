@@ -21,9 +21,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 ## 前置条件
 
 - `fireworks-tech-graph` skill available (for SVG diagram creation)
-- ECharts 5.x: download to `libs/echarts.min.js` for interactive chart support (#24)
-- Three.js: download to `libs/three.min.js` for 3D data visualization (#25)
-- D3.js: download `libs/d3.min.js` + `libs/d3-sankey.min.js` for custom charts (#27)
+- 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js，课程创建时完整复制到目标项目即可
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
 
 ## 核心约定
@@ -231,7 +229,7 @@ Step 6: SPA 集成
   - 🔴 验证：`id="lesson-NNN"` 在 `index.html` 中不与其他课程冲突
   - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
   - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
-  - 🔴 如课程使用了 ECharts 组件（#26），将 `libs/echarts.min.js` 复制到目标项目的 `libs/` 目录
+  - 🔴 将本 skill 的 `libs/` 下所有文件（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js）完整复制到目标项目的 `libs/` 目录，确保课程始终使用固定版本离线包
   - 🛑 STOP：确认 SPA 预览正常后再进入 Step 7
 
 Step 7: 知识图谱更新

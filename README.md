@@ -94,7 +94,7 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 2. 从 SKILL.md 组件索引表选 4-7 个组件（每幕 1-3 个），使用决策指南匹配 → 确认组件清单
 3. 打开对应 `components/NN-name.md`，复制 ````html`/```css`/```js` 合并到模板中
 4. SVG 保存为 `lessons/svg/NNNN-slug.svg`（磁盘文件）**并**内联到 HTML 中 `<figure class="svg-fig">` 包裹
-5. **`libs/` 依赖**：ECharts 组件需复制 `libs/echarts.min.js`；Three.js 需 `libs/three.min.js`；D3.js 需 `libs/d3.min.js`
+5. **`libs/` 依赖**：先完整复制本 skill 的 `libs/` 下所有文件到目标项目的 `libs/`（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js），确保离线包版本一致
 6. 运行 `python scripts/validate-lesson.py lessons/NNNN-slug.html` 验证
 7. SPA 集成：从 `templates/index-spa.html` 复制为 `index.html`，追加 `<section class="lesson-view" id="lesson-NNN">`
 7. 知识图谱：新项目从 `templates/kg-starter.html` 复制到项目根目录为 `kg-项目名.html`（双语 `nameZh`/`nameEn` + L 键切换）；已有项目在已有 `kg-*.html` 中追加节点和关系
