@@ -28,15 +28,25 @@ def check_svg_links(html, base_dir):
 
 
 def check_quiz_correct_count(html):
-    """Each quiz question should have exactly one data-correct=true."""
+    """Each quiz question should have exactly one data-correct=true per language."""
     issues = []
     questions = re.findall(
         r'<div[^>]*class="[^"]*quiz-question[^"]*"[^>]*>.*?</div>', html, re.DOTALL
     )
     for i, q in enumerate(questions, 1):
-        corrects = re.findall(r'data-correct="true"', q)
-        if len(corrects) != 1:
-            issues.append(f"Quiz Q{i}: {len(corrects)} correct answers (expected 1)")
+        langs = re.findall(r'data-lang="([^"]+)"', q)
+        if langs:
+            langs = set(langs)
+            for lang in langs:
+                corrects = re.findall(
+                    r'data-correct="true"[^>]*data-lang="' + lang + '"', q
+                )
+                if len(corrects) != 1:
+                    issues.append(f"Quiz Q{i} ({lang}): {len(corrects)} correct answers (expected 1)")
+        else:
+            corrects = re.findall(r'data-correct="true"', q)
+            if len(corrects) != 1:
+                issues.append(f"Quiz Q{i}: {len(corrects)} correct answers (expected 1)")
     return issues
 
 
@@ -83,7 +93,7 @@ def check_relative_links(html):
 
 
 def check_quiz_completeness(html):
-    """Should have exactly 5 questions, each with 3 options."""
+    """Should have exactly 5 questions, each with 3 options per language."""
     issues = []
     questions = re.findall(
         r'<div[^>]*class="[^"]*quiz-question[^"]*"[^>]*>.*?</div>', html, re.DOTALL
@@ -92,8 +102,18 @@ def check_quiz_completeness(html):
         issues.append(f"Found {len(questions)} quiz questions (expected 5)")
     for i, q in enumerate(questions, 1):
         options = re.findall(r'<button[^>]*class="[^"]*quiz-option[^"]*"', q)
-        if len(options) != 3:
-            issues.append(f"Quiz Q{i}: {len(options)} options (expected 3)")
+        langs = re.findall(r'data-lang="([^"]+)"', q)
+        if langs:
+            langs = set(langs)
+            for lang in langs:
+                lang_opts = re.findall(
+                    r'class="[^"]*quiz-option[^"]*"[^>]*data-lang="' + lang + '"', q
+                )
+                if len(lang_opts) != 3:
+                    issues.append(f"Quiz Q{i} ({lang}): {len(lang_opts)} options (expected 3)")
+        else:
+            if len(options) != 3:
+                issues.append(f"Quiz Q{i}: {len(options)} options (expected 3)")
     return issues
 
 

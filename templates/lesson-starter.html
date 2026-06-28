@@ -247,7 +247,8 @@ button:active { transform: scale(0.98); }
 .lang-btn { background: none; border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; font-size: 0.72rem; cursor: pointer; padding: 1px 5px; line-height: 1.4; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; font-family: inherit; font-weight: 600; letter-spacing: 0.03em; }
 .lang-btn:hover { opacity: 1; color: #ffffff; border-color: rgba(255,255,255,0.5); }
 [data-lang] { display: none; }
-[data-lang].active { display: inherit; }
+[data-lang].active { display: revert; }
+.cover-badge[data-lang].active { display: inline-block; }
 .toc-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; padding: 0 2px; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; color: #e0e0e0; }
 .toc-btn:hover { opacity: 1; color: #ffffff; }
 .toc-panel { position: fixed; bottom: 70px; right: 20px; z-index: 998; background: #1a1a1a; border: 1px solid #333; border-radius: var(--radius, 8px); padding: 0.6em 0; box-shadow: 0 4px 16px rgba(0,0,0,0.3); overflow-y: auto; display: none; min-width: 160px; max-height: 50vh; }
@@ -285,77 +286,107 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
 <!-- ===== 第一章：设置矛盾 ===== -->
 <section class="section-divider" aria-label="第一幕">
-  <span class="divider-num">第一幕</span>
-  <h2>设置矛盾</h2>
+  <span class="divider-num" data-lang="zh">第一幕</span>
+  <span class="divider-num" data-lang="en">Act I</span>
+  <h2 data-lang="zh">设置矛盾</h2>
+  <h2 data-lang="en">Setting the Conflict</h2>
 </section>
 
-<p>第一幕引出问题……</p>
+<p data-lang="zh">第一幕引出问题……</p>
+<p data-lang="en">Act I introduces the problem...</p>
 
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 第二章：危机爆发 ===== -->
 <section class="section-divider" aria-label="第二幕">
-  <span class="divider-num">第二幕</span>
-  <h2>危机爆发</h2>
+  <span class="divider-num" data-lang="zh">第二幕</span>
+  <span class="divider-num" data-lang="en">Act II</span>
+  <h2 data-lang="zh">危机爆发</h2>
+  <h2 data-lang="en">Crisis Erupts</h2>
 </section>
 
-<p>第二幕核心内容……</p>
+<p data-lang="zh">第二幕核心内容……</p>
+<p data-lang="en">Act II core content...</p>
 
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 第三章：转折与遗产 ===== -->
 <section class="section-divider" aria-label="第三幕">
-  <span class="divider-num">第三幕</span>
-  <h2>转折与遗产</h2>
+  <span class="divider-num" data-lang="zh">第三幕</span>
+  <span class="divider-num" data-lang="en">Act III</span>
+  <h2 data-lang="zh">转折与遗产</h2>
+  <h2 data-lang="en">Turning Point & Legacy</h2>
 </section>
 
-<p>第三幕收束与联系……</p>
+<p data-lang="zh">第三幕收束与联系……</p>
+<p data-lang="en">Act III conclusion and connections...</p>
 
 <!-- INSERT: 视觉组件 HTML 从这里插入 -->
 
 <!-- ===== 总结页 ===== -->
 <aside class="summary-cards">
-  <div class="summary-card"><span class="summary-icon">💡</span><strong>核心洞察</strong><p>一句话</p></div>
-  <div class="summary-card"><span class="summary-icon">🔗</span><strong>与上一课的联系</strong><p>一句话</p></div>
-  <div class="summary-card"><span class="summary-icon">❓</span><strong>开放问题</strong><p>一句话</p></div>
+  <div class="summary-card"><span class="summary-icon">💡</span><strong data-lang="zh">核心洞察</strong><strong data-lang="en">Key Insight</strong><p data-lang="zh">一句话</p><p data-lang="en">One sentence</p></div>
+  <div class="summary-card"><span class="summary-icon">🔗</span><strong data-lang="zh">与上一课的联系</strong><strong data-lang="en">Previous Lesson Link</strong><p data-lang="zh">一句话</p><p data-lang="en">One sentence</p></div>
+  <div class="summary-card"><span class="summary-icon">❓</span><strong data-lang="zh">开放问题</strong><strong data-lang="en">Open Questions</strong><p data-lang="zh">一句话</p><p data-lang="en">One sentence</p></div>
 </aside>
 
 <!-- ===== 测验 ===== -->
 <div class="quiz-section">
-  <h2>课后测验</h2>
+  <h2 data-lang="zh">课后测验</h2>
+  <h2 data-lang="en">Quiz</h2>
   <div class="quiz-question" data-q="1">
-    <p class="quiz-q-text">1. 问题一？</p>
-    <button class="quiz-option" data-correct="true">正确选项</button>
-    <button class="quiz-option" data-correct="false">错误选项</button>
-    <button class="quiz-option" data-correct="false">错误选项</button>
+    <p class="quiz-q-text" data-lang="zh">1. 问题一？</p>
+    <p class="quiz-q-text" data-lang="en">1. Question one?</p>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
+    <button class="quiz-option" data-correct="true" data-lang="zh">正确选项</button>
+    <button class="quiz-option" data-correct="true" data-lang="en">Correct answer</button>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
     <p class="quiz-feedback"></p>
   </div>
   <div class="quiz-question" data-q="2">
-    <p class="quiz-q-text">2. 问题二？</p>
-    <button class="quiz-option" data-correct="false">错误选项</button>
-    <button class="quiz-option" data-correct="true">正确选项</button>
-    <button class="quiz-option" data-correct="false">错误选项</button>
+    <p class="quiz-q-text" data-lang="zh">2. 问题二？</p>
+    <p class="quiz-q-text" data-lang="en">2. Question two?</p>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
+    <button class="quiz-option" data-correct="true" data-lang="zh">正确选项</button>
+    <button class="quiz-option" data-correct="true" data-lang="en">Correct answer</button>
     <p class="quiz-feedback"></p>
   </div>
   <div class="quiz-question" data-q="3">
-    <p class="quiz-q-text">3. 问题三？</p>
-    <button class="quiz-option" data-correct="false">错误选项</button>
-    <button class="quiz-option" data-correct="false">错误选项</button>
-    <button class="quiz-option" data-correct="true">正确选项</button>
+    <p class="quiz-q-text" data-lang="zh">3. 问题三？</p>
+    <p class="quiz-q-text" data-lang="en">3. Question three?</p>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
+    <button class="quiz-option" data-correct="true" data-lang="zh">正确选项</button>
+    <button class="quiz-option" data-correct="true" data-lang="en">Correct answer</button>
     <p class="quiz-feedback"></p>
   </div>
   <div class="quiz-question" data-q="4">
-    <p class="quiz-q-text">4. 问题四？</p>
-    <button class="quiz-option" data-correct="true">正确选项</button>
-    <button class="quiz-option" data-correct="false">错误选项</button>
-    <button class="quiz-option" data-correct="false">错误选项</button>
+    <p class="quiz-q-text" data-lang="zh">4. 问题四？</p>
+    <p class="quiz-q-text" data-lang="en">4. Question four?</p>
+    <button class="quiz-option" data-correct="true" data-lang="zh">正确选项</button>
+    <button class="quiz-option" data-correct="true" data-lang="en">Correct answer</button>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
     <p class="quiz-feedback"></p>
   </div>
   <div class="quiz-question" data-q="5">
-    <p class="quiz-q-text">5. 问题五？</p>
-    <button class="quiz-option" data-correct="false">错误选项</button>
-    <button class="quiz-option" data-correct="true">正确选项</button>
-    <button class="quiz-option" data-correct="false">错误选项</button>
+    <p class="quiz-q-text" data-lang="zh">5. 问题五？</p>
+    <p class="quiz-q-text" data-lang="en">5. Question five?</p>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
+    <button class="quiz-option" data-correct="true" data-lang="zh">正确选项</button>
+    <button class="quiz-option" data-correct="true" data-lang="en">Correct answer</button>
+    <button class="quiz-option" data-correct="false" data-lang="zh">错误选项</button>
+    <button class="quiz-option" data-correct="false" data-lang="en">Wrong answer</button>
     <p class="quiz-feedback"></p>
   </div>
 </div>
