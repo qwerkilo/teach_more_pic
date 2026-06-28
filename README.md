@@ -108,14 +108,29 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 │   ├── validate-lesson.py  课程验证脚本（18 项检查，含双语 + SPA + KG）
 │   ├── test_validate.py    验证脚本单元测试（71 项，覆盖全部 18 项检查）
 │   └── run-tests.ps1       批量验证所有示例
-├── examples/               组件用法示例（22 个 .html）
-├── libs/                   外部库（echarts.min.js、three.min.js、d3.min.js）
+├── examples/               组件用法示例（24 个 .html，含 1 个 ECharts/D3/Three 混合）
+├── libs/                   外部库（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js、magicui-effects.css）
 ├── references/             参考附件（决策指南、页面类型模板）
 ├── templates/              7 个模板（4 SVG 骨架 + 1 课程起始 HTML + 1 知识图谱骨架 + 1 SPA 入口）
 ├── theme/19 个品牌 DESIGN.md  各品牌设计语言参考
 ├── test-prompts.json       测试提示词（12 个场景）
 └── results.tsv             darwin-skill 优化记录
 ```
+
+### Magic UI 装饰效果
+
+课程模板和所有示例通过 `libs/magicui-effects.css` 共享 6 种 CSS 装饰效果：
+
+| 效果 | CSS 类 | 说明 |
+|---|---|---|
+| 光泽扫光 | `.shiny-text` | 文本渐变扫光动画（封面 badge / 标题） |
+| 噪点纹理 | `.noise-overlay` | SVG feTurbulence 噪点叠加层（封面/工具栏背景） |
+| 圆点网格 | `.dot-bg` | CSS radial-gradient 圆点背景 |
+| 流星雨 | `.meteors-container` + `.meteor` | 封面装饰流星动画 |
+| 边框发光 | `.border-glow` | conic-gradient 旋转边框 |
+| 模糊淡入 | `data-anim="blur"` | 滚动 → 模糊消除入场动画 |
+
+所有效果适配 CSS 变量（`var(--accent)`、`var(--surface)` 等），自动跟随主题切换。
 
 ## 前置依赖
 

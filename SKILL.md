@@ -24,8 +24,9 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 ## 前置条件
 
 - `fireworks-tech-graph` skill available (for SVG diagram creation)
-- 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js，课程创建时完整复制到目标项目即可
+- 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js、magicui-effects.css，课程创建时完整复制到目标项目即可
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
+- Magic UI CSS 效果：`libs/magicui-effects.css` 共享 6 种装饰效果（shiny-text、noise-overlay、dot-bg、meteors、border-glow、blur-fade），所有模板和示例均已引用
 
 ## 核心约定
 
@@ -281,6 +282,7 @@ Step 7: 知识图谱更新
 | `references/page-types.md` | 封面/分隔页/总结页 HTML/CSS 代码 | 可选页面类型 |
 | `scripts/validate-lesson.py` | 课程验证脚本（18 项检查） | Step 4 |
 | `scripts/test_validate.py` | 验证脚本单元测试（74 项） | 开发 |
+| `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（shiny/noise/dot/meteor/glow/blur） | 模板自动加载 |
 | `libs/` | 离线包（echarts/three/d3/d3-sankey） | Step 6 |
 
 ## 失败模式与异常处理
