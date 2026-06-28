@@ -23,6 +23,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - `fireworks-tech-graph` skill available (for SVG diagram creation)
 - ECharts 5.x: download to `libs/echarts.min.js` for interactive chart support (#24)
 - Three.js: download to `libs/three.min.js` for 3D data visualization (#25)
+- D3.js: download `libs/d3.min.js` + `libs/d3-sankey.min.js` for custom charts (#27)
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
 
 ## 核心约定
