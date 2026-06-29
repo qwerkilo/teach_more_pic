@@ -217,16 +217,27 @@ function showError(id, msg) {
   } catch(e) { console.error('Example 3 error:', e); }
 })();
 
-/* ===== 示例四：Anime.js + Three.js 动画弹跳 ===== */
+/* ===== 示例四：弹跳柱状图（Anime.js + Three.js） ===== */
 (function(){
   try {
     var el = document.getElementById('hybrid-anime-three');
     if(!el) return;
-    // Use a script tag to load anime.js then init
-    var scr = document.createElement('script');
-    scr.src = 'https://cdn.jsdelivr.net/npm/animejs@4.5.0/lib/anime.min.js';
-    scr.onload = function(){
-      if(typeof anime === 'undefined') return;
+    // Load Anime.js ESM via import, fallback to rAF
+    var importAnime = function(cb){
+      var s = document.createElement('script');
+      s.type = 'module';
+      s.textContent = [
+        'import { animate, createTimer } from "https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/modules/index.js";',
+        'window.__anime = { animate: animate, createTimer: createTimer };',
+        'import("https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/modules/adapters/three/index.js").catch(function(){});',
+        'window.__animeReady = true;',
+      ].join('\n');
+      s.onload = function(){ if(cb) cb(); };
+      document.head.appendChild(s);
+    };
+
+    importAnime(function init(){
+      var hasAnime = window.__anime && window.__anime.animate;
       var w = el.clientWidth, h = 400;
       var scene = new THREE.Scene();
       scene.background = new THREE.Color(0xf5f0eb);
@@ -240,8 +251,6 @@ function showError(id, msg) {
       light.position.set(5, 10, 7); scene.add(light);
       scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-      // Use the adapter approach via anime.set
-      var labels = ['中国','美国','日本','德国','英国'];
       var heights = [5.1, 3.2, 2.8, 4.5, 3.9];
       var colors = [0xe74c3c,0x3498db,0x2ecc71,0xf39c12,0x9b59b6];
       var bars = [];
@@ -251,6 +260,7 @@ function showError(id, msg) {
         var mat = new THREE.MeshLambertMaterial({ color: colors[i] });
         var mesh = new THREE.Mesh(geo, mat);
         mesh.position.set((i - 2) * 1.2, 0.005, 0);
+        mesh.userData = { target: v, idx: i };
         scene.add(mesh);
         bars.push(mesh);
       });
@@ -262,44 +272,43 @@ function showError(id, msg) {
       floor.rotation.x = -Math.PI / 2; floor.position.y = -0.05;
       scene.add(floor);
 
-      // Anime.js animation using direct JS object animation (since UMD adapter needs importmap)
-      var animData = bars.map(function(bar, i){
-        return { target: bar, h: heights[i] };
-      });
-      animData.forEach(function(d, i){
-        // Use anime.js to animate a proxy object whose onUpdate drives Three.js
-        var proxy = { scaleY: 0.01, y: 0.005 };
-        anime({
-          targets: proxy,
-          scaleY: d.h,
-          y: d.h / 2,
-          delay: i * 180,
-          duration: 1000,
-          easing: 'easeOutElastic(1, 0.5)',
-          update: function(){
-            d.target.scale.y = proxy.scaleY;
-            d.target.position.y = proxy.y;
-          }
+      if(hasAnime){
+        var ani = window.__anime.animate;
+        bars.forEach(function(bar){
+          ani(bar, {
+            scaleY: [0.01, bar.userData.target],
+            y: [0.005, bar.userData.target / 2],
+            delay: bar.userData.idx * 180,
+            duration: 1000,
+            ease: 'outBack(1.5)',
+          });
         });
-      });
+      } else {
+        // rAF fallback
+        var startT = Date.now();
+        bars.forEach(function(bar){
+          bar.userData.t0 = startT + bar.userData.idx * 180;
+        });
+        (function frame(){
+          var now = Date.now();
+          bars.forEach(function(bar){
+            var t = now - bar.userData.t0;
+            if(t < 0) return;
+            var p = Math.min(t / 1000, 1);
+            var e = 1 - Math.pow(1 - p, 3);
+            var hh = bar.userData.target * e;
+            bar.scale.y = 0.01 + hh;
+            bar.position.y = hh / 2;
+          });
+          scene.rotation.y += 0.003;
+          renderer.render(scene, camera);
+          requestAnimationFrame(frame);
+        })();
+        return;
+      }
 
-      // Continuous rotation via anime
-      var rotProxy = { angle: 0 };
-      anime({
-        targets: rotProxy,
-        angle: [0, Math.PI * 2],
-        duration: 20000,
-        loop: true,
-        easing: 'linear',
-        update: function(){
-          scene.rotation.y = rotProxy.angle;
-        }
-      });
-
-      function animFrame(){ requestAnimationFrame(animFrame); renderer.render(scene, camera); }
-      animFrame();
-    };
-    document.body.appendChild(scr);
+      (function rAF(){ requestAnimationFrame(rAF); scene.rotation.y += 0.003; renderer.render(scene, camera); })();
+    });
   } catch(e) { console.error('Example 4 error:', e); }
 })();
 </script>
