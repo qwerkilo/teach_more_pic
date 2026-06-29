@@ -20,7 +20,7 @@ body { font-family: "Noto Serif CJK SC",Georgia,serif; background: var(--bg); co
 h1 { text-wrap: pretty; border-bottom: 2px solid var(--accent); padding-bottom: 0.5em; }
 .chart-box { background: var(--surface); border-radius: var(--radius); margin: 1rem 0; padding: 8px; position: relative; }
 .chart-box canvas { display: block; }
-.error-msg { display: none; padding: 2rem; text-align: center; color: #dc2626; background: #fef2f2; border-radius: var(--radius); }
+.info-msg { display: none; padding: 1rem; text-align: center; color: #d97706; background: #fff7ed; border-radius: var(--radius); font-size: 0.82rem; }
 </style>
 </head>
 <body>
@@ -29,38 +29,41 @@ h1 { text-wrap: pretty; border-bottom: 2px solid var(--accent); padding-bottom: 
 <h1 class="shiny-text">Three.js 3D — WebGPU + TSL</h1>
 <p>GDP 对比 · 优先 WebGPU，回退 WebGL</p>
 <div class="chart-box" id="chart-box"><div id="three-container" style="width:100%;height:400px;"></div></div>
-<div class="error-msg" id="error-msg"><p>⚠ WebGPU 不可用。使用 WebGL 渲染。</p></div>
+<div class="info-msg" id="info-msg"></div>
 
-<script type="module">
-var container = document.getElementById('three-container');
-if(!container) throw new Error('no container');
+<script>
+// UMD fallback: load libs/three.min.js if importmap CDN fails
+var loadUMD = function(cb){
+  var s = document.createElement('script');
+  s.src = '../libs/three.min.js';
+  s.onload = cb;
+  s.onerror = function(){ document.getElementById('three-container').innerHTML = '<p style="padding:2rem;text-align:center;color:#c0392b;">Three.js 加载失败</p>'; };
+  document.head.appendChild(s);
+};
 
 var hasWebGPU = typeof navigator !== 'undefined' && navigator.gpu;
 
-import * as THREE from 'three';
-
-var loadWebGPU = hasWebGPU
-  ? import('three/addons/renderers/webgpu/WebGPURenderer.js').then(function(m){ return m.WebGPURenderer; }).catch(function(){ return null; })
-  : Promise.resolve(null);
-
-loadWebGPU.then(function(WebGPURenderer){
+function initScene(THREE, WebGPURenderer){
+  var container = document.getElementById('three-container');
+  if(!container) return;
   var w = container.clientWidth, h = container.clientHeight;
+
   var scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf5f0eb);
-
   var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-  camera.position.set(5, 4, 8);
-  camera.lookAt(0, 0, 0);
+  camera.position.set(5, 4, 8); camera.lookAt(0, 0, 0);
 
   var renderer;
   if(WebGPURenderer && hasWebGPU){
     renderer = new WebGPURenderer({ antialias: true });
   } else {
     renderer = new THREE.WebGLRenderer({ antialias: true });
-    if(!hasWebGPU) document.getElementById('error-msg').style.display = 'block';
+    if(!hasWebGPU){
+      var m = document.getElementById('info-msg');
+      if(m){ m.style.display = 'block'; m.textContent = '⚠ WebGPU 不可用，使用 WebGL 渲染'; }
+    }
   }
-  renderer.setSize(w, h);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(w, h); renderer.setPixelRatio(window.devicePixelRatio);
   container.appendChild(renderer.domElement);
 
   var labels = ['美国','中国','日本','德国','英国'];
@@ -69,92 +72,64 @@ loadWebGPU.then(function(WebGPURenderer){
   var barGroup = new THREE.Group();
 
   for(var i = 0; i < data.length; i++){
-    var bar = new THREE.Mesh(
-      new THREE.BoxGeometry(0.6, data[i], 0.6),
-      new THREE.MeshLambertMaterial({ color: colors[i] })
-    );
+    var bar = new THREE.Mesh(new THREE.BoxGeometry(0.6, data[i], 0.6), new THREE.MeshLambertMaterial({ color: colors[i] }));
     bar.position.set((i - 2) * 1.2, data[i] / 2, 0);
     bar.userData = { label: labels[i], value: data[i] };
     barGroup.add(bar);
-
-    var canvas = document.createElement('canvas');
-    canvas.width = 256; canvas.height = 64;
-    var ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#1a1a1a';
-    ctx.font = 'bold 28px "Noto Serif CJK SC",Georgia,serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(labels[i], 128, 28);
-    ctx.fillStyle = '#555';
-    ctx.font = '20px "Noto Serif CJK SC",Georgia,serif';
-    ctx.fillText(data[i].toFixed(1), 128, 52);
-    var tex = new THREE.CanvasTexture(canvas);
-    tex.needsUpdate = true;
-    var sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
-    sprite.position.set((i - 2) * 1.2, data[i] + 0.5, 0);
-    sprite.scale.set(1.8, 0.45, 1);
-    barGroup.add(sprite);
+    var c = document.createElement('canvas'); c.width = 256; c.height = 64;
+    var x = c.getContext('2d');
+    x.fillStyle = '#1a1a1a'; x.font = 'bold 28px "Noto Serif CJK SC",Georgia,serif';
+    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(labels[i], 128, 28);
+    x.fillStyle = '#555'; x.font = '20px "Noto Serif CJK SC",Georgia,serif';
+    x.fillText(data[i].toFixed(1), 128, 52);
+    var t = new THREE.CanvasTexture(c); t.needsUpdate = true;
+    var sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthTest: false }));
+    sp.position.set((i - 2) * 1.2, data[i] + 0.5, 0); sp.scale.set(1.8, 0.45, 1);
+    barGroup.add(sp);
   }
-
-  var floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(8, 3),
-    new THREE.MeshLambertMaterial({ color: 0xddd8d0, side: THREE.DoubleSide })
-  );
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.y = -0.05;
-  barGroup.add(floor);
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(8, 3), new THREE.MeshLambertMaterial({ color: 0xddd8d0, side: THREE.DoubleSide }));
+  floor.rotation.x = -Math.PI / 2; floor.position.y = -0.05; barGroup.add(floor);
   scene.add(barGroup);
-
-  var light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(5, 10, 7);
-  scene.add(light);
+  var light = new THREE.DirectionalLight(0xffffff, 1); light.position.set(5, 10, 7); scene.add(light);
   scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-  // TSL 适用场景：自定义着色器效果（辉光、粒子、后处理等）
-  // 使用方式：import { Fn, uniform, time, color } from 'three/tsl';
-  // TSL 节点可取代材质中的固定着色器代码，实现可编程视觉效果
-
-  var tooltip = document.createElement('div');
-  tooltip.style.cssText = 'position:fixed;background:rgba(0,0,0,0.85);color:#fff;padding:4px 10px;border-radius:6px;font-size:0.85rem;pointer-events:none;z-index:999;opacity:0;transition:opacity 0.15s ease;font-family:inherit;';
-  document.body.appendChild(tooltip);
-
-  var raycaster = new THREE.Raycaster();
-  var mouse = new THREE.Vector2();
-  var hoverBar = null;
-
+  var tip = document.createElement('div');
+  tip.style.cssText = 'position:fixed;background:rgba(0,0,0,0.85);color:#fff;padding:4px 10px;border-radius:6px;font-size:0.85rem;pointer-events:none;z-index:999;opacity:0;transition:opacity 0.15s ease;font-family:inherit;';
+  document.body.appendChild(tip);
+  var ray = new THREE.Raycaster(); var mou = new THREE.Vector2(); var hov = null;
   renderer.domElement.addEventListener('mousemove', function(e){
-    var rect = renderer.domElement.getBoundingClientRect();
-    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    var intersects = raycaster.intersectObjects(barGroup.children);
-    if(intersects.length > 0){
-      var obj = intersects[0].object;
-      if(obj.userData && obj.userData.label){
-        tooltip.textContent = obj.userData.label + ': ' + obj.userData.value.toFixed(1);
-        tooltip.style.left = (e.clientX + 12) + 'px';
-        tooltip.style.top = (e.clientY - 8) + 'px';
-        tooltip.style.opacity = '1';
-        hoverBar = obj;
-        obj.material.emissive = obj.material.color;
-        obj.material.emissiveIntensity = 0.3;
-        renderer.domElement.style.cursor = 'pointer';
-      }
-    } else {
-      tooltip.style.opacity = '0';
-      if(hoverBar){ hoverBar.material.emissiveIntensity = 0; hoverBar = null; }
-      renderer.domElement.style.cursor = 'default';
-    }
+    var r = renderer.domElement.getBoundingClientRect();
+    mou.x = ((e.clientX - r.left) / r.width) * 2 - 1; mou.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    ray.setFromCamera(mou, camera);
+    var hit = ray.intersectObjects(barGroup.children);
+    if(hit.length > 0 && hit[0].object.userData && hit[0].object.userData.label){
+      var o = hit[0].object;
+      tip.textContent = o.userData.label + ': ' + o.userData.value.toFixed(1);
+      tip.style.left = (e.clientX + 12) + 'px'; tip.style.top = (e.clientY - 8) + 'px';
+      tip.style.opacity = '1'; hov = o; o.material.emissive = o.material.color; o.material.emissiveIntensity = 0.3;
+      renderer.domElement.style.cursor = 'pointer';
+    } else { tip.style.opacity = '0'; if(hov){ hov.material.emissiveIntensity = 0; hov = null; } renderer.domElement.style.cursor = 'default'; }
   });
+  (function ani(){ requestAnimationFrame(ani); barGroup.rotation.y += 0.003; renderer.render(scene, camera); })();
+  window.addEventListener('resize', function(){ camera.aspect = container.clientWidth / container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
+}
+</script>
 
-  function animate(){ requestAnimationFrame(animate); barGroup.rotation.y += 0.003; renderer.render(scene, camera); }
-  animate();
-
-  window.addEventListener('resize', function(){
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-  });
-});
+<script type="module">
+// Try WebGPU via importmap CDN first
+try {
+  var T = await import('three');
+  var WGR = null;
+  if(typeof navigator !== 'undefined' && navigator.gpu){
+    try { var m = await import('three/addons/renderers/webgpu/WebGPURenderer.js'); WGR = m.WebGPURenderer; } catch(e){}
+  }
+  initScene(T, WGR);
+} catch(e) {
+  // CDN importmap failed → load UMD fallback
+  var m = document.getElementById('info-msg');
+  if(m){ m.style.display = 'block'; m.textContent = '⚠ CDN 不可用，加载本地 libs/three.min.js (WebGL)'; }
+  loadUMD(function(){ initScene(THREE, null); });
+}
 </script>
 </body>
 </html>

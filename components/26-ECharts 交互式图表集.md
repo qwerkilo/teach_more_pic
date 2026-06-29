@@ -1,4 +1,4 @@
-### 26. ECharts 交互式图表集
+### 24. ECharts 交互式图表集
 
 替代原 #24（纯 CSS/SVG 图表）。使用 Apache ECharts 渲染，支持交互式悬浮提示、自适应缩放。
 
