@@ -49,7 +49,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 
 ## 视觉组件工具箱
 
-27 个组件，每个组件的 HTML/CSS/JS 代码和用法规则在 `components/NN-name.md` 中。此处只列索引。
+28 个组件，每个组件的 HTML/CSS/JS 代码和用法规则在 `components/NN-name.md` 中。此处只列索引。
 
 ### 核心组件（#1-7）
 
@@ -289,7 +289,12 @@ Step 8: 本地 HTTP 服务器（可选）
   - 按 Q 键停止服务器
   - Python 内置 `http.server`，无需额外依赖
   - Linux/macOS：复制 `templates/start-server.sh`，运行 `bash start-server.sh`，后台静默运行（nohup），PID 写入 `.server.pid`；停止 `kill $(cat .server.pid) && rm .server.pid`
+  - 🛑 STOP：全部完成后做最终完整性检查——课程可双击打开（file://）、SPA 路由正常、KG 图谱双语言切换正常、服务器一键启停正常
 ```
+
+### 视觉设计纪律
+
+- **最多 1 个强调色**，饱和度 < 80%。禁止 AI 默认的紫/蓝渐变
 
 ## 文件资源速查
 
@@ -304,11 +309,11 @@ Step 8: 本地 HTTP 服务器（可选）
 | `templates/comparison-side-by-side.svg` | 左右对比 SVG 模板（双列对比） | Step 2/5 |
 | `templates/timeline-horizontal.svg` | 水平时间线 SVG 模板（单线事件序列） | Step 2/5 |
 | `examples/*.html` | 28 个组件的独立用法示例（含 D3→Three 专用示例，D3/Three/ECharts 三合一混合） | Step 2 参考 |
-| `components/NN-name.md` | 组件代码 + 降级说明（27 个） | Step 2/3 |
+| `components/NN-name.md` | 组件代码 + 降级说明（28 个） | Step 2/3 |
 | `references/decision-guide.md` | 组件选择决策矩阵 + 7 组三幕组合示例 | Step 2 |
 | `references/page-types.md` | 6 种可选页面类型的完整 HTML/CSS（中英双语） | 可选页面类型 |
 | `scripts/validate-lesson.py` | 课程验证脚本（18 项检查，含双语+SPA+KG） | Step 4 |
-| `scripts/test_validate.py` | 验证脚本单元测试（83 项） | 开发 |
+| `scripts/test_validate.py` | 验证脚本单元测试（85 项） | 开发 |
 | `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（13 种零依赖纯 CSS） | 模板自动加载 |
 | `libs/` | 离线包（echarts/echarts-gl/three UMD/three.module.js/d3/d3-sankey） | Step 6 |
 
