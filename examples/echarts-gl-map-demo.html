@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../libs/magicui-effects.css">
 <script src="../libs/echarts.min.js"></script>
 <script src="../libs/echarts-gl.min.js"></script>
+<script src="../libs/guangdong.js"></script>
 <style>
 :root{--bg:#faf9f7;--text:#1a1a1a;--accent:#3498db;--surface:#f5f0eb;--radius:8px;--font:"Noto Serif CJK SC",Georgia,serif}
 body{font-family:var(--font);background:var(--bg);color:var(--text);max-width:960px;margin:0 auto;padding:2rem;-webkit-font-smoothing:antialiased}
@@ -52,17 +53,13 @@ p{color:var(--muted);font-size:.9rem;margin:.5em 0}
       '河源市': [114.70,23.74], '汕尾市': [115.37,22.79], '云浮市': [112.04,22.92]
     };
 
-    // 加载广东省 GeoJSON（本地优先 → CDN 降级）
-    var geoUrl = '../libs/guangdong.json';
-    function loadGeoJSON(url){
-      return fetch(url).then(function(r){
-        if(!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      });
+    // 广东省 GeoJSON 已通过 <script src="../libs/guangdong.js"> 加载
+    var geoJson = window.__gdGeoJSON;
+    if(!geoJson){
+      status.textContent = '加载失败';
+      document.getElementById('gd-map').innerHTML = '<div style="padding:2rem;text-align:center;color:#c0392b;">广东省地图数据未加载。<br/>请确认 <code>libs/guangdong.js</code> 文件存在。</div>';
+      return;
     }
-    loadGeoJSON(geoUrl).catch(function(){
-      return loadGeoJSON('https://geo.datav.aliyun.com/areas_v3/bound/440000_full.json');
-    }).then(function(geoJson){
         status.textContent = '广东省 · ' + Object.keys(cityData).length + ' 地市';
 
         echarts.registerMap('guangdong', geoJson);
@@ -165,11 +162,6 @@ p{color:var(--muted);font-size:.9rem;margin:.5em 0}
 
         chart.setOption(option);
         window.addEventListener('resize', function(){ chart.resize(); });
-      })
-      .catch(function(err){
-        status.textContent = '加载失败';
-        var el = document.getElementById('gd-map');
-        el.innerHTML = '<div style="padding:2rem;text-align:center;color:#c0392b;">无法加载广东省地图数据。<br/><br/>尝试：<br/>1. 确保 <code>libs/guangdong.json</code> 文件存在<br/>2. 或通过 HTTP 服务器访问（运行 start-server.ps1）<br/><br/>GeoJSON 数据来源：DataV.GeoAtlas</div>';
       });
   } catch(e) { console.error('ECharts GL map error:', e); }
 })();
