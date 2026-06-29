@@ -100,6 +100,10 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - 新增组件：先在 `components/` 下创建文件，再更新此索引表
 - 颜色语义全局统一：蓝=正常，橙=触发，红=崩溃，绿=救助
 - **ECharts (#24)、Three.js (#25)、D3.js (#27) 可组合使用**：例如 D3.js 计算力导向布局后由 Three.js 渲染 3D 场景；或 D3.js 数据预处理后交给 ECharts 图表呈现。组合时只需确认各库的 CDN/本地文件均已加载即可。
+- **ECharts GL (#28)**：使用 `<script>` 标签加载（`echarts.min.js` → `echarts-gl.min.js`），纯静态 `file://` 协议兼容。
+  - GeoJSON 必须通过 `<script>` 标签加载（转为 `.js` 文件 + `window.__gdGeoJSON` 全局变量），`fetch()` 在 `file://` 下不可用。
+  - `map3D` 系列无需 `boxWidth`/`boxHeight`（仅 `grid3D`/`bar3D` 需要）；`visualMap` 配合 `map3D` 时指定 `seriesIndex: 0`。
+  - `scatter3D` 的 `coordinateSystem: 'geo3D'` 可叠加在 `map3D` 上层做城市标注。
 
 
 ### 视觉设计纪律

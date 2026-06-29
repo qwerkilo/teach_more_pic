@@ -73,35 +73,47 @@ chart.setOption({
 #### 示例：3D 广东省地图
 
 ```html
+<!-- GeoJSON 必须通过 <script> 标签加载（file:// 协议下 fetch 不可用） -->
+<script src="libs/guangdong.js"></script>
 <div id="gd-map" style="width:100%;height:600px;"></div>
 ```
 ```js
-// 本地 GeoJSON 优先 → CDN 降级
-fetch('../libs/guangdong.json').catch(function(){
-  return fetch('https://geo.datav.aliyun.com/areas_v3/bound/440000_full.json');
-}).then(function(r){ return r.json(); }).then(function(geoJson){
-  echarts.registerMap('guangdong', geoJson);
-  var chart = echarts.init(document.getElementById('gd-map'));
-  chart.setOption({
-    series: [{
-      type: 'map3D', map: 'guangdong',
-      data: [{name:'深圳市',value:3.46},...],
-      shading: 'lambert'
-    }, {
-      type: 'scatter3D',
-      coordinateSystem: 'geo3D',
-      data: [{name:'深圳',value:[114.07,22.55,34600]},...],
-      symbolSize: function(v){ return 6 + Math.sqrt(v[2]/10000)*4; },
-      label: { show: true }
-    }]
-  });
+var geoJson = window.__gdGeoJSON; // 通过 <script> 注入的全局变量
+echarts.registerMap('guangdong', geoJson);
+var chart = echarts.init(document.getElementById('gd-map'));
+chart.setOption({
+  visualMap: {
+    show: true, min: 0.1, max: 3.5,
+    inRange: { color: ['#3498db','#2ecc71','#f39c12','#e74c3c'] },
+    seriesIndex: 0
+  },
+  series: [{
+    type: 'map3D', map: 'guangdong',
+    data: [{name:'深圳市',value:3.46},...],
+    regionHeight: 1.5, // 地图挤压高度
+    shading: 'lambert'
+  }, {
+    type: 'scatter3D',
+    coordinateSystem: 'geo3D', // 叠加在 map3D 上层
+    data: [{name:'深圳',value:[114.07,22.55,34600]},...],
+    symbolSize: function(v){ return 6 + Math.sqrt(v[2]/10000)*4; },
+    label: { show: true }
+  }]
 });
 ```
 完整示例见 `examples/echarts-gl-map-demo.html`。
+
+#### 实践要点
+
+- **GeoJSON 加载**：必须通过 `<script>` 标签加载（转为 `.js` 文件 + 全局变量），`fetch()` 在 `file://` 协议下因 CORS 限制不可用
+- **加载顺序**：`echarts.min.js` → `echarts-gl.min.js` → GeoJSON（如需）
+- **map3D 属性**：只需 `regionHeight`（挤压高度），无需 `boxWidth`/`boxHeight`（仅 `grid3D`/`bar3D` 需要）
+- **visualMap + map3D**：需显式指定 `seriesIndex: 0`，否则颜色映射可能不生效
+- **scatter3D 叠加**：设置 `coordinateSystem: 'geo3D'` 可叠加在 `map3D` 之上做城市标注
+- **region 名称匹配**：GeoJSON 中的 `name` 属性必须与 `data` 中的城市名完全一致（如"深圳市"而非"深圳"）
 
 #### 降级说明
 
 - **WebGL 不支持**：ECharts GL 自动降级为提示信息，不影响 ECharts 2D 部分
 - **未加载 GL**：访问 `echarts` 对象时 GL 系列不存在，显示 `[ECharts] Unknown series bar3D` 警告但不崩溃
 - **纹理缺失**：地球底图使用网络纹理，离线时可用纯色 `itemStyle.color` 替代
-- **GeoJSON 离线**：省级/城市边界 GeoJSON 可下载到 `libs/` 目录，`fetch` 本地路径加载
