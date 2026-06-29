@@ -149,3 +149,26 @@ def test_anim_fade_up_valid(): assert check_passes(v.check_data_anim_syntax, '<h
 def test_anim_unknown_fails(): assert check_fails(v.check_data_anim_syntax, '<html><div data-anim="foobar"></div></html>')
 def test_magicui_shiny_text_detected(): assert check_passes(v.check_data_anim_syntax, '<html><span class="shiny-text">hi</span></html>')
 def test_anim_blur_in_list(): assert check_passes(v.check_data_anim_syntax, '<html><div data-anim="blur"></div><div data-anim="fade-up"></div></html>')
+
+# ==== check_svg_links ====
+def test_svg_links_no_svg_pass(): assert check_passes(v.check_svg_links, '<html><p>no svg</p></html>', '.')
+def test_svg_links_missing_fail():
+    issues = v.check_svg_links('<html><img src="nonexistent.svg"></html>', '.')
+    assert len(issues) > 0 and 'nonexistent' in issues[0]
+
+# ==== check_container_width ====
+def test_container_width_ok(): assert check_passes(v.check_container_width, '<style>.container { max-width: 760px; }</style>')
+def test_container_width_too_small(): assert check_fails(v.check_container_width, '<style>.container { max-width: 600px; }</style>')
+def test_container_width_too_large(): assert check_fails(v.check_container_width, '<style>.container { max-width: 900px; }</style>')
+def test_container_width_no_rule_pass(): assert check_passes(v.check_container_width, '<html><p>hello</p></html>')
+
+# ==== check_svg_contrast ====
+def test_svg_contrast_no_svg_pass(): assert check_passes(v.check_svg_contrast, '<html><p>no svg</p></html>', '.')
+def test_svg_contrast_dark_fill_pass():
+    # Create a temp SVG with dark fill
+    fd, tmpsvg = tempfile.mkstemp(suffix='.svg')
+    os.close(fd)
+    with open(tmpsvg, 'w', encoding='utf-8') as f: f.write('<svg><rect fill="#1a1a1a"/></svg>')
+    svgname = os.path.basename(tmpsvg)
+    try: assert check_passes(v.check_svg_contrast, f'<html><img src="{svgname}"></html>', os.path.dirname(tmpsvg))
+    finally: os.unlink(tmpsvg)

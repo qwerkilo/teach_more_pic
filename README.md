@@ -114,7 +114,7 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 ├── tests/                  pytest 单元测试（test_validate.py，85 项）
 ├── references/             参考附件（决策指南、页面类型模板）
 ├── templates/              9 个模板（4 有效 SVG 图例 + 课程支架 + SPA + KG + 2 启动脚本）
-├── theme/20 个品牌 DESIGN.md  各品牌设计语言参考
+├── theme/19 个品牌 DESIGN.md  各品牌设计语言参考
 ├── test-prompts.json       测试提示词（3 个场景）
 ```
 
