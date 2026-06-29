@@ -75,7 +75,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 13 | 引用/引文卡片 | `components/13-引用引文卡片.md` | 左侧竖条 + 引文 + 署名 |
 | 14 | 标注式图片 | `components/14-标注式图片.md` | 图片上数字标注点弹出说明 |
 
-### 数据与辅助组件（#15-27）
+### 数据与辅助组件（#15-28）
 
 | # | 组件 | 文件 | 说明 |
 |---|---|---|---|
