@@ -77,8 +77,8 @@ python scripts/validate-lesson.py lessons/NNNN-slug.html
 # 批量验证所有示例
 powershell -ExecutionPolicy Bypass -File scripts/run-tests.ps1
 
-# 运行验证脚本单元测试
-python scripts/test_validate.py
+# 运行验证脚本单元测试（pytest）
+python -m pytest tests/ -v
 
 # JS 语法检查
 node -e "new Function(require('fs').readFileSync('file','r',encoding='utf-8').match(/<script>([\\s\\S]*?)<\\/script>/)[1])"
@@ -107,10 +107,11 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 ├── components/             各组件独立文件（28 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
 │   ├── validate-lesson.py  课程验证脚本（18 项检查，含双语 + SPA + KG）
-│   ├── test_validate.py    验证脚本单元测试（85 项，覆盖全部 18 项检查）
+│   ├── test_validate.py    验证脚本单元测试（85 项，覆盖全部 18 项检查，pytest）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（30 个 .html，含 D3→Three 专用示例、ECharts GL 示例、跨库混合）
 ├── libs/                   外部库（echarts.min.js、echarts-gl.min.js、three.min.js、three.module.js、d3.min.js、d3-sankey.min.js、guangdong.js、magicui-effects.css）
+├── tests/                  pytest 单元测试（test_validate.py，85 项）
 ├── references/             参考附件（决策指南、页面类型模板）
 ├── templates/              9 个模板（4 有效 SVG 图例 + 课程支架 + SPA + KG + 2 启动脚本）
 ├── theme/20 个品牌 DESIGN.md  各品牌设计语言参考

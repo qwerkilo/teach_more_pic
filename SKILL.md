@@ -313,7 +313,7 @@ Step 8: 本地 HTTP 服务器（可选）
 | `references/decision-guide.md` | 组件选择决策矩阵 + 7 组三幕组合示例 | Step 2 |
 | `references/page-types.md` | 6 种可选页面类型的完整 HTML/CSS（中英双语） | 可选页面类型 |
 | `scripts/validate-lesson.py` | 课程验证脚本（18 项检查，含双语+SPA+KG） | Step 4 |
-| `scripts/test_validate.py` | 验证脚本单元测试（85 项） | 开发 |
+| `tests/test_validate.py` | 验证脚本单元测试（85 项，pytest） | 开发 |
 | `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（13 种零依赖纯 CSS） | 模板自动加载 |
 | `libs/` | 离线包（echarts/echarts-gl/three UMD/three.module.js/d3/d3-sankey） | Step 6 |
 
@@ -380,5 +380,7 @@ Step 8: 本地 HTTP 服务器（可选）
 - [ ] 语言切换按钮和 L 键快捷键存在
 
 验证自动化：`python scripts/validate-lesson.py lessons/NNNN-slug.html` — 自动检查 SVG 路径/XML 有效性/颜色对比度、quiz 正确数/完整度、h1 数量、data-anim 语法、容器宽度、相对路径、PPT JS（主题+导航）存在性。
+
+单元测试：`python -m pytest tests/ -v` — 85 项 pytest 测试，覆盖全部检查函数。
 
 JS 语法检查：`node -e "new Function(require('fs').readFileSync('file','r',encoding='utf-8').match(/<script>([\\s\\S]*?)<\\/script>/)[1])"`

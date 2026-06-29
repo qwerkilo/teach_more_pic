@@ -40,5 +40,12 @@ Get-ChildItem -Path "examples" -Filter "*.html" | ForEach-Object {
 }
 
 Write-Host ""
-Write-Host "=== Results: $pass passed, $fail failed ===" -ForegroundColor Cyan
-if ($fail -gt 0) { exit 1 }
+Write-Host ""
+
+Write-Host "=== Running unit tests (pytest) ===" -ForegroundColor Cyan
+python -m pytest tests/ -q 2>&1
+$exitCode = $LASTEXITCODE
+
+Write-Host ""
+Write-Host "=== Results: $pass passed, $fail failed (batch), pytest exit=$exitCode ===" -ForegroundColor Cyan
+if ($fail -gt 0 -or $exitCode -ne 0) { exit 1 }
