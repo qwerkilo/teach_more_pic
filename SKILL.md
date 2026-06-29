@@ -45,7 +45,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 第三幕：转折与遗产  →  解决方案、制度创新、与其它课程的联系
 ```
 
-每幕结束时插入一个**视觉停顿**（SVG 流程图、时间线、对比表），让读者从文本中喘口气。
+每幕结束时插入一个**视觉停顿**（SVG 流程图、时间线、对比表）。
 
 ## 视觉组件工具箱
 
