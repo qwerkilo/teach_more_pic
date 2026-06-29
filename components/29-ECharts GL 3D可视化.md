@@ -70,8 +70,38 @@ chart.setOption({
 });
 ```
 
+#### 示例：3D 广东省地图
+
+```html
+<div id="gd-map" style="width:100%;height:600px;"></div>
+```
+```js
+// 本地 GeoJSON 优先 → CDN 降级
+fetch('../libs/guangdong.json').catch(function(){
+  return fetch('https://geo.datav.aliyun.com/areas_v3/bound/440000_full.json');
+}).then(function(r){ return r.json(); }).then(function(geoJson){
+  echarts.registerMap('guangdong', geoJson);
+  var chart = echarts.init(document.getElementById('gd-map'));
+  chart.setOption({
+    series: [{
+      type: 'map3D', map: 'guangdong',
+      data: [{name:'深圳市',value:3.46},...],
+      shading: 'lambert'
+    }, {
+      type: 'scatter3D',
+      coordinateSystem: 'geo3D',
+      data: [{name:'深圳',value:[114.07,22.55,34600]},...],
+      symbolSize: function(v){ return 6 + Math.sqrt(v[2]/10000)*4; },
+      label: { show: true }
+    }]
+  });
+});
+```
+完整示例见 `examples/echarts-gl-map-demo.html`。
+
 #### 降级说明
 
 - **WebGL 不支持**：ECharts GL 自动降级为提示信息，不影响 ECharts 2D 部分
 - **未加载 GL**：访问 `echarts` 对象时 GL 系列不存在，显示 `[ECharts] Unknown series bar3D` 警告但不崩溃
 - **纹理缺失**：地球底图使用网络纹理，离线时可用纯色 `itemStyle.color` 替代
+- **GeoJSON 离线**：省级/城市边界 GeoJSON 可下载到 `libs/` 目录，`fetch` 本地路径加载

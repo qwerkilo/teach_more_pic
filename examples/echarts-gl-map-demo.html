@@ -52,10 +52,17 @@ p{color:var(--muted);font-size:.9rem;margin:.5em 0}
       '河源市': [114.70,23.74], '汕尾市': [115.37,22.79], '云浮市': [112.04,22.92]
     };
 
-    // 加载广东省 GeoJSON
-    fetch('https://geo.datav.aliyun.com/areas_v3/bound/440000_full.json')
-      .then(function(r){ return r.json(); })
-      .then(function(geoJson){
+    // 加载广东省 GeoJSON（本地优先 → CDN 降级）
+    var geoUrl = '../libs/guangdong.json';
+    function loadGeoJSON(url){
+      return fetch(url).then(function(r){
+        if(!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      });
+    }
+    loadGeoJSON(geoUrl).catch(function(){
+      return loadGeoJSON('https://geo.datav.aliyun.com/areas_v3/bound/440000_full.json');
+    }).then(function(geoJson){
         status.textContent = '广东省 · ' + Object.keys(cityData).length + ' 地市';
 
         echarts.registerMap('guangdong', geoJson);
@@ -162,7 +169,7 @@ p{color:var(--muted);font-size:.9rem;margin:.5em 0}
       .catch(function(err){
         status.textContent = '加载失败';
         var el = document.getElementById('gd-map');
-        el.innerHTML = '<div style="padding:2rem;text-align:center;color:#c0392b;">无法加载广东省地图数据，请检查网络连接。<br/><br/>GeoJSON 数据来源：DataV.GeoAtlas</div>';
+        el.innerHTML = '<div style="padding:2rem;text-align:center;color:#c0392b;">无法加载广东省地图数据。<br/><br/>尝试：<br/>1. 确保 <code>libs/guangdong.json</code> 文件存在<br/>2. 或通过 HTTP 服务器访问（运行 start-server.ps1）<br/><br/>GeoJSON 数据来源：DataV.GeoAtlas</div>';
       });
   } catch(e) { console.error('ECharts GL map error:', e); }
 })();
