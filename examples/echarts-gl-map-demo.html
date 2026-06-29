@@ -60,110 +60,115 @@ p{color:var(--muted);font-size:.9rem;margin:.5em 0}
       document.getElementById('gd-map').innerHTML = '<div style="padding:2rem;text-align:center;color:#c0392b;">广东省地图数据未加载。<br/>请确认 <code>libs/guangdong.js</code> 文件存在。</div>';
       return;
     }
-        status.textContent = '广东省 · ' + Object.keys(cityData).length + ' 地市';
 
-        echarts.registerMap('guangdong', geoJson);
+    status.textContent = '广东省 · ' + Object.keys(cityData).length + ' 地市';
 
-        var chart = echarts.init(document.getElementById('gd-map'));
+    echarts.registerMap('guangdong', geoJson);
 
-        // map3D 数据
-        var mapData = Object.keys(cityData).map(function(name){
-          return { name: name, value: cityData[name] };
-        });
+    var chart = echarts.init(document.getElementById('gd-map'));
 
-        // scatter3D 数据
-        var scatterData = Object.keys(cityCoords).map(function(name){
-          return {
-            name: name,
-            value: cityCoords[name].concat((cityData[name] || 0) * 10000)
-          };
-        });
+    // map3D 数据
+    var mapData = Object.keys(cityData).map(function(name){
+      return { name: name, value: cityData[name] };
+    });
 
-        var option = {
-          tooltip: {
-            trigger: 'item',
-            formatter: function(p){
-              if(p.seriesType === 'map3D')
-                return p.name + '<br/>GDP: <b>' + ((cityData[p.name] || 0)).toFixed(2) + '</b> 万亿';
-              if(p.seriesType === 'scatter3D')
-                return p.name + '<br/>GDP: <b>' + ((p.data.value[2] || 0) / 10000).toFixed(2) + '</b> 万亿';
-              return '';
-            }
+    // scatter3D 数据
+    var scatterData = Object.keys(cityCoords).map(function(name){
+      return {
+        name: name,
+        value: cityCoords[name].concat((cityData[name] || 0) * 10000)
+      };
+    });
+
+    var option = {
+      tooltip: {
+        trigger: 'item',
+        formatter: function(p){
+          if(p.seriesType === 'map3D')
+            return p.name + '<br/>GDP: <b>' + ((cityData[p.name] || 0)).toFixed(2) + '</b> 万亿';
+          if(p.seriesType === 'scatter3D')
+            return p.name + '<br/>GDP: <b>' + ((p.data.value[2] || 0) / 10000).toFixed(2) + '</b> 万亿';
+          return '';
+        }
+      },
+      visualMap: {
+        show: true,
+        min: 0.1,
+        max: 3.5,
+        text: ['高 GDP', '低 GDP'],
+        inRange: {
+          color: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c']
+        },
+        calculable: true,
+        left: 'left',
+        bottom: 20,
+        textStyle: { fontSize: 11 }
+      },
+      series: [{
+        type: 'map3D',
+        map: 'guangdong',
+        data: mapData,
+        shading: 'lambert',
+        itemStyle: {
+          borderColor: 'rgba(255,255,255,0.4)',
+          borderWidth: 1
+        },
+        label: {
+          show: true,
+          color: '#1a1a1a',
+          fontSize: 10
+        },
+        emphasis: {
+          label: { fontSize: 14, color: '#c0392b' },
+          itemStyle: { areaColor: '#c0392b' }
+        },
+        regionHeight: 1.5,
+        viewControl: {
+          autoRotate: true,
+          autoRotateSpeed: 5,
+          distance: 140,
+          beta: 20
+        },
+        light: {
+          main: { intensity: 1.2, shadow: true },
+          ambient: { intensity: 0.4 }
+        }
+      }, {
+        type: 'scatter3D',
+        coordinateSystem: 'geo3D',
+        data: scatterData,
+        symbol: 'circle',
+        symbolSize: function(val){
+          return 6 + Math.sqrt(val[2] / 10000) * 4;
+        },
+        itemStyle: {
+          color: '#c0392b',
+          opacity: 0.9,
+          borderColor: '#fff',
+          borderWidth: 1
+        },
+        label: {
+          show: true,
+          formatter: function(p){
+            var gdp = ((p.data.value[2] || 0) / 10000).toFixed(2);
+            return p.name + ' ' + gdp;
           },
-          visualMap: {
-            show: true,
-            min: 0.1,
-            max: 3.5,
-            text: ['高 GDP', '低 GDP'],
-            inRange: {
-              color: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c']
-            },
-            calculable: true,
-            left: 'left',
-            bottom: 20,
-            textStyle: { fontSize: 11 }
-          },
-          series: [{
-            type: 'map3D',
-            map: 'guangdong',
-            data: mapData,
-            shading: 'lambert',
-            itemStyle: {
-              borderColor: 'rgba(255,255,255,0.4)',
-              borderWidth: 1
-            },
-            label: {
-              show: mapData,
-              color: '#1a1a1a',
-              fontSize: 10
-            },
-            emphasis: {
-              label: { fontSize: 14, color: '#c0392b' },
-              itemStyle: { areaColor: '#c0392b' }
-            },
-            regionHeight: 1.5,
-            viewControl: {
-              autoRotate: true,
-              autoRotateSpeed: 5,
-              distance: 140,
-              beta: 20
-            },
-            light: {
-              main: { intensity: 1.2, shadow: true },
-              ambient: { intensity: 0.4 }
-            }
-          }, {
-            type: 'scatter3D',
-            coordinateSystem: 'geo3D',
-            data: scatterData,
-            symbol: 'circle',
-            symbolSize: function(val){
-              return 6 + Math.sqrt(val[2] / 10000) * 4;
-            },
-            itemStyle: {
-              color: '#c0392b',
-              opacity: 0.9,
-              borderColor: '#fff',
-              borderWidth: 1
-            },
-            label: {
-              show: true,
-              formatter: function(p){
-                var gdp = ((p.data.value[2] || 0) / 10000).toFixed(2);
-                return p.name + ' ' + gdp;
-              },
-              fontSize: 11,
-              color: '#1a1a1a',
-              fontWeight: 'bold',
-              position: 'right'
-            }
-          }]
-        };
+          fontSize: 11,
+          color: '#1a1a1a',
+          fontWeight: 'bold',
+          position: 'right'
+        }
+      }]
+    };
 
-        chart.setOption(option);
-        window.addEventListener('resize', function(){ chart.resize(); });
-      });
-  } catch(e) { console.error('ECharts GL map error:', e); }
+    chart.setOption(option);
+
+    window.addEventListener('resize', function(){ chart.resize(); });
+  } catch(e) {
+    console.error('ECharts GL map error:', e);
+    var s = document.getElementById('load-status');
+    if(s) s.textContent = '出错';
+  }
 })();
 </script>
 </body>
