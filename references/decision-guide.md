@@ -120,8 +120,11 @@ ECharts、D3.js、Three.js 不互斥，可按需组合发挥各自优势：
 | D3 数据 → ECharts | D3 聚合/筛选/排序 | ECharts 渲染标准图表 | 大数据量降采样后喂 ECharts |
 | Three + ECharts 同屏 | ECharts 2D 趋势 | Three.js 3D 空间分布 | 金融仪表盘 = 折线图 + 3D 网络 |
 | D3 纯数据处理 | D3 做格式转换、比例尺映射 | CSS/HTML 消费数据 | d3-scale 生成色阶 → CSS 热力图 |
+| Anime.js → Three.js 动画 | Anime.js 驱动 Three.js 对象属性 | Three.js WebGPU/WebGL 渲染 | `animate(mesh, { x, rotateY, color })` — 替代手写 rAF |
 
-**典型组合**：金融课中 D3 计算相关性矩阵 → Three 渲染 3D 网络；同时 ECharts 折线图展示历史走势。
+**动画组合**：Three.js 3D 场景的动画优先使用 Anime.js 4.5+ Three.js Adapter（`import 'animejs/adapters/three'`），一句 `animate(mesh, { x: 100, rotateY: 360, duration: 1500 })` 完成位置+旋转+颜色的同步动画。
+
+**典型组合**：金融课中 D3 计算相关性矩阵 → Three 渲染 3D 网络 + Anime.js 做旋转动画；同时 ECharts 折线图展示历史走势。
 
 ## 三幕选型速查
 

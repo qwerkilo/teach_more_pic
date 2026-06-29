@@ -107,7 +107,7 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 ├── components/             各组件独立文件（27 个 .md），含 HTML/CSS/JS/降级说明
 ├── scripts/
 │   ├── validate-lesson.py  课程验证脚本（18 项检查，含双语 + SPA + KG）
-│   ├── test_validate.py    验证脚本单元测试（81 项，覆盖全部 18 项检查）
+│   ├── test_validate.py    验证脚本单元测试（85 项，覆盖全部 18 项检查）
 │   └── run-tests.ps1       批量验证所有示例
 ├── examples/               组件用法示例（27 个 .html，含 3 个新增: 流程图/对比表/SVG 容器，1 个 ECharts/D3/Three 混合）
 ├── libs/                   外部库（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js、magicui-effects.css）

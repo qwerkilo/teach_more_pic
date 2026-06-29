@@ -300,7 +300,7 @@ Step 8: 本地 HTTP 服务器（可选）
 | `references/decision-guide.md` | 组件选择决策矩阵 + 7 组三幕组合示例 | Step 2 |
 | `references/page-types.md` | 6 种可选页面类型的完整 HTML/CSS（中英双语） | 可选页面类型 |
 | `scripts/validate-lesson.py` | 课程验证脚本（18 项检查，含双语+SPA+KG） | Step 4 |
-| `scripts/test_validate.py` | 验证脚本单元测试（81 项） | 开发 |
+| `scripts/test_validate.py` | 验证脚本单元测试（85 项） | 开发 |
 | `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（13 种零依赖纯 CSS） | 模板自动加载 |
 | `libs/` | 离线包（echarts/three UMD/three.module.js/three addons/d3/d3-sankey） | Step 6 |
 

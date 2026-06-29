@@ -446,16 +446,23 @@ def check_lib_deps(html, base_dir):
         has_cdn = "cdn.jsdelivr.net/npm/echarts" in html
         if not has_local and not has_cdn:
             issues.append("ECharts usage found but no libs/echarts.min.js or CDN link")
-    if re.search(r'new THREE\.', html) or re.search(r'\bTHREE\b', html):
-        has_local = os.path.exists(os.path.join(base_dir, "libs", "three.min.js"))
+    if re.search(r'new THREE\.', html) or re.search(r'\bTHREE\b', html) or 'three@0.185.0' in html:
+        has_local_umd = os.path.exists(os.path.join(base_dir, "libs", "three.min.js"))
+        has_local_esm = os.path.exists(os.path.join(base_dir, "libs", "three.module.js"))
         has_cdn = "cdnjs.cloudflare.com/ajax/libs/three.js" in html
-        if not has_local and not has_cdn:
-            issues.append("Three.js usage found but no libs/three.min.js or CDN link")
+        has_importmap = "cdn.jsdelivr.net/npm/three@0.185.0" in html
+        if not has_local_umd and not has_local_esm and not has_cdn and not has_importmap:
+            issues.append("Three.js usage found but no libs/three.min.js, three.module.js, or CDN link")
     if re.search(r'd3\.(forceSimulation|hierarchy|sankey|select)\b', html):
         has_local = os.path.exists(os.path.join(base_dir, "libs", "d3.min.js"))
         has_cdn = "d3js.org/d3" in html
         if not has_local and not has_cdn:
             issues.append("D3.js usage found but no libs/d3.min.js or CDN link")
+    if re.search(r'animejs/adapters/three', html) or re.search(r'\banime\b.*animate\(', html):
+        has_local = os.path.exists(os.path.join(base_dir, "libs", "animejs.module.js"))
+        has_cdn = "cdn.jsdelivr.net/npm/animejs" in html
+        if not has_local and not has_cdn:
+            issues.append("Anime.js usage found but no libs/animejs.module.js or CDN link")
     return issues
 
 

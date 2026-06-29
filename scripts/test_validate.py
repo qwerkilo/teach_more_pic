@@ -249,6 +249,15 @@ test("lib deps: d3.js local passes", not v.check_lib_deps(
     '<html>d3.select("body")</html>', '.'))
 test("lib deps: d3.js no lib fails", len(v.check_lib_deps(
     '<html>d3.forceSimulation()</html>', 'C:\\nonexistent')) > 0)
+test("lib deps: three.js r185 importmap passes", not v.check_lib_deps(
+    '<html>cdn.jsdelivr.net/npm/three@0.185.0/ new THREE.Scene()</html>', '.'))
+test("lib deps: three.js r185 importmap as CDN passes", not v.check_lib_deps(
+    '<html>cdn.jsdelivr.net/npm/three@0.185.0/ new THREE.Scene()</html>', 'C:\\nonexistent'))
+
+test("lib deps: anime.js adapter import passes", not v.check_lib_deps(
+    '<html>import "animejs/adapters/three" animate(mesh,{x:10})</html>', '.'))
+test("lib deps: anime.js no lib fails", len(v.check_lib_deps(
+    '<html>import "animejs/adapters/three"</html>', 'C:\\nonexistent')) > 0)
 
 # ==== magicui CSS effects ====
 test("data-anim: blur is valid", not v.check_data_anim_syntax('<html><div data-anim="blur"></div></html>'))
