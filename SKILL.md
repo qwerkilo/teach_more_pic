@@ -21,7 +21,9 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 ## 前置条件
 
 - `fireworks-tech-graph` skill available (for SVG diagram creation)
-- 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js、magicui-effects.css，课程创建时完整复制到目标项目即可
+- 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、three.min.js（UMD 回退）、three.module.js（ESM 主入口，r185 WebGPU）、d3.min.js、d3-sankey.min.js、magicui-effects.css，课程创建时完整复制到目标项目即可
+- Three.js WebGPU/TSL 需通过 `<script type="importmap">` 导入，详见 `27-Three.js 3D组件.md`
+- Anime.js 4.5+ 内置 Three.js Adapter，动画优先使用 Anime.js（`animate(mesh, { x, rotateY, ... })`）而非手写 rAF
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
 - Magic UI CSS 效果：`libs/magicui-effects.css` 共享 13 种零依赖装饰效果（shiny-text/noise/dot/grid/meteors/border-glow/glare-hover/gradient-text/blur/neon-card/spotlight-card/interactive-btn/typing-cursor），所有模板和示例均已引用
 
@@ -87,7 +89,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 22 | 对比表增强版 | `components/22-对比表增强版.md` | 粘性表头 + 斑马纹 + 排序 |
 | 23 | 全屏模态/灯箱 | `components/23-全屏模态灯箱.md` | 点击放大全屏展示 |
 | 24 | ECharts 交互式图表集 | `components/26-ECharts 交互式图表集.md` | 柱状图/饼图/折线图/堆叠图，ECharts 引擎，交互式 (CDN: cdn.jsdelivr.net/npm/echarts) |
-| 25 | Three.js 3D 组件 | `components/27-Three.js 3D组件.md` | 3D 场景/柱状图/地理可视化，Three.js 引擎 (CDN: cdnjs.cloudflare.com/ajax/libs/three.js) |
+| 25 | Three.js 3D 组件 | `components/27-Three.js 3D组件.md` | 3D 场景/柱状图/地理可视化，Three.js r185。**WebGPU 优先**（`WebGPURenderer`），不支持则回退 WebGL。**TSL 优先**（着色器节点），无法实现再降级 WGSL |
 | 26 | 现代浏览器 API | `components/25-现代浏览器API组件.md` | 原生折叠/原生模态/CSS 幻灯片/Popover |
 | 27 | D3.js 数据可视化 | `components/28-D3.js 数据可视化.md` | 力导向图/旭日图/桑基图，D3.js 引擎 (CDN: d3js.org/d3.v7.min.js，桑基图需额外 d3-sankey) |
 
@@ -262,7 +264,7 @@ Step 6: SPA 集成
   - 🔴 验证：`id="lesson-NNN"` 在 `index.html` 中不与其他课程冲突
   - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
   - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
-  - 🔴 将本 skill 的 `libs/` 下所有文件（echarts.min.js、three.min.js、d3.min.js、d3-sankey.min.js）完整复制到目标项目的 `libs/` 目录，确保课程始终使用固定版本离线包
+  - 🔴 将本 skill 的 `libs/` 下所有文件（echarts.min.js、three.min.js、three.module.js、three/ 目录、d3.min.js、d3-sankey.min.js）完整复制到目标项目的 `libs/` 目录，确保课程始终使用固定版本离线包
   - 🛑 STOP：确认 SPA 预览正常后再进入 Step 7
 
 Step 7: 知识图谱更新
@@ -300,7 +302,7 @@ Step 8: 本地 HTTP 服务器（可选）
 | `scripts/validate-lesson.py` | 课程验证脚本（18 项检查，含双语+SPA+KG） | Step 4 |
 | `scripts/test_validate.py` | 验证脚本单元测试（81 项） | 开发 |
 | `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（13 种零依赖纯 CSS） | 模板自动加载 |
-| `libs/` | 离线包（echarts/three/d3/d3-sankey） | Step 6 |
+| `libs/` | 离线包（echarts/three UMD/three.module.js/three addons/d3/d3-sankey） | Step 6 |
 
 ## 失败模式与异常处理
 
@@ -315,6 +317,8 @@ Step 8: 本地 HTTP 服务器（可选）
 | Panel 点击外部不关闭 | 点击外部 1s 后面板未关 | click 事件未委托到 document | 排除 toolbar/panel 区域 |
 | 折叠动画不平滑 | 点击时过渡不平滑 | 先 `scrollHeight` 再设 px | 过渡结束恢复 `auto` |
 | ECharts/Three/D3/D3-sankey 空白 | 页面加载 3s 后空白 | 对应 lib 未加载 | 复制 `libs/` 下文件，或 CDN 加载 |
+| Three.js WebGPU 空白（THREE 未定义） | 页面加载 3s 后空白 | importmap 路径错误或 r185 CDN 不可达 | 降级为 `libs/three.min.js` UMD 回退 |
+| Three.js TSL 失效 | 着色器效果不显示 | TSL 节点语法错误或版本不匹配 | 降级为固定色常规材质 |
 | libs 版本过旧 | API 报错（如 `setOption is not a function`） | 检查版本号，本地与 CDN 同步 | 重新下载 libs 覆盖 |
 | 多图表库性能问题 | 帧率 < 30fps 持续 5s | 延迟非首屏图表 | 减少动画复杂度 |
 | SPA 课程 id 冲突 | 路由跳转显示错误课程 | 两个 `id` 相同 | 用 `id="lesson-NNN"` 格式 |
