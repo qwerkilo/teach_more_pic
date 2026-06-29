@@ -8,41 +8,6 @@
 - **回退 WebGL**：浏览器不支持 WebGPU 时自动降级为 `WebGLRenderer`
 - **Three.js 版本**：固定在 r185（`three@0.185.0`）
 
-#### 动画引擎搭配
-
-自 Anime.js 4.5.0 起，官方内置 **Three.js Adapter**。制作 Three.js 动画时优先使用 Anime.js 而非手写 `requestAnimationFrame` 循环：
-
-```html
-<script type="importmap">
-{
-  "imports": {
-    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/modules/index.js",
-    "animejs/": "https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/modules/"
-  }
-}
-</script>
-<script type="module">
-import { animate, createTimeline, utils } from 'animejs';
-import 'animejs/adapters/three';  // 加载 Three.js Adapter（自 v4.5.0）
-
-// 现在可以直接 animate Three.js 对象
-animate(mesh, {
-  x: 100,          // mesh.position.x
-  y: 50,           // mesh.position.y
-  rotateX: 360,    // mesh.rotation.x（自动角度转换）
-  rotateY: 180,
-  color: '#ff8800', // mesh.material.color
-  duration: 1500,
-  ease: 'inOutSine',
-});
-</script>
-```
-
-**使用原则**：
-- 简单循环动画（平移/旋转/缩放）→ Anime.js + Three.js Adapter
-- 帧级精确控制（按帧更新数据、物理模拟）→ 手写 `requestAnimationFrame`
-- 动画时间和 Three.js 渲染需通过 `createTimer` 同步
-
 #### 着色器策略
 
 - **优先 TSL（Three Shading Language）**：使用 `three/tsl` 模块的函数式节点定义着色器效果（辉光、粒子、后处理、自定义材质等）
@@ -173,6 +138,10 @@ mat.colorNode = pulseColor;  // TSL 节点替代固定 color 属性
 | 后处理（bloom/glow） | ✅ | ❌ |
 | 外部第三方 shader 代码 | ❌ | ✅ |
 | Compute shader 通用计算 | ❌ | ✅（需 `WebGPUComputeRenderer`） |
+
+#### 动画
+
+Three.js 动画使用标准的 `requestAnimationFrame` 循环，无需额外动画库。简单循环动画（平移/旋转/缩放）可直接在 rAF 中更新 `mesh.position`、`mesh.rotation` 等属性。
 
 #### 降级说明
 

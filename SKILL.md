@@ -23,7 +23,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - `fireworks-tech-graph` skill available (for SVG diagram creation)
 - 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、three.min.js（UMD 回退）、three.module.js（ESM 主入口，r185 WebGPU）、d3.min.js、d3-sankey.min.js、magicui-effects.css，课程创建时完整复制到目标项目即可
 - Three.js WebGPU/TSL 需通过 `<script type="importmap">` 导入，详见 `27-Three.js 3D组件.md`
-- Anime.js 4.5+ 内置 Three.js Adapter，动画优先使用 Anime.js（`animate(mesh, { x, rotateY, ... })`）而非手写 rAF
+
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
 - Magic UI CSS 效果：`libs/magicui-effects.css` 共享 13 种零依赖装饰效果（shiny-text/noise/dot/grid/meteors/border-glow/glare-hover/gradient-text/blur/neon-card/spotlight-card/interactive-btn/typing-cursor），所有模板和示例均已引用
 
@@ -99,7 +99,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - 新增组件：先在 `components/` 下创建文件，再更新此索引表
 - 颜色语义全局统一：蓝=正常，橙=触发，红=崩溃，绿=救助
 - **ECharts (#24)、Three.js (#25)、D3.js (#27) 可组合使用**：例如 D3.js 计算力导向布局后由 Three.js 渲染 3D 场景；或 D3.js 数据预处理后交给 ECharts 图表呈现。组合时只需确认各库的 CDN/本地文件均已加载即可。
-- **Anime.js 4.5+ → Three.js 动画**：Three.js 对象动画优先使用 Anime.js Three.js Adapter（`import 'animejs/adapters/three'`），一句 `animate(mesh, { x, rotateY, color })` 完成多属性动画，参见 `examples/anime-three-demo.html`
+
 
 ### 视觉设计纪律
 
@@ -265,7 +265,7 @@ Step 6: SPA 集成
   - 🔴 验证：`id="lesson-NNN"` 在 `index.html` 中不与其他课程冲突
   - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
   - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
-  - 🔴 将本 skill 的 `libs/` 下所有文件（echarts.min.js、three.min.js、three.module.js、three/ 目录、d3.min.js、d3-sankey.min.js）完整复制到目标项目的 `libs/` 目录，确保课程始终使用固定版本离线包
+  - 🔴 将本 skill 的 `libs/` 下所有文件（echarts.min.js、three.min.js、three.module.js、d3.min.js、d3-sankey.min.js）完整复制到目标项目的 `libs/` 目录，确保课程始终使用固定版本离线包
   - 🛑 STOP：确认 SPA 预览正常后再进入 Step 7
 
 Step 7: 知识图谱更新
@@ -296,14 +296,14 @@ Step 8: 本地 HTTP 服务器（可选）
 | `templates/cycle-diagram.svg` | 循环图模板（中心+周边节点） | Step 2/5 |
 | `templates/comparison-side-by-side.svg` | 左右对比 SVG 模板（双列对比） | Step 2/5 |
 | `templates/timeline-horizontal.svg` | 水平时间线 SVG 模板（单线事件序列） | Step 2/5 |
-| `examples/*.html` | 29 个组件的独立用法示例（含 Anime.js+Three、D3→Three 专用示例，D3/Three/ECharts/Anime 四合一混合） | Step 2 参考 |
+| `examples/*.html` | 28 个组件的独立用法示例（含 D3→Three 专用示例，D3/Three/ECharts 三合一混合） | Step 2 参考 |
 | `components/NN-name.md` | 组件代码 + 降级说明（27 个） | Step 2/3 |
 | `references/decision-guide.md` | 组件选择决策矩阵 + 7 组三幕组合示例 | Step 2 |
 | `references/page-types.md` | 6 种可选页面类型的完整 HTML/CSS（中英双语） | 可选页面类型 |
 | `scripts/validate-lesson.py` | 课程验证脚本（18 项检查，含双语+SPA+KG） | Step 4 |
-| `scripts/test_validate.py` | 验证脚本单元测试（85 项） | 开发 |
+| `scripts/test_validate.py` | 验证脚本单元测试（83 项） | 开发 |
 | `libs/magicui-effects.css` | Magic UI 装饰效果共享 CSS（13 种零依赖纯 CSS） | 模板自动加载 |
-| `libs/` | 离线包（echarts/three UMD/three.module.js/three addons/d3/d3-sankey） | Step 6 |
+| `libs/` | 离线包（echarts/three UMD/three.module.js/d3/d3-sankey） | Step 6 |
 
 ## 失败模式与异常处理
 

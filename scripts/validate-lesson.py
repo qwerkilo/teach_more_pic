@@ -458,11 +458,6 @@ def check_lib_deps(html, base_dir):
         has_cdn = "d3js.org/d3" in html
         if not has_local and not has_cdn:
             issues.append("D3.js usage found but no libs/d3.min.js or CDN link")
-    if re.search(r'animejs/adapters/three', html) or re.search(r'\banime\b.*animate\(', html):
-        has_local = os.path.exists(os.path.join(base_dir, "libs", "animejs.module.js"))
-        has_cdn = "cdn.jsdelivr.net/npm/animejs" in html
-        if not has_local and not has_cdn:
-            issues.append("Anime.js usage found but no libs/animejs.module.js or CDN link")
     return issues
 
 

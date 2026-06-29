@@ -36,9 +36,7 @@ p{color:var(--muted);font-size:.9rem;margin:.5em 0}
 <h2>示例三：D3 比例尺 → Three.js 3D 柱状图 → ECharts 折线趋势</h2>
 <p>D3 的 scale 函数将数值映射到颜色和高度，Three.js 渲染 3D 柱体，ECharts 同步展示折线趋势。</p>
 
-<h2>示例四：Anime.js + Three.js 动画弹跳</h2>
-<p>Anime.js 4.5+ Three.js Adapter 驱动柱体动画，替代手写 requestAnimationFrame。</p>
-<div class="box border-glow"><div id="hybrid-anime-three" style="width:100%;height:400px;"></div></div>
+
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
   <div class="box border-glow"><div id="hybrid-three-bars" style="width:100%;height:350px;"></div></div>
   <div class="box border-glow"><div id="hybrid-echarts-line" style="width:100%;height:350px;"></div></div>
@@ -217,100 +215,6 @@ function showError(id, msg) {
   } catch(e) { console.error('Example 3 error:', e); }
 })();
 
-/* ===== 示例四：弹跳柱状图（Anime.js + Three.js） ===== */
-(function(){
-  try {
-    var el = document.getElementById('hybrid-anime-three');
-    if(!el) return;
-    // Load Anime.js ESM via import, fallback to rAF
-    var importAnime = function(cb){
-      var s = document.createElement('script');
-      s.type = 'module';
-      s.textContent = [
-        'import { animate, createTimer } from "https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/modules/index.js";',
-        'window.__anime = { animate: animate, createTimer: createTimer };',
-        'import("https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/modules/adapters/three/index.js").catch(function(){});',
-        'window.__animeReady = true;',
-      ].join('\n');
-      s.onload = function(){ if(cb) cb(); };
-      document.head.appendChild(s);
-    };
-
-    importAnime(function init(){
-      var hasAnime = window.__anime && window.__anime.animate;
-      var w = el.clientWidth, h = 400;
-      var scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xf5f0eb);
-      var camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 50);
-      camera.position.set(5, 4, 9); camera.lookAt(0, 0, 0);
-      var renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(w, h);
-      el.innerHTML = ''; el.appendChild(renderer.domElement);
-
-      var light = new THREE.DirectionalLight(0xffffff, 1);
-      light.position.set(5, 10, 7); scene.add(light);
-      scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-
-      var heights = [5.1, 3.2, 2.8, 4.5, 3.9];
-      var colors = [0xe74c3c,0x3498db,0x2ecc71,0xf39c12,0x9b59b6];
-      var bars = [];
-
-      heights.forEach(function(v, i){
-        var geo = new THREE.BoxGeometry(0.5, 0.01, 0.5);
-        var mat = new THREE.MeshLambertMaterial({ color: colors[i] });
-        var mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set((i - 2) * 1.2, 0.005, 0);
-        mesh.userData = { target: v, idx: i };
-        scene.add(mesh);
-        bars.push(mesh);
-      });
-
-      var floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(7, 3),
-        new THREE.MeshLambertMaterial({ color: 0xddd8d0, side: THREE.DoubleSide })
-      );
-      floor.rotation.x = -Math.PI / 2; floor.position.y = -0.05;
-      scene.add(floor);
-
-      if(hasAnime){
-        var ani = window.__anime.animate;
-        bars.forEach(function(bar){
-          ani(bar, {
-            scaleY: [0.01, bar.userData.target],
-            y: [0.005, bar.userData.target / 2],
-            delay: bar.userData.idx * 180,
-            duration: 1000,
-            ease: 'outBack(1.5)',
-          });
-        });
-      } else {
-        // rAF fallback
-        var startT = Date.now();
-        bars.forEach(function(bar){
-          bar.userData.t0 = startT + bar.userData.idx * 180;
-        });
-        (function frame(){
-          var now = Date.now();
-          bars.forEach(function(bar){
-            var t = now - bar.userData.t0;
-            if(t < 0) return;
-            var p = Math.min(t / 1000, 1);
-            var e = 1 - Math.pow(1 - p, 3);
-            var hh = bar.userData.target * e;
-            bar.scale.y = 0.01 + hh;
-            bar.position.y = hh / 2;
-          });
-          scene.rotation.y += 0.003;
-          renderer.render(scene, camera);
-          requestAnimationFrame(frame);
-        })();
-        return;
-      }
-
-      (function rAF(){ requestAnimationFrame(rAF); scene.rotation.y += 0.003; renderer.render(scene, camera); })();
-    });
-  } catch(e) { console.error('Example 4 error:', e); }
-})();
 </script>
 </body>
 </html>
