@@ -39,7 +39,7 @@ def check_quiz_correct_count(html):
             langs = set(langs)
             for lang in langs:
                 corrects = re.findall(
-                    r'data-correct="true"[^>]*data-lang="' + lang + '"', q
+                    r'data-lang="' + lang + r'"[^>]*data-correct="true"|data-correct="true"[^>]*data-lang="' + lang + r'"', q
                 )
                 if len(corrects) != 1:
                     issues.append(f"Quiz Q{i} ({lang}): {len(corrects)} correct answers (expected 1)")
@@ -181,10 +181,12 @@ def check_inline_svg(html):
         before = html[max(0,pos-200):pos]
         if 'noise-overlay' in before:
             continue
-        # Check if it's an icon SVG (width <= 28 for UI icons)
+        # Check if it's an icon SVG (width <= 28 or viewBox only with no width)
         wm = re.search(r'width="(\d+)"', attrs)
         if wm and int(wm.group(1)) <= 28:
             continue
+        if not wm and re.search(r'viewBox\s*=', attrs):
+            continue  # icon without explicit width attribute
         if not has_figure:
             issues.append("Inline <svg> found without .svg-fig wrapper")
             break
