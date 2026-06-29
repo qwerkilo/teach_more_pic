@@ -99,6 +99,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 - 新增组件：先在 `components/` 下创建文件，再更新此索引表
 - 颜色语义全局统一：蓝=正常，橙=触发，红=崩溃，绿=救助
 - **ECharts (#24)、Three.js (#25)、D3.js (#27) 可组合使用**：例如 D3.js 计算力导向布局后由 Three.js 渲染 3D 场景；或 D3.js 数据预处理后交给 ECharts 图表呈现。组合时只需确认各库的 CDN/本地文件均已加载即可。
+- **Anime.js 4.5+ → Three.js 动画**：Three.js 对象动画优先使用 Anime.js Three.js Adapter（`import 'animejs/adapters/three'`），一句 `animate(mesh, { x, rotateY, color })` 完成多属性动画，参见 `examples/anime-three-demo.html`
 
 ### 视觉设计纪律
 
@@ -295,7 +296,7 @@ Step 8: 本地 HTTP 服务器（可选）
 | `templates/cycle-diagram.svg` | 循环图模板（中心+周边节点） | Step 2/5 |
 | `templates/comparison-side-by-side.svg` | 左右对比 SVG 模板（双列对比） | Step 2/5 |
 | `templates/timeline-horizontal.svg` | 水平时间线 SVG 模板（单线事件序列） | Step 2/5 |
-| `examples/*.html` | 27 个组件的独立用法示例（含 SVG 流程图 #1、灵活对比表 #5、SVG 容器 #6、D3/Three/ECharts 混合） | Step 2 参考 |
+| `examples/*.html` | 29 个组件的独立用法示例（含 Anime.js+Three、D3→Three 专用示例，D3/Three/ECharts/Anime 四合一混合） | Step 2 参考 |
 | `components/NN-name.md` | 组件代码 + 降级说明（27 个） | Step 2/3 |
 | `references/decision-guide.md` | 组件选择决策矩阵 + 7 组三幕组合示例 | Step 2 |
 | `references/page-types.md` | 6 种可选页面类型的完整 HTML/CSS（中英双语） | 可选页面类型 |

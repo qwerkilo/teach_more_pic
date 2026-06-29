@@ -35,6 +35,10 @@ p{color:var(--muted);font-size:.9rem;margin:.5em 0}
 
 <h2>示例三：D3 比例尺 → Three.js 3D 柱状图 → ECharts 折线趋势</h2>
 <p>D3 的 scale 函数将数值映射到颜色和高度，Three.js 渲染 3D 柱体，ECharts 同步展示折线趋势。</p>
+
+<h2>示例四：Anime.js + Three.js 动画弹跳</h2>
+<p>Anime.js 4.5+ Three.js Adapter 驱动柱体动画，替代手写 requestAnimationFrame。</p>
+<div class="box border-glow"><div id="hybrid-anime-three" style="width:100%;height:400px;"></div></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
   <div class="box border-glow"><div id="hybrid-three-bars" style="width:100%;height:350px;"></div></div>
   <div class="box border-glow"><div id="hybrid-echarts-line" style="width:100%;height:350px;"></div></div>
@@ -211,6 +215,92 @@ function showError(id, msg) {
     });
     window.addEventListener('resize',function(){chartLine.resize();});
   } catch(e) { console.error('Example 3 error:', e); }
+})();
+
+/* ===== 示例四：Anime.js + Three.js 动画弹跳 ===== */
+(function(){
+  try {
+    var el = document.getElementById('hybrid-anime-three');
+    if(!el) return;
+    // Use a script tag to load anime.js then init
+    var scr = document.createElement('script');
+    scr.src = 'https://cdn.jsdelivr.net/npm/animejs@4.5.0/lib/anime.min.js';
+    scr.onload = function(){
+      if(typeof anime === 'undefined') return;
+      var w = el.clientWidth, h = 400;
+      var scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf5f0eb);
+      var camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 50);
+      camera.position.set(5, 4, 9); camera.lookAt(0, 0, 0);
+      var renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(w, h);
+      el.innerHTML = ''; el.appendChild(renderer.domElement);
+
+      var light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(5, 10, 7); scene.add(light);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+      // Use the adapter approach via anime.set
+      var labels = ['中国','美国','日本','德国','英国'];
+      var heights = [5.1, 3.2, 2.8, 4.5, 3.9];
+      var colors = [0xe74c3c,0x3498db,0x2ecc71,0xf39c12,0x9b59b6];
+      var bars = [];
+
+      heights.forEach(function(v, i){
+        var geo = new THREE.BoxGeometry(0.5, 0.01, 0.5);
+        var mat = new THREE.MeshLambertMaterial({ color: colors[i] });
+        var mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set((i - 2) * 1.2, 0.005, 0);
+        scene.add(mesh);
+        bars.push(mesh);
+      });
+
+      var floor = new THREE.Mesh(
+        new THREE.PlaneGeometry(7, 3),
+        new THREE.MeshLambertMaterial({ color: 0xddd8d0, side: THREE.DoubleSide })
+      );
+      floor.rotation.x = -Math.PI / 2; floor.position.y = -0.05;
+      scene.add(floor);
+
+      // Anime.js animation using direct JS object animation (since UMD adapter needs importmap)
+      var animData = bars.map(function(bar, i){
+        return { target: bar, h: heights[i] };
+      });
+      animData.forEach(function(d, i){
+        // Use anime.js to animate a proxy object whose onUpdate drives Three.js
+        var proxy = { scaleY: 0.01, y: 0.005 };
+        anime({
+          targets: proxy,
+          scaleY: d.h,
+          y: d.h / 2,
+          delay: i * 180,
+          duration: 1000,
+          easing: 'easeOutElastic(1, 0.5)',
+          update: function(){
+            d.target.scale.y = proxy.scaleY;
+            d.target.position.y = proxy.y;
+          }
+        });
+      });
+
+      // Continuous rotation via anime
+      var rotProxy = { angle: 0 };
+      anime({
+        targets: rotProxy,
+        angle: [0, Math.PI * 2],
+        duration: 20000,
+        loop: true,
+        easing: 'linear',
+        update: function(){
+          scene.rotation.y = rotProxy.angle;
+        }
+      });
+
+      function animFrame(){ requestAnimationFrame(animFrame); renderer.render(scene, camera); }
+      animFrame();
+    };
+    document.body.appendChild(scr);
+  } catch(e) { console.error('Example 4 error:', e); }
 })();
 </script>
 </body>

@@ -121,10 +121,20 @@ ECharts、D3.js、Three.js 不互斥，可按需组合发挥各自优势：
 | Three + ECharts 同屏 | ECharts 2D 趋势 | Three.js 3D 空间分布 | 金融仪表盘 = 折线图 + 3D 网络 |
 | D3 纯数据处理 | D3 做格式转换、比例尺映射 | CSS/HTML 消费数据 | d3-scale 生成色阶 → CSS 热力图 |
 | Anime.js → Three.js 动画 | Anime.js 驱动 Three.js 对象属性 | Three.js WebGPU/WebGL 渲染 | `animate(mesh, { x, rotateY, color })` — 替代手写 rAF |
+| Three.js + Anime.js 弹跳 | Anime.js `easeOutElastic` 驱动柱体从 0→目标高度 | Three.js 渲染 | 数据入场动画，20 行代码替代 ~50 行 rAF |
 
 **动画组合**：Three.js 3D 场景的动画优先使用 Anime.js 4.5+ Three.js Adapter（`import 'animejs/adapters/three'`），一句 `animate(mesh, { x: 100, rotateY: 360, duration: 1500 })` 完成位置+旋转+颜色的同步动画。
 
 **典型组合**：金融课中 D3 计算相关性矩阵 → Three 渲染 3D 网络 + Anime.js 做旋转动画；同时 ECharts 折线图展示历史走势。
+
+### 跨库示例索引
+
+| 文件 | 组合方式 | 说明 |
+|------|---------|------|
+| `examples/anime-three-demo.html` | Anime.js 4.5 Adapter + Three.js r185 | 弹跳柱状图 + 脉冲球体网络，`createTimer` 同步渲染帧 |
+| `examples/d3-three-demo.html` | D3 力导向布局 → Three.js 3D 渲染 | 11 节点金融网络，鼠标 hover 高亮 + Canvas Sprite 文字标签 |
+| `examples/hybrid-d3-three-echarts.html` | D3→Three + D3→ECharts + Three+ECharts + Anime.js+Three | 4 个独立示例同页展示所有组合模式 |
+| `examples/three-demo.html` | Three.js r185 WebGPU + importmap CDN | WebGPU 优先/WEBGL 降级，Sprite 标签 + hover tooltip |
 
 ## 三幕选型速查
 
