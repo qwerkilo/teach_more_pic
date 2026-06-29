@@ -343,7 +343,7 @@ button:active { transform: scale(0.98); }
 
 /* ===== 🛑 上方为组件示例 CSS，替换课程内容时按需保留/删除 ===== */
 /* ============================================================ */
-/* INSERT: 从 components/NN-name.md 复制 CSS 到这里（组件 CSS 可追加在下方） */
+/* INSERT: 从 components/NN-name.md 复制 CSS 到此处（按前缀分组追加，每组件一行注释标记） */
 
 /* ===== Magic UI 装饰效果（同步自 libs/magicui-effects.css，见 libs/ 为最新版） ===== */
 @keyframes bg-spin { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -499,8 +499,8 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <div class="dg-card"><span class="dg-icon">📈</span><span class="dg-value" data-countup="3.4">0</span><span class="dg-label" data-lang="zh">GDP 增速 (%)</span><span class="dg-label" data-lang="en">GDP Growth (%)</span></div>
 </div>
 
-<!-- ===== 🛑 上方为组件示例，下方可继续插入其他组件 ===== -->
-<!-- INSERT: 视觉组件 HTML 从这里插入 -->
+<!-- ===== Act 1 组件示例 END（角色卡片#2 + 状态链#15 + 标签组#17 + 计数动画#16） ===== -->
+<!-- INSERT: Act 1 视觉组件入口（可按需用 流程SVG#1 / 折叠分步#8 / 信息面板#21 等替换） -->
 
 <!-- ===== 第二章：危机爆发 ===== -->
 <section class="section-divider" aria-label="第二幕">
@@ -547,13 +547,11 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <thead><tr><th data-lang="zh">指标</th><th data-lang="en">Metric</th><th>传统观点</th><th>MMT 观点</th></tr></thead>
   <tbody>
     <tr><td data-lang="zh">财政赤字</td><td data-lang="en">Fiscal Deficit</td><td>坏、应削减</td><td>中性、是部门余额的结果</td></tr>
-    <tr><td data-lang="zh">政府债务</td><td data-lang="en">Gov Debt</td><td>传给下一代</td><td>非主权货币发行国的约束</td></tr>
-    <tr><td data-lang="zh">税收</td><td data-lang="en">Taxation</td><td>为支出筹钱</td><td>控制通胀 + 驱动货币需求</td></tr>
-  </tbody>
+</tbody>
 </table>
 
-<!-- ===== 🛑 上方为组件示例，下方可继续插入其他组件 ===== -->
-<!-- INSERT: 视觉组件 HTML 从这里插入 -->
+<!-- ===== Act 2 组件示例 END（时间线#3 + 条形图#4 + 告警条#18 + 对比表#5） ===== -->
+<!-- INSERT: Act 2 视觉组件入口（可按需用 ECharts 柱状图#24a / 折线图#24c / 热力图#19 / D3桑基图#27c 等替换） -->
 
 <!-- ===== 第三章：转折与遗产 ===== -->
 <section class="section-divider" aria-label="第三幕">
@@ -607,8 +605,8 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <div class="si-step"><span class="si-num">4</span><span data-lang="zh">发债</span><span data-lang="en">Bond</span></div>
 </div>
 
-<!-- ===== 🛑 上方为组件示例，下方可继续插入其他组件 ===== -->
-<!-- INSERT: 视觉组件 HTML 从这里插入 -->
+<!-- ===== Act 3 组件示例 END（折叠分步#8 + 引文卡片#13 + Tab面板#9 + 灯箱#23 + 步骤指示器#20） ===== -->
+<!-- INSERT: Act 3 视觉组件入口（可按需用 D3力导向图#27a / ECharts饼图#24b / Three.js#25 / 对比滑块#10 等替换） -->
 
 <!-- ===== 总结页 ===== -->
 <aside class="summary-cards">
@@ -804,7 +802,7 @@ var n=e.key==='ArrowRight'?Math.min(c+1,h2s.length-1):Math.max(c-1,0);if(n>=0&&h
 })();
 </script>
 <!-- ===== 🛑 上方为组件示例 JS ===== -->
-<!-- INSERT: 从 components/NN-name.md 复制 JS 到这里（可追加在下方） -->
+<!-- INSERT: 从 components/NN-name.md 复制 JS 到此处（每组件一个 IIFE try/catch 块，注释标记组件号） -->
 
 </body>
 </html>
