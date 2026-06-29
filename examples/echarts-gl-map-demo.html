@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECharts GL — 广东省 3D 地图</title>
+<link rel="stylesheet" href="../libs/magicui-effects.css">
+<script src="../libs/echarts.min.js"></script>
+<script src="../libs/echarts-gl.min.js"></script>
+<style>
+:root{--bg:#faf9f7;--text:#1a1a1a;--accent:#3498db;--surface:#f5f0eb;--radius:8px;--font:"Noto Serif CJK SC",Georgia,serif}
+body{font-family:var(--font);background:var(--bg);color:var(--text);max-width:960px;margin:0 auto;padding:2rem;-webkit-font-smoothing:antialiased}
+h1{border-bottom:2px solid var(--accent);padding-bottom:.5em}
+h2{margin-top:2em}
+.box{background:var(--surface);border-radius:var(--radius);margin:1rem 0;padding:8px;overflow:hidden;position:relative}
+p{color:var(--muted);font-size:.9rem;margin:.5em 0}
+.status{position:absolute;top:16px;left:16px;z-index:10;background:rgba(255,255,255,0.9);padding:4px 12px;border-radius:20px;font-size:.78rem;color:#666;pointer-events:none}
+</style>
+</head>
+<body>
+<h1 class="shiny-text">广东省 3D 地图 — ECharts GL</h1>
+<p>各地市 GDP（2024 示意数据）· 颜色从蓝到红表示低到高· 悬浮查看数值。</p>
+<div class="box border-glow"><div id="gd-map" style="width:100%;height:600px;"></div><span class="status" id="load-status">加载中...</span></div>
+
+<noscript><p style="text-align:center;padding:2rem;">需要 JavaScript</p></noscript>
+
+<script>
+(function(){
+  try {
+    if(typeof echarts === 'undefined'){ document.querySelector('.box').innerHTML = '<p style="padding:2rem;text-align:center;color:#c0392b;">ECharts 未加载</p>'; return; }
+
+    var status = document.getElementById('load-status');
+
+    // 广东省各地市 GDP 示意数据（万亿元）
+    var cityData = {
+      '深圳市': 3.46, '广州市': 3.04, '佛山市': 1.33, '东莞市': 1.12,
+      '惠州市': 0.61, '珠海市': 0.42, '茂名市': 0.40, '江门市': 0.38,
+      '中山市': 0.37, '湛江市': 0.37, '汕头市': 0.33, '肇庆市': 0.28,
+      '揭阳市': 0.24, '清远市': 0.21, '阳江市': 0.16, '韶关市': 0.16,
+      '梅州市': 0.14, '潮州市': 0.13, '河源市': 0.13, '汕尾市': 0.13,
+      '云浮市': 0.12
+    };
+
+    // 各地市坐标（经纬度）
+    var cityCoords = {
+      '深圳市': [114.07,22.55], '广州市': [113.26,23.13], '佛山市': [113.12,23.02],
+      '东莞市': [113.75,23.05], '惠州市': [114.42,23.11], '珠海市': [113.57,22.27],
+      '茂名市': [110.93,21.66], '江门市': [113.08,22.58], '中山市': [113.38,22.52],
+      '湛江市': [110.36,21.27], '汕头市': [116.68,23.35], '肇庆市': [112.47,23.05],
+      '揭阳市': [116.36,23.55], '清远市': [113.03,23.70], '阳江市': [111.98,21.86],
+      '韶关市': [113.60,24.80], '梅州市': [116.12,24.29], '潮州市': [116.63,23.66],
+      '河源市': [114.70,23.74], '汕尾市': [115.37,22.79], '云浮市': [112.04,22.92]
+    };
+
+    // 加载广东省 GeoJSON
+    fetch('https://geo.datav.aliyun.com/areas_v3/bound/440000_full.json')
+      .then(function(r){ return r.json(); })
+      .then(function(geoJson){
+        status.textContent = '广东省 · ' + Object.keys(cityData).length + ' 地市';
+
+        echarts.registerMap('guangdong', geoJson);
+
+        var chart = echarts.init(document.getElementById('gd-map'));
+
+        // map3D 数据
+        var mapData = Object.keys(cityData).map(function(name){
+          return { name: name, value: cityData[name] };
+        });
+
+        // scatter3D 数据
+        var scatterData = Object.keys(cityCoords).map(function(name){
+          return {
+            name: name,
+            value: cityCoords[name].concat((cityData[name] || 0) * 10000)
+          };
+        });
+
+        var option = {
+          tooltip: {
+            trigger: 'item',
+            formatter: function(p){
+              if(p.seriesType === 'map3D')
+                return p.name + '<br/>GDP: <b>' + ((cityData[p.name] || 0)).toFixed(2) + '</b> 万亿';
+              if(p.seriesType === 'scatter3D')
+                return p.name + '<br/>GDP: <b>' + ((p.data.value[2] || 0) / 10000).toFixed(2) + '</b> 万亿';
+              return '';
+            }
+          },
+          visualMap: {
+            show: true,
+            min: 0.1,
+            max: 3.5,
+            text: ['高 GDP', '低 GDP'],
+            inRange: {
+              color: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c']
+            },
+            calculable: true,
+            left: 'left',
+            bottom: 20,
+            textStyle: { fontSize: 11 }
+          },
+          series: [{
+            type: 'map3D',
+            map: 'guangdong',
+            data: mapData,
+            shading: 'lambert',
+            itemStyle: {
+              borderColor: 'rgba(255,255,255,0.4)',
+              borderWidth: 1
+            },
+            label: {
+              show: mapData,
+              color: '#1a1a1a',
+              fontSize: 10
+            },
+            emphasis: {
+              label: { fontSize: 14, color: '#c0392b' },
+              itemStyle: { areaColor: '#c0392b' }
+            },
+            regionHeight: 1.5,
+            viewControl: {
+              autoRotate: true,
+              autoRotateSpeed: 5,
+              distance: 140,
+              beta: 20
+            },
+            light: {
+              main: { intensity: 1.2, shadow: true },
+              ambient: { intensity: 0.4 }
+            }
+          }, {
+            type: 'scatter3D',
+            coordinateSystem: 'geo3D',
+            data: scatterData,
+            symbol: 'circle',
+            symbolSize: function(val){
+              return 6 + Math.sqrt(val[2] / 10000) * 4;
+            },
+            itemStyle: {
+              color: '#c0392b',
+              opacity: 0.9,
+              borderColor: '#fff',
+              borderWidth: 1
+            },
+            label: {
+              show: true,
+              formatter: function(p){
+                var gdp = ((p.data.value[2] || 0) / 10000).toFixed(2);
+                return p.name + ' ' + gdp;
+              },
+              fontSize: 11,
+              color: '#1a1a1a',
+              fontWeight: 'bold',
+              position: 'right'
+            }
+          }]
+        };
+
+        chart.setOption(option);
+        window.addEventListener('resize', function(){ chart.resize(); });
+      })
+      .catch(function(err){
+        status.textContent = '加载失败';
+        var el = document.getElementById('gd-map');
+        el.innerHTML = '<div style="padding:2rem;text-align:center;color:#c0392b;">无法加载广东省地图数据，请检查网络连接。<br/><br/>GeoJSON 数据来源：DataV.GeoAtlas</div>';
+      });
+  } catch(e) { console.error('ECharts GL map error:', e); }
+})();
+</script>
+</body>
+</html>

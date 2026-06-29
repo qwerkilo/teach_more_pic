@@ -446,6 +446,10 @@ def check_lib_deps(html, base_dir):
         has_cdn = "cdn.jsdelivr.net/npm/echarts" in html
         if not has_local and not has_cdn:
             issues.append("ECharts usage found but no libs/echarts.min.js or CDN link")
+    if re.search(r'bar3D|scatter3D|map3D|globe|\'surface\'', html) or 'echarts-gl' in html:
+        has_gl = os.path.exists(os.path.join(base_dir, "libs", "echarts-gl.min.js"))
+        if not has_gl:
+            issues.append("ECharts GL usage found but no libs/echarts-gl.min.js")
     if re.search(r'new THREE\.', html) or re.search(r'\bTHREE\b', html) or 'three@0.185.0' in html:
         has_local_umd = os.path.exists(os.path.join(base_dir, "libs", "three.min.js"))
         has_local_esm = os.path.exists(os.path.join(base_dir, "libs", "three.module.js"))

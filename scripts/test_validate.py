@@ -253,6 +253,10 @@ test("lib deps: three.js r185 importmap passes", not v.check_lib_deps(
     '<html>cdn.jsdelivr.net/npm/three@0.185.0/ new THREE.Scene()</html>', '.'))
 test("lib deps: three.js r185 importmap as CDN passes", not v.check_lib_deps(
     '<html>cdn.jsdelivr.net/npm/three@0.185.0/ new THREE.Scene()</html>', 'C:\\nonexistent'))
+test("lib deps: echarts GL passes", not v.check_lib_deps(
+    '<html>type: "bar3D" scatter3D map3D globe</html>', '.'))
+test("lib deps: echarts GL no lib fails", len(v.check_lib_deps(
+    '<html>type: "bar3D"</html>', 'C:\\nonexistent')) > 0)
 
 
 

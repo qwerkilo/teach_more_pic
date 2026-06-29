@@ -43,6 +43,9 @@ ECharts 4 子类型是数据可视化的首选引擎，D3.js 适合复杂自定�
 | 关系网络/知识图谱 | **D3 力导向图 (#27a)** | SVG 流程图 (#1) | 一/二 |
 | 多层层次占比 | **D3 旭日图 (#27b)** | 饼图 (#24b) | 二 |
 | 流量/转化路径 | **D3 桑基图 (#27c)** | 状态链 (#15) | 二 |
+| 三维空间分布 | **ECharts GL 3D 散点 (#28b)** | 热力图 (#19) | 二/三 |
+| 三维分簇对比 | **ECharts GL 3D 柱状 (#28a)** | 堆叠图 (#24d) | 二 |
+| 地理数据全球分布 | **ECharts GL 地球 (#28c)** | 无 | 二 |
 | 单组数据对比 | CSS 条形图 (#4) | 柱状图 (#24a) | 二 |
 | 多方案多维度对比 | 对比表增强版 (#22) | Tab 面板 (#9) | 三 |
 
@@ -77,7 +80,7 @@ ECharts 4 子类型是数据可视化的首选引擎，D3.js 适合复杂自定�
 | 参与者介绍 | 角色卡片 (#2) | 数据卡片 (#12) | 一 |
 | 全屏放大查看 | 灯箱 (#23) | 原生模态 (#26b) | 二 |
 | 图片轮播 | CSS 幻灯片 (#26c) | 灯箱 (#23) | 二 |
-| 3D 数据可视化 | **Three.js (#25)** | 柱状图 (#24a) | 二 |
+| 3D 数据可视化 | **Three.js (#25)** / **ECharts GL (#28)** | 柱状图 (#24a) | 二 |
 
 ## 象限六：零 JS 轻量
 
@@ -127,6 +130,8 @@ ECharts、D3.js、Three.js 不互斥，可按需组合发挥各自优势：
 
 | 文件 | 组合方式 | 说明 |
 |------|---------|------|
+| `examples/echarts-gl-demo.html` | ECharts GL 3D 柱状 + 3D 散点 | file:// 兼容，autoRotate + cluster 颜色编码 |
+| `examples/echarts-gl-map-demo.html` | ECharts GL 3D 广东地图 + scatter3D 标注 | GeoJSON DataV + 21 地市 GDP 数据，visualMap 颜色编码 |
 | `examples/d3-three-demo.html` | D3 力导向布局 → Three.js 3D 渲染 | 11 节点金融网络，鼠标 hover 高亮 + Canvas Sprite 文字标签 |
 | `examples/hybrid-d3-three-echarts.html` | D3→Three + D3→ECharts + Three+ECharts | 3 个独立示例同页展示所有组合模式 |
 | `examples/three-demo.html` | Three.js r185 WebGPU + importmap CDN | WebGPU 优先/WEBGL 降级，Sprite 标签 + hover tooltip |
