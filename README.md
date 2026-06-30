@@ -60,6 +60,16 @@ Skills: teach, grill-me, teach_more_pic, fireworks-tech-graph, knowledge-graph-m
 - **20 品牌主题** — 22 个 CSS 变量，`var(--accent/border/surface/...)` 自动跟随
 - **主题切换动画** — 0.35s 平滑过渡，`prefers-reduced-motion` 自动禁用
 
+## 最近更新
+
+**质量改进**（17 项 bug 修复，覆盖 P0-P2）：
+
+- **P0 必修**：测验错答高亮按语言过滤（之前英文模式下看不到正确答案）/ KG tooltip/legend XSS 风险消除 / `<html lang>` 随 L 键切换同步（屏幕阅读器发音正确）
+- **P1 应修**：验证脚本 `check_inline_svg` 混合场景漏检、`check_container_width` 死代码、popover 检测无效 三处盲点全部修复 / `data-anim="blur"` 在无 IntersectionObserver 浏览器中残影 / 模板标题占位符 / SD 缺 `aria-expanded`、Tab 缺 `aria-selected`/`aria-controls`
+- **P2 可选**：spotlight mousemove 改 `requestAnimationFrame` 节流 / `buildTOC` 跨 try 块作用域修复 / 重复 `--h1-size` 与 body 声明清理 / 添加 meta description + og:* + favicon + 打印样式
+
+详见 git history。`scripts/test_validate.py` 85 个单元测试全 PASS，3 个核心模板验证零回归。
+
 ## 使用方法
 
 在 opencode 中同时激活两个 skill：

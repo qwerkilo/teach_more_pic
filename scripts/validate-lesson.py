@@ -53,12 +53,19 @@ def check_quiz_correct_count(html):
 def check_h1_count(html):
     """Each lesson must have exactly one h1 (or one per language with data-lang)."""
     h1s = re.findall(r"<h1[^>]*>", html)
+    if not h1s:
+        return ["Missing <h1> tag"]
     lang_h1s = re.findall(r'<h1[^>]*data-lang=["\']([^"\']+)["\']', html)
     if lang_h1s:
+        # One h1 per language is allowed (e.g., zh + en)
         if len(h1s) == len(set(lang_h1s)):
             return []
+        return [
+            f"Found {len(h1s)} h1 tags with {len(set(lang_h1s))} distinct languages "
+            f"(expected {len(set(lang_h1s))} matching data-lang, or 1 unilingual h1)"
+        ]
     if len(h1s) != 1:
-        return [f"Found {len(h1s)} h1 tags (expected 1, or 1 per language with data-lang)"]
+        return [f"Found {len(h1s)} h1 tags (expected exactly 1)"]
     return []
 
 
@@ -73,13 +80,25 @@ def check_data_anim_syntax(html):
 
 
 def check_container_width(html):
-    """Container max-width should be between 700-800px."""
-    m = re.search(r"\.container\s*\{[^}]*max-width:\s*(\d+)", html)
-    if m:
+    """Container max-width should be between 700-800px.
+    Matches body, main, .container, or any element with max-width in that range.
+    """
+    issues = []
+    found = False
+    # Match .container {...} block
+    for m in re.finditer(r"\.container\s*\{[^}]*max-width:\s*(\d+)", html):
+        found = True
         w = int(m.group(1))
         if w < 700 or w > 800:
-            return [f"Container max-width is {w}px (recommended 720-780)"]
-    return []
+            issues.append(f"Container max-width is {w}px (recommended 720-780)")
+    # Match body or main with max-width
+    for m in re.finditer(r"\b(?:body|main|#\S+|\.\S+)\s*\{[^}]*max-width:\s*(\d+)", html):
+        w = int(m.group(1))
+        if 500 <= w < 700 or w > 900:
+            issues.append(
+                f"Detected max-width {w}px outside the recommended 700-800px range"
+            )
+    return issues
 
 
 def check_relative_links(html):
@@ -166,19 +185,34 @@ def check_ppt_js(html):
 def check_inline_svg(html):
     """Inline SVGs must be wrapped in .svg-fig figure, excluding icon SVGs."""
     issues = []
-    has_figure = bool(re.search(r'class="[^"]*svg-fig[^"]*"', html))
     # Find each <svg> opening tag with its attributes
     for m in re.finditer(r'<svg\s+([^>]*)>', html):
-        tag = m.group()
         attrs = m.group(1)
         pos = m.start()
+        # Skip SVGs inside an attribute value (e.g. href="data:image/svg+xml,<svg ...>").
+        # Heuristic: a 'data:image/svg+xml' appears in the preceding 500 chars, and we have
+        # not yet seen the closing quote of the href attribute.
+        before_wide = html[max(0, pos - 500):pos]
+        if 'data:image/svg+xml' in before_wide:
+            data_pos = before_wide.rfind('data:image/svg+xml')
+            # Look for the start of the href attribute value (a `="` after data:image/svg+xml occurrence)
+            href_open = before_wide.rfind('href="', 0, data_pos)
+            if href_open != -1:
+                # We are inside an href attribute if no closing quote was found between href_open and pos
+                tail = before_wide[href_open + 6:]
+                if '"' not in tail:
+                    continue
+        # Skip SVGs inside an HTML comment (e.g. <!-- ... <svg ...> ... -->)
+        last_open = html.rfind("<!--", 0, pos)
+        if last_open != -1 and html.find("-->", last_open, pos) == -1:
+            continue
         # Check if inside a code block
         code_start = html.rfind("```", 0, pos)
         code_end = html.find("```", pos)
         if code_start != -1 and code_end != -1:
             continue
         # Check if it's inside a noise-overlay (decorative SVG texture)
-        before = html[max(0,pos-200):pos]
+        before = html[max(0, pos - 200):pos]
         if 'noise-overlay' in before:
             continue
         # Check if it's an icon SVG (width <= 28 or viewBox only with no width)
@@ -187,9 +221,20 @@ def check_inline_svg(html):
             continue
         if not wm and re.search(r'viewBox\s*=', attrs):
             continue  # icon without explicit width attribute
-        if not has_figure:
-            issues.append("Inline <svg> found without .svg-fig wrapper")
-            break
+        # Verify this <svg> is inside a .svg-fig figure (anywhere before pos)
+        fig_start = html.rfind("<figure", 0, pos)
+        if fig_start == -1:
+            issues.append(f"Inline <svg> at pos {pos} has no enclosing <figure>")
+            continue
+        fig_end = html.find("</figure>", fig_start)
+        if fig_end == -1 or fig_end < pos:
+            issues.append(f"Inline <svg> at pos {pos} has no enclosing <figure>")
+            continue
+        fig_open = html[fig_start:fig_start + 200]
+        if 'svg-fig' not in fig_open:
+            issues.append(
+                f"Inline <svg> at pos {pos} is inside a <figure> without class=\"svg-fig\""
+            )
     return issues
 
 
@@ -210,11 +255,17 @@ def check_component_consistency(html):
     # Popover: popovertarget="X" must have matching id="X" with popover attribute
     popover_triggers = re.findall(r'popovertarget="([^"]+)"', html)
     for pid in popover_triggers:
-        target = f'id="{pid}"'
-        if target not in html:
-            issues.append(f"Popover trigger popovertarget=\"{pid}\" has no matching element")
-        elif f'popover' not in html:
-            pass  # popover content may not be in same file
+        target_re = re.search(r'<[^>]*\bid="' + re.escape(pid) + r'"[^>]*>', html)
+        if not target_re:
+            issues.append(
+                f"Popover trigger popovertarget=\"{pid}\" has no matching id=\"{pid}\""
+            )
+        else:
+            target_tag = target_re.group(0)
+            if 'popover' not in target_tag:
+                issues.append(
+                    f"Popover target id=\"{pid}\" is missing the popover attribute"
+                )
     # Dialog: <dialog> should have close mechanism
     dialogs = len(re.findall(r'<dialog[\s>]', html))
     close_methods = len(re.findall(r'close\(\)|showModal\(\)', html))

@@ -3,8 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XXXX 课标题</title>
+<meta name="description" content="【TODO 替换课程简介】teach_more_pic lesson — 中英双语可视化课件">
+<meta property="og:title" content="【TODO 替换课程标题】teach_more_pic lesson">
+<meta property="og:description" content="【TODO 替换课程简介】">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23c0392b'/><text x='32' y='44' font-size='36' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>T</text></svg>">
 <link rel="stylesheet" href="../libs/magicui-effects.css">
+<title>【TODO 替换课程标题】teach_more_pic lesson</title>
 <style>
 /* ===== CSS 变量与主题 ===== */
 :root {
@@ -17,7 +24,7 @@
   --lh: 1.8; --h1-size: 2rem; --h2-size: 1.3rem;
   --body-size: 1rem; --small-size: 0.85rem;
   --radius: 8px; --anim-dur: 0.3s; --anim-y: 18px;
-  --h2-border: 1px solid #ddd; --h1-size: 2rem;
+  --h2-border: 1px solid #ddd;
 }
 [data-theme="airbnb"] {
   --bg: #ffffff; --text: #222222; --accent: #ff385c;
@@ -191,7 +198,7 @@
 }
 
 /* ===== 正文排版 ===== */
-body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: var(--lh); max-width: 720px; margin: 0 auto; padding: 0 1.5rem; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: var(--lh); max-width: 720px; margin: 0 auto; padding: 0 1.5rem; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; transition: background-color 0.35s ease-out, color 0.35s ease-out; }
 h1 { font-size: var(--h1-size); font-family: var(--font-h); margin-top: 2rem; text-wrap: pretty; letter-spacing: -0.01em; }
 h2 { font-size: 1.3rem; font-family: var(--font-h); border-bottom: var(--h2-border); padding-bottom: 0.3em; margin-top: 2em; text-wrap: pretty; letter-spacing: -0.01em; }
 p { margin: 1.2em 0; }
@@ -421,13 +428,21 @@ td[data-lang].active, th[data-lang].active { display: table-cell; }
 
 
 /* ===== 主题切换过渡动画 ===== */
-body { transition: background-color 0.35s ease-out, color 0.35s ease-out; }
 body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out, border-color 0.35s ease-out, box-shadow 0.35s ease-out; }
 @media (prefers-reduced-motion: reduce) { body, body * { transition: none !important; } }
 /* ===== 响应式 ===== */
 @media (max-width: 600px) {
   body { padding: 0 1rem; }
   h1 { font-size: 1.5rem; }
+}
+/* ===== 打印 ===== */
+@media print {
+  body { max-width: none; padding: 0; color: #000; background: #fff; }
+  .ui-toolbar, .tp-panel, .toc-panel, .lbox-overlay, .meteors-container, .noise-overlay, .meteor, .border-glow::before, .border-glow::after, .neon-card::before, .neon-card::after { display: none !important; }
+  [data-anim] { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
+  a { color: #000; text-decoration: underline; }
+  h2 { break-after: avoid; }
+  .cover-page, .section-divider, .summary-card, .quiz-question { break-inside: avoid; }
 }
 </style>
 </head>
@@ -570,9 +585,9 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <!-- ===== 🛑 组件示例 HTML — 替换为实际课程内容 ===== -->
 
 <!-- 折叠式分步详解 (#8) 🛑 替换步骤 -->
-<div class="sd-item"><button class="sd-trigger" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第一步：政府支出</span><span data-lang="en">▶ Step 1: Gov Spending</span></button><div class="sd-content"><div><p data-lang="zh">财政部在央行开设账户，签发支票即创造货币。</p><p data-lang="en">The Treasury creates money by writing checks from its central bank account.</p></div></div></div>
-<div class="sd-item"><button class="sd-trigger" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第二步：货币流通</span><span data-lang="en">▶ Step 2: Money Circulation</span></button><div class="sd-content"><div><p data-lang="zh">货币在经济体中流转，形成购买力。</p><p data-lang="en">Money circulates in the economy, creating purchasing power.</p></div></div></div>
-<div class="sd-item"><button class="sd-trigger" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第三步：税收回收</span><span data-lang="en">▶ Step 3: Tax Withdrawal</span></button><div class="sd-content"><div><p data-lang="zh">税收从经济体中回收货币，防止过热。</p><p data-lang="en">Taxes withdraw money from the economy to prevent overheating.</p></div></div></div>
+<div class="sd-item" data-expanded="false"><button class="sd-trigger" type="button" aria-expanded="false" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');this.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');this.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第一步：政府支出</span><span data-lang="en">▶ Step 1: Gov Spending</span></button><div class="sd-content" role="region"><div><p data-lang="zh">财政部在央行开设账户，签发支票即创造货币。</p><p data-lang="en">The Treasury creates money by writing checks from its central bank account.</p></div></div></div>
+<div class="sd-item" data-expanded="false"><button class="sd-trigger" type="button" aria-expanded="false" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');this.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');this.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第二步：货币流通</span><span data-lang="en">▶ Step 2: Money Circulation</span></button><div class="sd-content" role="region"><div><p data-lang="zh">货币在经济体中流转，形成购买力。</p><p data-lang="en">Money circulates in the economy, creating purchasing power.</p></div></div></div>
+<div class="sd-item" data-expanded="false"><button class="sd-trigger" type="button" aria-expanded="false" onclick="var c=this.nextElementSibling,o=this.closest('.sd-item').getAttribute('data-expanded')==='true';if(o){c.style.height=c.scrollHeight+'px';requestAnimationFrame(function(){c.style.height='0px';});this.closest('.sd-item').setAttribute('data-expanded','false');this.setAttribute('aria-expanded','false');}else{c.style.height='0px';requestAnimationFrame(function(){c.style.height=c.scrollHeight+'px';});this.closest('.sd-item').setAttribute('data-expanded','true');this.setAttribute('aria-expanded','true');c.addEventListener('transitionend',function h(){c.removeEventListener('transitionend',h);c.style.height='auto';});}"><span data-lang="zh">▶ 第三步：税收回收</span><span data-lang="en">▶ Step 3: Tax Withdrawal</span></button><div class="sd-content" role="region"><div><p data-lang="zh">税收从经济体中回收货币，防止过热。</p><p data-lang="en">Taxes withdraw money from the economy to prevent overheating.</p></div></div></div>
 
 <!-- 引用/引文卡片 (#13) 🛑 替换引言 -->
 <div class="qc-card">
@@ -583,11 +598,11 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
 <!-- Tab 切换面板 (#9) 🛑 替换标签页 -->
 <div class="tab-bar" role="tablist">
-  <button class="tab-btn active" data-tab="tab-a" role="tab" onclick="document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});document.getElementById(this.dataset.tab).classList.add('active');"><span data-lang="zh">传统学派</span><span data-lang="en">Traditional</span></button>
-  <button class="tab-btn" data-tab="tab-b" role="tab" onclick="document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});document.getElementById(this.dataset.tab).classList.add('active');"><span data-lang="zh">MMT 学派</span><span data-lang="en">MMT School</span></button>
+  <button class="tab-btn active" data-tab="tab-a" role="tab" aria-selected="true" aria-controls="tab-a" onclick="document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');b.setAttribute('aria-selected','false');});this.classList.add('active');this.setAttribute('aria-selected','true');document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});document.getElementById(this.dataset.tab).classList.add('active');"><span data-lang="zh">传统学派</span><span data-lang="en">Traditional</span></button>
+  <button class="tab-btn" data-tab="tab-b" role="tab" aria-selected="false" aria-controls="tab-b" onclick="document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');b.setAttribute('aria-selected','false');});this.classList.add('active');this.setAttribute('aria-selected','true');document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});document.getElementById(this.dataset.tab).classList.add('active');"><span data-lang="zh">MMT 学派</span><span data-lang="en">MMT School</span></button>
 </div>
-<div class="tab-panel active" id="tab-a"><p data-lang="zh">政府必须像家庭一样平衡预算；赤字会导致通货膨胀和债务危机。</p><p data-lang="en">Government must balance its budget like a household; deficits cause inflation and debt crises.</p></div>
-<div class="tab-panel" id="tab-b"><p data-lang="zh">主权货币发行国不受预算硬约束；赤字是私人部门净储蓄的正常结果。</p><p data-lang="en">Sovereign issuers face no hard budget constraint; deficits are the normal result of private sector net saving.</p></div>
+<div class="tab-panel active" id="tab-a" role="tabpanel" aria-labelledby="tab-a-btn"><p data-lang="zh">政府必须像家庭一样平衡预算；赤字会导致通货膨胀和债务危机。</p><p data-lang="en">Government must balance its budget like a household; deficits cause inflation and debt crises.</p></div>
+<div class="tab-panel" id="tab-b" role="tabpanel" aria-labelledby="tab-b-btn" hidden><p data-lang="zh">主权货币发行国不受预算硬约束；赤字是私人部门净储蓄的正常结果。</p><p data-lang="en">Sovereign issuers face no hard budget constraint; deficits are the normal result of private sector net saving.</p></div>
 
 <!-- 全屏模态/灯箱 (#23) 🛑 替换内容 -->
 <button class="lbox-trigger" onclick="document.getElementById('demo-lbox').classList.add('open');"><span data-lang="zh">打开演示弹窗</span><span data-lang="en">Open Demo Modal</span></button>
@@ -695,13 +710,14 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   document.querySelectorAll('.quiz-option').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var q = this.closest('.quiz-question');
+      var ql='zh';try{var qs=localStorage.getItem('lang');if(qs)ql=qs;}catch(e){}
       q.querySelectorAll('.quiz-option').forEach(function(b) { b.disabled = true; });
       var correct = this.dataset.correct === 'true';
       this.classList.add(correct ? 'correct' : 'wrong');
       if (!correct) {
-        q.querySelector('.quiz-option[data-correct="true"]').classList.add('correct');
+        var correctBtn = q.querySelector('.quiz-option[data-correct="true"][data-lang="' + ql + '"]');
+        if (correctBtn) correctBtn.classList.add('correct');
       }
-      var ql='zh';try{var qs=localStorage.getItem('lang');if(qs)ql=qs;}catch(e){}
       q.querySelector('.quiz-feedback').textContent = correct ? (ql==='zh'?'✓ 正确！':'✓ Correct!') : (ql==='zh'?'✗ 不正确。正确答案已标出。':'✗ Incorrect. The correct answer is highlighted.');
     });
   });
@@ -742,7 +758,10 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 
 <!-- ===== PPT 质感增强 JS ===== -->
 <script>
-(function(){var t=['warm','apple','minimax','nvidia','spotify','tesla','airbnb','airtable','binance','bmw-m','claude','cursor','dell-1996','figma','hp','ibm','nike','notion','x.ai','zapier'];try{var s=localStorage.getItem('theme');if(s&&t.indexOf(s)>-1){document.documentElement.dataset.theme=s;}}catch(e){}
+(function(){
+var t=['warm','apple','minimax','nvidia','spotify','tesla','airbnb','airtable','binance','bmw-m','claude','cursor','dell-1996','figma','hp','ibm','nike','notion','x.ai','zapier'];
+var buildTOC=function(){var tl=document.querySelector('.toc-list');if(!tl)return;var lang='zh';try{var ls=localStorage.getItem('lang');if(ls)lang=ls;}catch(e){}var allH2s=document.querySelectorAll('h2');var h2s=[];allH2s.forEach(function(h){if(!h.hasAttribute('data-lang')||h.dataset.lang===lang)h2s.push(h);});tl.textContent='';h2s.forEach(function(h,i){var li=document.createElement('li');li.className='toc-item';li.textContent=h.textContent;li.addEventListener('click',function(){h.scrollIntoView({behavior:'smooth'});var p=document.querySelector('.toc-panel');if(p)p.classList.remove('open');});tl.appendChild(li);});if(window.__tocObserver)window.__tocObserver.disconnect();window.__tocObserver=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var idx=Array.from(h2s).indexOf(e.target);document.querySelectorAll('.toc-item').forEach(function(x,i){x.classList.toggle('active',i===idx);});}});},{rootMargin:'-80px 0px -60% 0px'});h2s.forEach(function(h){window.__tocObserver.observe(h);});};
+try{var s=localStorage.getItem('theme');if(s&&t.indexOf(s)>-1){document.documentElement.dataset.theme=s;}}catch(e){}
 var i=t.indexOf(document.documentElement.dataset.theme);if(i<0)i=0;var d=document.documentElement;
 try{document.querySelectorAll('.tp-item').forEach(function(b){b.addEventListener('click',function(){
 var th=this.dataset.theme;d.dataset.theme=th;i=t.indexOf(th);try{localStorage.setItem('theme',th);}catch(e){}
@@ -760,12 +779,16 @@ document.querySelectorAll('.tp-item').forEach(function(x){x.classList.toggle('ac
 try{document.addEventListener('click',function(e){if(!e.target.closest('.ui-toolbar')&&!e.target.closest('.tp-panel')){
 document.querySelector('.tp-panel').classList.remove('open');}});
 }catch(e){}
-try{var tl=document.querySelector('.toc-list');var tocBtn=document.querySelector('.toc-btn');var to;function buildTOC(){if(!tl)return;var lang='zh';try{var ls=localStorage.getItem('lang');if(ls)lang=ls;}catch(e){}var allH2s=document.querySelectorAll('h2');var h2s=[];allH2s.forEach(function(h){if(!h.hasAttribute('data-lang')||h.dataset.lang===lang)h2s.push(h);});tl.innerHTML='';h2s.forEach(function(h,i){var li=document.createElement('li');li.className='toc-item';li.textContent=h.textContent;li.addEventListener('click',function(){h.scrollIntoView({behavior:'smooth'});document.querySelector('.toc-panel').classList.remove('open');});tl.appendChild(li);});if(to)to.disconnect();to=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var idx=Array.from(h2s).indexOf(e.target);document.querySelectorAll('.toc-item').forEach(function(x,i){x.classList.toggle('active',i===idx);});}});},{rootMargin:'-80px 0px -60% 0px'});h2s.forEach(function(h){to.observe(h);});}if(tocBtn)tocBtn.addEventListener('click',function(){document.querySelector('.toc-panel').classList.toggle('open');});document.addEventListener('click',function(e){if(!e.target.closest('.ui-toolbar')&&!e.target.closest('.toc-panel')){document.querySelector('.toc-panel').classList.remove('open');}});buildTOC();}catch(e){}
-try{var la=['zh','en'];var li=la.indexOf(localStorage.getItem('lang'));if(li<0)li=0;var lb=document.querySelector('[data-lang-btn]');function sw(l){document.querySelectorAll('[data-lang]').forEach(function(x){x.classList.toggle('active',x.dataset.lang===l);});try{localStorage.setItem('lang',l);}catch(e){}if(lb){lb.textContent=l==='zh'?'中':'EN';}if(typeof buildTOC==='function')buildTOC();}sw(la[li]);if(lb){lb.addEventListener('click',function(){li=(li+1)%la.length;sw(la[li]);});}document.addEventListener('keydown',function(e){if(e.key==='l'&&!e.ctrlKey&&!e.metaKey){li=(li+1)%la.length;sw(la[li]);}});}catch(e){}
-try{document.querySelectorAll('.spotlight-card').forEach(function(c){c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');});});}catch(e){}
+try{var tocBtn=document.querySelector('.toc-btn');
+if(tocBtn)tocBtn.addEventListener('click',function(){document.querySelector('.toc-panel').classList.toggle('open');});
+document.addEventListener('click',function(e){if(!e.target.closest('.ui-toolbar')&&!e.target.closest('.toc-panel')){document.querySelector('.toc-panel').classList.remove('open');}});
+buildTOC();
+}catch(e){}
+try{var la=['zh','en'];var li=la.indexOf(localStorage.getItem('lang'));if(li<0)li=0;var lb=document.querySelector('[data-lang-btn]');var sw=function(l){document.querySelectorAll('[data-lang]').forEach(function(x){x.classList.toggle('active',x.dataset.lang===l);});try{localStorage.setItem('lang',l);}catch(e){}if(lb){lb.textContent=l==='zh'?'中':'EN';}document.documentElement.lang=(l==='zh'?'zh-CN':'en');buildTOC();};sw(la[li]);if(lb){lb.addEventListener('click',function(){li=(li+1)%la.length;sw(la[li]);});}document.addEventListener('keydown',function(e){if(e.key==='l'&&!e.ctrlKey&&!e.metaKey){li=(li+1)%la.length;sw(la[li]);}});}catch(e){}
+try{document.querySelectorAll('.spotlight-card').forEach(function(c){var pending=false,lr={};c.addEventListener('mousemove',function(e){lr.x=e.clientX;lr.y=e.clientY;if(pending)return;pending=true;requestAnimationFrame(function(){var r=c.getBoundingClientRect();c.style.setProperty('--mx',((lr.x-r.left)/r.width*100)+'%');c.style.setProperty('--my',((lr.y-r.top)/r.height*100)+'%');pending=false;});});});}catch(e){}
 try{var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in-view');});});
 document.querySelectorAll('[data-anim]').forEach(function(el){o.observe(el);});
-}catch(e){document.querySelectorAll('[data-anim]').forEach(function(el){el.style.opacity='1';el.style.transform='none';});}
+}catch(e){document.querySelectorAll('[data-anim]').forEach(function(el){el.style.opacity='1';el.style.transform='none';el.style.filter='none';});}
 try{var s=document.querySelectorAll('h2');
 document.addEventListener('keydown',function(e){if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&!e.ctrlKey&&!e.metaKey){e.preventDefault();
 var lang='zh';try{var ls=localStorage.getItem('lang');if(ls)lang=ls;}catch(e){}
