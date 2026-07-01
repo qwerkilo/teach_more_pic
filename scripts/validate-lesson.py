@@ -181,12 +181,11 @@ def check_ppt_js(html):
         issues.append("Missing keyboard navigation JS (arrow key handler)")
     return issues
 
-
 def check_inline_svg(html):
     """Inline SVGs must be wrapped in .svg-fig figure, excluding icon SVGs."""
     issues = []
     # Find each <svg> opening tag with its attributes
-    for m in re.finditer(r'<svg\s+([^>]*)>', html):
+    for m in re.finditer(r'<svg\b([^>]*)>', html):
         attrs = m.group(1)
         pos = m.start()
         # Skip SVGs inside an attribute value (e.g. href="data:image/svg+xml,<svg ...>").
@@ -235,6 +234,15 @@ def check_inline_svg(html):
             issues.append(
                 f"Inline <svg> at pos {pos} is inside a <figure> without class=\"svg-fig\""
             )
+            continue
+        # Also validate the inline SVG XML syntax
+        svg_end = html.find("</svg>", m.end())
+        if svg_end != -1:
+            svg_block = html[pos:svg_end + 6]
+            try:
+                ET.fromstring(svg_block)
+            except Exception as e:
+                issues.append(f"Inline <svg> at pos {pos} has XML error: {e}")
     return issues
 
 
@@ -335,11 +343,29 @@ def check_spa_integration(html, path):
     return issues
 
 
+def _extract_brace_blocks(text):
+    """Extract balanced {...} blocks, handling nested braces correctly."""
+    blocks = []
+    depth = 0
+    start = -1
+    for i, c in enumerate(text):
+        if c == '{':
+            if depth == 0:
+                start = i
+            depth += 1
+        elif c == '}':
+            depth -= 1
+            if depth == 0 and start != -1:
+                blocks.append(text[start:i + 1])
+                start = -1
+    return blocks
+
+
 def _check_kg_nodes(nodes_text, cats, require_name=True):
     """Shared node validation (old and new format)."""
     issues = []
     node_ids = []
-    node_objs = re.findall(r'\{(.+?)\}', nodes_text, re.DOTALL)
+    node_objs = _extract_brace_blocks(nodes_text)
     if len(node_objs) < 1:
         issues.append("nodes array is empty (need at least 1)")
     else:
@@ -375,7 +401,7 @@ def _check_kg_nodes(nodes_text, cats, require_name=True):
 def _check_kg_links(links_text, node_ids):
     """Shared link validation."""
     issues = []
-    link_objs = re.findall(r'\{(.+?)\}', links_text, re.DOTALL)
+    link_objs = _extract_brace_blocks(links_text)
     if len(link_objs) < 1:
         issues.append("links array is empty (need at least 1)")
     else:
@@ -416,7 +442,7 @@ def check_kg_structure(html, path):
         else:
             rn_text = rn_match.group(1)
             # Check for nameZh + nameEn on each node
-            rn_objs = re.findall(r'\{(.+?)\}', rn_text, re.DOTALL)
+            rn_objs = _extract_brace_blocks(rn_text)
             for i, nobj in enumerate(rn_objs):
                 if 'nameZh' not in nobj:
                     issues.append(f"rawNodes #{i+1}: missing 'nameZh'")
@@ -435,7 +461,7 @@ def check_kg_structure(html, path):
         if not rl_match:
             issues.append("bilingual KG: missing 'rawLinks' array")
         else:
-            sub_issues = _check_kg_links(rl_match.group(1), node_ids if 'node_ids' in dir() else [])
+            sub_issues = _check_kg_links(rl_match.group(1), locals().get('node_ids', []))
             issues.extend(['bilingual KG: ' + s for s in sub_issues])
         return issues
 
@@ -527,7 +553,7 @@ def run_all(path):
         html = f.read()
 
     base_dir = os.path.dirname(path)
-    is_kg = "graphdata" in html.lower()
+    is_kg = 'graphData' in html and ('rawNodes' in html or 'const graphData' in html)
     basename = os.path.basename(path).lower()
     is_index = basename == "index.html" or basename.startswith("index-")
 

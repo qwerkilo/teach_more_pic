@@ -545,11 +545,11 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
     else showLanding();
   }
 
-  /* ===== 初始化卡片 ===== */
+  /* ===== 初始化卡片（事件委托） ===== */
   function buildCards() {
     if (!grid) return;
     var lang = 'zh'; try { var ls = localStorage.getItem('lang'); if (ls) lang = ls; } catch(e) {}
-    grid.innerHTML = '';
+    grid.textContent = '';
     views.forEach(function(v) {
       var m = v.id.match(/^lesson-(\d+)$/);
       if (!m) return;
@@ -563,9 +563,15 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
       card.className = 'lesson-card';
       card.setAttribute('data-lesson', num);
       card.innerHTML = '<span class="card-num">' + cardNum + '</span><span class="card-title">' + title + '</span>' + (desc ? '<span class="card-desc">' + desc + '</span>' : '');
-      card.addEventListener('click', function() { showLesson('lesson-' + num); });
       grid.appendChild(card);
     });
+  }
+  if (!grid._delegated) {
+    grid.addEventListener('click', function(e) {
+      var card = e.target.closest('.lesson-card');
+      if (card) showLesson('lesson-' + card.getAttribute('data-lesson'));
+    });
+    grid._delegated = true;
   }
   buildCards();
 

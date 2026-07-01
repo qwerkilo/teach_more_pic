@@ -50,6 +50,13 @@ def test_inline_svg_24px_icon_pass(): assert check_passes(v.check_inline_svg, '<
 def test_inline_svg_28px_icon_pass(): assert check_passes(v.check_inline_svg, '<span><svg width="28" height="28" viewBox="0 0 24 24"></svg></span>')
 def test_inline_svg_pie_in_figure_pass(): assert check_passes(v.check_inline_svg, '<figure class="svg-fig"><svg viewBox="0 0 100 100" width="240"></svg></figure>')
 def test_inline_svg_pie_no_figure_fail(): assert check_fails(v.check_inline_svg, '<svg viewBox="0 0 100 100" width="240"></svg>')
+def test_inline_svg_mixed_figure_and_bare_fail():
+    """B4: mixed case — one wrapped, one bare SVG — should flag the bare one."""
+    html = '<figure class="svg-fig"><svg width="200"></svg></figure><p><svg width="300" viewBox="0 0 100 100"></svg></p>'
+    assert check_fails(v.check_inline_svg, html)
+def test_inline_svg_figure_no_svgfig_fail():
+    """B4: <figure> without .svg-fig class should be flagged."""
+    assert check_fails(v.check_inline_svg, '<figure><svg width="300"></svg></figure>')
 
 # ==== check_component_consistency ====
 def test_lbox_trigger_target_pass(): assert check_passes(v.check_component_consistency, '<span data-lbox="chart-1"></span><div id="lbox-chart-1"></div>')
@@ -58,6 +65,9 @@ def test_panel_trigger_target_pass(): assert check_passes(v.check_component_cons
 def test_panel_trigger_no_target_fail(): assert check_fails(v.check_component_consistency, '<span data-panel="glossary"></span>')
 def test_popover_trigger_target_pass(): assert check_passes(v.check_component_consistency, '<button popovertarget="pop-1"></button><div id="pop-1" popover></div>')
 def test_popover_trigger_no_target_fail(): assert check_fails(v.check_component_consistency, '<button popovertarget="pop-1"></button>')
+def test_popover_target_missing_popover_attr_fail():
+    """B6: target exists but missing popover attribute — should flag."""
+    assert check_fails(v.check_component_consistency, '<button popovertarget="pop-1"></button><div id="pop-1">not a popover</div>')
 def test_dialog_with_close_pass(): assert check_passes(v.check_component_consistency, '<dialog><button onclick="this.closest(\'dialog\').close()">x</button></dialog>')
 def test_dialog_no_close_fail(): assert check_fails(v.check_component_consistency, '<dialog></dialog>')
 
@@ -161,6 +171,15 @@ def test_container_width_ok(): assert check_passes(v.check_container_width, '<st
 def test_container_width_too_small(): assert check_fails(v.check_container_width, '<style>.container { max-width: 600px; }</style>')
 def test_container_width_too_large(): assert check_fails(v.check_container_width, '<style>.container { max-width: 900px; }</style>')
 def test_container_width_no_rule_pass(): assert check_passes(v.check_container_width, '<html><p>hello</p></html>')
+def test_container_width_body_width_in_range_pass():
+    """B5: body max-width within range should pass."""
+    assert check_passes(v.check_container_width, '<style>body { max-width: 720px; }</style>')
+def test_container_width_body_width_outside_flags():
+    """B5: body max-width outside 700-800 should be flagged."""
+    assert check_fails(v.check_container_width, '<style>body { max-width: 600px; }</style>')
+def test_container_width_body_width_too_large_flags():
+    """B5: body max-width >900 should be flagged."""
+    assert check_fails(v.check_container_width, '<style>body { max-width: 960px; }</style>')
 
 # ==== check_svg_contrast ====
 def test_svg_contrast_no_svg_pass(): assert check_passes(v.check_svg_contrast, '<html><p>no svg</p></html>', '.')
