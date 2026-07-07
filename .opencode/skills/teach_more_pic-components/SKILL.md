@@ -1,11 +1,11 @@
 ---
 name: teach_more_pic-components
-description: 28 个视觉组件的完整索引、使用规则和选择决策指南。
+description: 33 个视觉组件的完整索引、使用规则和选择决策指南。
 ---
 
 # 视觉组件工具箱
 
-28 个组件，代码和用法在 `components/NN-name.md` 中。
+33 个组件（核心 #1-7 / 交互 #8-14 / 数据辅助 #15-28 / 微交互 #29-33），代码和用法在 `components/NN-name.md` 中。
 
 ## 核心组件（#1-7）
 
@@ -49,6 +49,11 @@ description: 28 个视觉组件的完整索引、使用规则和选择决策指�
 | 26 | 现代浏览器 API | `components/26-现代浏览器API组件.md` | 原生折叠/模态/Popover |
 | 27 | D3.js 可视化 | `components/27-D3.js 数据可视化.md` | 力导向/旭日/桑基图 |
 | 28 | ECharts GL 3D | `components/28-ECharts GL 3D可视化.md` | 3D柱状/散点/地球 |
+| 29 | 走马灯/轮播 | `components/29-走马灯轮播.md` | 图片/卡片自动轮播 |
+| 30 | 打字机效果 | `components/30-打字机效果.md` | 文本逐字输出 |
+| 31 | 视差滚动 | `components/31-视差滚动.md` | 背景视差滚动 |
+| 32 | 浮动提醒/Toast | `components/32-浮动提醒.md` | 临时提示条 |
+| 33 | 计数器徽章 | `components/33-计数器徽章.md` | 数字角标 + 等宽计数 |
 
 ## 使用规则
 

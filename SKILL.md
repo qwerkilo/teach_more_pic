@@ -170,7 +170,7 @@ Step 8: 本地 HTTP 服务器（可选）
 | 子 skill | 路径 | 涵盖内容 |
 |---|---|---|
 | teach_more_pic-core | `.opencode/skills/teach_more_pic-core/` | 核心约定、叙事框架、完整工作流 |
-| teach_more_pic-components | `.opencode/skills/teach_more_pic-components/` | 28 组件索引、使用规则、决策指南、折叠 JS 模式 |
+| teach_more_pic-components | `.opencode/skills/teach_more_pic-components/` | 33 组件索引（含 5 个微交互）、使用规则、决策指南、折叠 JS 模式 |
 | teach_more_pic-design | `.opencode/skills/teach_more_pic-design/` | 视觉纪律、写作风格、反模式、PPT JS 注意事项 |
 | teach_more_pic-refs | `.opencode/skills/teach_more_pic-refs/` | 页面类型、文件速查、失败模式表 |
 
