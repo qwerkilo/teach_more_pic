@@ -2,6 +2,11 @@
 
 **全技能内嵌，零外部依赖。** 本体已包含 `teach`、`grill-me`、`fireworks-tech-graph`、`knowledge-graph` 四个前置 skill。
 
+## Recent Fixes
+
+- **2026-07-07** 数值滚动动画 (#16) 修复 IntersectionObserverEntry 误用 `.dataset` 而非 `entry.target.dataset` 的 bug，涉及 `components/16-数值滚动动画.md` + `templates/lesson-starter.html`
+- **2026-07-07** CDN 优先 + 离线降级策略：第三方库使用 jsDelivr CDN，`libs/` 为离线 fallback
+
 ## 能力
 
 **33 个视觉组件**（完整索引见 SKILL.md）：
