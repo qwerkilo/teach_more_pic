@@ -41,12 +41,13 @@ description: 课程制作核心工作流 — 从需求拷问到完整 HTML 课�
 - 参考与风格偏好
 - **是否希望大量使用 3D 类型组件**（Three.js #25 / ECharts GL #28 / D3.js #27）
 
-🛑 STOP：等待用户确认后再进入 Step 1。
+🎯 **自适应节奏**：如果用户回复含"直接干/少问/快速/fast/go"等关键字，标记 `fast_pace=true`，跳过 Step 1/2/5/6/7 的所有 STOP，直接全量输出至 Step 4 验证。
+🛑 STOP（默认）：等待用户确认后再进入 Step 1。
 
 ## Step 1: 确定叙事框架（三幕）
 
 输出三段式大纲（每幕 2-3 句话），展示给用户确认。
-🛑 STOP：用户确认后进入 Step 2。
+🛑 STOP（默认）：用户确认后进入 Step 2。若 `fast_pace=true` 则跳过。
 
 ## Step 2: 设计视觉组件
 
@@ -55,7 +56,7 @@ description: 课程制作核心工作流 — 从需求拷问到完整 HTML 课�
 - 每个 SVG 创建后立即验证：`python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"`
 - SVG 需同时保存为 `lessons/svg/NNNN-slug.svg` + 内联到 HTML
 
-🛑 STOP：用户确认后进入 Step 3。
+🛑 STOP（默认）：用户确认后进入 Step 3。若 `fast_pace=true` 则跳过。
 
 ## Step 3: 写 HTML
 
@@ -102,20 +103,20 @@ lessons/NNNN-slug.html
 - EPUB 重建（如适用）
 - 课程间链接验证
 
-🛑 STOP：用户确认后进入 Step 6。
+🛑 STOP（默认）：用户确认后进入 Step 6。若 `fast_pace=true` 则跳过。
 
 ## Step 6: SPA 集成
 
 从 `templates/index-spa.html` 复制骨架。每课一个 `<section class="lesson-view" id="lesson-NNN">`。
 保留 `lessons/NNN-slug.html` 独立文件。
 
-🛑 STOP：预览正常后进入 Step 7。
+🛑 STOP（默认）：预览正常后进入 Step 7。若 `fast_pace=true` 则跳过。
 
 ## Step 7: 知识图谱更新
 
 从 `templates/kg-starter.html` 创建 `kg-项目名.html`。节点 `nameZh`/`nameEn` 双语。
 
-🛑 STOP：图谱显示正确后再提交。
+🛑 STOP（默认）：图谱显示正确后再提交。若 `fast_pace=true` 则跳过。
 
 ## Step 8: 本地 HTTP 服务器（可选）
 

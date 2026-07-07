@@ -59,20 +59,21 @@ Step 0: 需求拷问
      · 参考与风格偏好（是否有品牌色/参考课程/审美方向）
      · **是否希望大量使用 3D 类型组件**（Three.js #25 / ECharts GL #28 / D3.js 3D #27）——若回答"是"，三幕中尽可能多地使用 3D 组件
    - 🔴 未经过 grill-me 拷问不得开始 Step 1。拷问后输出一串 "设计读法" 确认方向，格式：`主题 → NNNN-slug.html · 三幕：矛盾/危机/转折 · 组件数 最少 6`
-  - 🛑 STOP：等待用户回复 "确认" 或 "可以，继续" 后再进入 Step 1。用户未明确确认不得推进。
+   - 🎯 **自适应节奏**：如果用户回复含"直接干/少问/快速/fast/go"等关键字，标记 `fast_pace=true`，跳过 Step 1/2/5/6/7 的所有 STOP，直接全量输出至 Step 4 验证。
+  - 🛑 STOP（默认）：等待用户回复 "确认" 或 "可以，继续" 后再进入 Step 1。用户未明确确认不得推进。
 
 Step 1: 确定叙事框架（三幕）
   - 第一幕：矛盾/背景（1-2段）
   - 第二幕：事件/危机（核心内容）
   - 第三幕：转折/遗产（收束+跨课连接）
   - 🔴 输出：三段式大纲（每幕 2-3 句话），展示给用户确认
-  - 🛑 STOP：用户回复 "确认" 或 "可以" 后再进入 Step 2。用户若提出修改意见 → 修改后再次展示 → 重复直到确认
+  - 🛑 STOP（默认）：用户回复 "确认" 或 "可以" 后再进入 Step 2。用户若提出修改意见 → 修改后再次展示 → 重复直到确认。若 `fast_pace=true` 则跳过。
 
 Step 2: 设计视觉组件
   - 从上方索引表按内容脉络选择组件：第一幕 2+ 个、第二幕 2+ 个、第三幕 2+ 个，**总量最少 6 个**（含标签组 #17）
   - 打开对应的 components/NN-name.md 读取完整 HTML/CSS/JS
   - 🔴 输出：组件选择清单（组件名+编号+所属幕），展示给用户确认
-  - 🛑 STOP：用户回复 "确认" 后再进入 Step 3。用户想增减组件 → 调整清单 → 再次展示确认
+  - 🛑 STOP（默认）：用户回复 "确认" 后再进入 Step 3。用户想增减组件 → 调整清单 → 再次展示确认。若 `fast_pace=true` 则跳过。
   - 🔴 每个 SVG 创建后立即验证：`python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"`
   - **SVG 需同时保存为磁盘文件和内联到 HTML**：`lessons/svg/NNNN-slug.svg` 保留为独立文件，同时将 SVG 内容复制到 HTML 中用 `<figure class="svg-fig">` 包裹内联
 
@@ -132,7 +133,7 @@ Step 5: 配套产出
   - 调用 `teach` skill（已内嵌 `.opencode/skills/teach/`）的 learning-record 模板，生成课程学习记录（含课程名、日期、关键概念列表）
   - EPUB 重建：如本课程隶属于某个系列（已有 `.epub` 文件），用 `teach` skill 的 EPUB 工具重新打包
   - 🔴 课程间链接验证：打开所有 `<a href="NNNN-slug.html">` 确认目标文件存在
-  - 🛑 STOP：用户确认配套产出无误后再进入 SPA 集成
+  - 🛑 STOP（默认）：用户确认配套产出无误后再进入 SPA 集成。若 `fast_pace=true` 则跳过。
 
 Step 6: SPA 集成
   - 从 `templates/index-spa.html` 复制骨架作为 `index.html`，插入各课的
@@ -143,14 +144,14 @@ Step 6: SPA 集成
   - SPA 切换 JS 已存在于 `index.html` 中，通过 `id` 控制显示/隐藏
   - 保留 `lessons/NNN-slug.html` 独立文件，供非 SPA 场景直接打开
   - 🔴 将本 skill 的 `libs/` 下所有文件（echarts.min.js、echarts-gl.min.js、three.min.js、three.module.js、d3.min.js、d3-sankey.min.js）完整复制到目标项目的 `libs/` 目录，确保课程始终使用固定版本离线包
-  - 🛑 STOP：确认 SPA 预览正常后再进入 Step 7
+  - 🛑 STOP（默认）：确认 SPA 预览正常后再进入 Step 7。若 `fast_pace=true` 则跳过。
 
 Step 7: 知识图谱更新
   - 新项目从 `templates/kg-starter.html` 复制到项目根目录为 `kg-项目名.html`；已有项目在已有 `kg-*.html` 中追加
   - 提取课程中的关键概念/术语作为节点，课程间的链接作为边
   - 节点名使用 `nameZh`/`nameEn` 双字段，图谱通过 L 键切换语言
   - 🔴 验证：新节点 id 不与已有节点重复
-  - 🛑 STOP：确认图谱显示正确后再提交最终成果
+  - 🛑 STOP（默认）：确认图谱显示正确后再提交最终成果。若 `fast_pace=true` 则跳过。
 
 Step 8: 本地 HTTP 服务器（可选）
   - 从 `templates/start-server.ps1` 复制到项目根目录
