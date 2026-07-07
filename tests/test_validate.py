@@ -217,3 +217,27 @@ def test_svg_contrast_dark_fill_pass():
     svgname = os.path.basename(tmpsvg)
     try: assert check_passes(v.check_svg_contrast, f'<html><img src="{svgname}"></html>', os.path.dirname(tmpsvg))
     finally: os.unlink(tmpsvg)
+
+# ==== check_meta_description_exists ====
+def test_meta_desc_exists_pass(): assert check_passes(v.check_meta_description_exists, '<html><head><meta name="description" content="foo"></head></html>')
+def test_meta_desc_missing_fail(): assert check_fails(v.check_meta_description_exists, '<html><head></head></html>')
+
+# ==== check_tag_group_exists ====
+def test_tag_group_present_pass(): assert check_passes(v.check_tag_group_exists, '<html><div class="tag-group"></div></html>')
+def test_tag_group_missing_fail(): assert check_fails(v.check_tag_group_exists, '<html><p>no tags</p></html>')
+
+# ==== check_quiz_options_strict_three ====
+def test_quiz_three_opts_per_lang_pass(): assert check_passes(v.check_quiz_options_strict_three, '<div class="quiz-question"><button class="quiz-option" data-lang="zh">A</button><button class="quiz-option" data-lang="zh">B</button><button class="quiz-option" data-lang="zh">C</button><button class="quiz-option" data-lang="en">A</button><button class="quiz-option" data-lang="en">B</button><button class="quiz-option" data-lang="en">C</button></div>')
+def test_quiz_two_opts_per_lang_fails(): assert check_fails(v.check_quiz_options_strict_three, '<div class="quiz-question"><button class="quiz-option" data-lang="zh">A</button><button class="quiz-option" data-lang="zh">B</button><button class="quiz-option" data-lang="en">A</button><button class="quiz-option" data-lang="en">B</button></div>')
+def test_quiz_four_opts_per_lang_fails(): assert check_fails(v.check_quiz_options_strict_three, '<div class="quiz-question"><button class="quiz-option" data-lang="zh">A</button><button class="quiz-option" data-lang="zh">B</button><button class="quiz-option" data-lang="zh">C</button><button class="quiz-option" data-lang="zh">D</button></div>')
+def test_quiz_no_lang_skips(): assert check_passes(v.check_quiz_options_strict_three, '<div class="quiz-question"><button>a</button><button>b</button></div>')
+
+# ==== check_print_style ====
+def test_print_style_present_pass(): assert check_passes(v.check_print_style, '<html><style>@media print { body { color: black; } }</style></html>')
+def test_print_style_missing_fail(): assert check_fails(v.check_print_style, '<html><style>body { color: red; }</style></html>')
+
+# ==== check_echarts_gl_geojson_compat ====
+def test_echarts_gl_no_geojson_pass(): assert check_passes(v.check_echarts_gl_geojson_compat, '<html>bar3D</html>', '.')
+def test_echarts_gl_js_geojson_pass(): assert check_passes(v.check_echarts_gl_geojson_compat, '<html>map3D<script src="guangdong.js"></script></html>', '.')
+def test_echarts_gl_json_geojson_fails(): assert check_fails(v.check_echarts_gl_geojson_compat, '<html>globe<script src="china.json"></script></html>', '.')
+def test_echarts_gl_no_gl_skips(): assert check_passes(v.check_echarts_gl_geojson_compat, '<html><p>no echarts gl</p></html>', '.')

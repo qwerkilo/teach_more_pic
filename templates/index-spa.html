@@ -436,27 +436,15 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   <button class="lang-btn" data-lang-btn aria-label="切换语言" title="切换语言" type="button">中</button>
 </div>
 <nav class="tp-panel">
-  <div class="tp-grid" role="listbox" aria-label="选择主题">
+    <div class="tp-grid" role="listbox" aria-label="选择主题">
+    <!-- 7 个静态主题按钮（预览用）；其余由 JS 动态生成 -->
     <button class="tp-item active" data-theme="warm" style="--tp-color:#c0392b;">暖色</button>
     <button class="tp-item" data-theme="apple" style="--tp-color:#0066cc;">Apple</button>
-    <button class="tp-item" data-theme="minimax" style="--tp-color:#ff5530;">Minimax</button>
-    <button class="tp-item" data-theme="nvidia" style="--tp-color:#76b900;">NVIDIA</button>
     <button class="tp-item" data-theme="spotify" style="--tp-color:#1ed760;">Spotify</button>
-    <button class="tp-item" data-theme="tesla" style="--tp-color:#3e6ae1;">Tesla</button>
-    <button class="tp-item" data-theme="airbnb" style="--tp-color:#ff385c;">Airbnb</button>
-    <button class="tp-item" data-theme="airtable" style="--tp-color:#181d26;">Airtable</button>
-    <button class="tp-item" data-theme="binance" style="--tp-color:#fcd535;">Binance</button>
-    <button class="tp-item" data-theme="bmw-m" style="--tp-color:#3c3c3c;">BMW M</button>
-    <button class="tp-item" data-theme="claude" style="--tp-color:#cc785c;">Claude</button>
-    <button class="tp-item" data-theme="cursor" style="--tp-color:#f54e00;">Cursor</button>
-    <button class="tp-item" data-theme="dell-1996" style="--tp-color:#e91d2a;">Dell 1996</button>
-    <button class="tp-item" data-theme="figma" style="--tp-color:#000000;">Figma</button>
-    <button class="tp-item" data-theme="hp" style="--tp-color:#024ad8;">HP</button>
-    <button class="tp-item" data-theme="ibm" style="--tp-color:#0f62fe;">IBM</button>
-    <button class="tp-item" data-theme="nike" style="--tp-color:#111111;">Nike</button>
+    <button class="tp-item" data-theme="nvidia" style="--tp-color:#76b900;">NVIDIA</button>
     <button class="tp-item" data-theme="notion" style="--tp-color:#5645d4;">Notion</button>
     <button class="tp-item" data-theme="x.ai" style="--tp-color:#636363;">x.ai</button>
-    <button class="tp-item" data-theme="zapier" style="--tp-color:#ff4f00;">Zapier</button>
+    <button class="tp-item" data-theme="binance" style="--tp-color:#fcd535;">Binance</button>
   </div>
 </nav>
 
@@ -464,14 +452,16 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 (function() {
   'use strict';
 
-  /* ===== 主题 ===== */
-  var t = ['warm','apple','minimax','nvidia','spotify','tesla','airbnb','airtable','binance','bmw-m','claude','cursor','dell-1996','figma','hp','ibm','nike','notion','x.ai','zapier'];
-  try { var s = localStorage.getItem('theme'); if (s && t.indexOf(s) > -1) document.documentElement.dataset.theme = s; } catch(e) {}
-  var i = t.indexOf(document.documentElement.dataset.theme); if (i < 0) i = 0;
+  /* ===== 主题（单一数据源，与 lesson-starter.html 同步） ===== */
+  var themes=[{id:'warm',color:'#c0392b',label:'暖色'},{id:'apple',color:'#0066cc',label:'Apple'},{id:'minimax',color:'#ff5530',label:'Minimax'},{id:'nvidia',color:'#76b900',label:'NVIDIA'},{id:'spotify',color:'#1ed760',label:'Spotify'},{id:'tesla',color:'#3e6ae1',label:'Tesla'},{id:'airbnb',color:'#ff385c',label:'Airbnb'},{id:'airtable',color:'#181d26',label:'Airtable'},{id:'binance',color:'#fcd535',label:'Binance'},{id:'bmw-m',color:'#3c3c3c',label:'BMW M'},{id:'claude',color:'#cc785c',label:'Claude'},{id:'cursor',color:'#f54e00',label:'Cursor'},{id:'dell-1996',color:'#e91d2a',label:'Dell 1996'},{id:'figma',color:'#000000',label:'Figma'},{id:'hp',color:'#024ad8',label:'HP'},{id:'ibm',color:'#0f62fe',label:'IBM'},{id:'nike',color:'#111111',label:'Nike'},{id:'notion',color:'#5645d4',label:'Notion'},{id:'x.ai',color:'#636363',label:'x.ai'},{id:'zapier',color:'#ff4f00',label:'Zapier'}];
+  /* 补齐缺失的 theme 按钮 */
+  !function(){var g=document.querySelector('.tp-grid');if(!g)return;var e={};g.querySelectorAll('.tp-item').forEach(function(b){e[b.dataset.theme]=1;});themes.forEach(function(t){if(!e[t.id]){var b=document.createElement('button');b.className='tp-item';b.dataset.theme=t.id;b.style.setProperty('--tp-color',t.color);b.textContent=t.label;g.appendChild(b);}});}();
+  try { var s = localStorage.getItem('theme'); if (s) { var fi = themes.findIndex(function(t){return t.id===s;}); if (fi > -1) document.documentElement.dataset.theme = s; } } catch(e) {}
+  var ci = themes.findIndex(function(t){return t.id===document.documentElement.dataset.theme;}); if (ci < 0) ci = 0;
   var d = document.documentElement;
 
   function applyTheme(th) {
-    d.dataset.theme = th; i = t.indexOf(th);
+    d.dataset.theme = th; ci = themes.findIndex(function(t){return t.id===th;});
     try { localStorage.setItem('theme', th); } catch(e) {}
     document.querySelectorAll('.tp-item').forEach(function(x) { x.classList.toggle('active', x.dataset.theme === th); });
   }
@@ -491,7 +481,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   } catch(e) {}
   try {
     document.addEventListener('keydown', function(e) {
-      if (e.key === 't' && !e.ctrlKey && !e.metaKey) { applyTheme(t[(i + 1) % t.length]); }
+      if (e.key === 't' && !e.ctrlKey && !e.metaKey) { applyTheme(themes[(ci + 1) % themes.length].id); }
     });
   } catch(e) {}
 

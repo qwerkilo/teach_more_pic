@@ -574,6 +574,63 @@ def check_cover_structure(html):
     return issues
 
 
+def check_meta_description_exists(html):
+    """Meta description tag must exist (not just be non-TODO)."""
+    if not re.search(r'<meta\s+name="description"\s+content="', html):
+        return ["Missing <meta name='description'> tag"]
+    return []
+
+
+def check_tag_group_exists(html):
+    """Lesson must contain tag group (#17) for keyword summary."""
+    if 'class="tag-group"' not in html:
+        return ["Missing .tag-group (component #17 is required per lesson)"]
+    return []
+
+
+def check_quiz_options_strict_three(html):
+    """Each quiz question must have exactly 3 options per language."""
+    issues = []
+    questions = re.findall(
+        r'<div[^>]*class="[^"]*quiz-question[^"]*"[^>]*>.*?</div>', html, re.DOTALL
+    )
+    for i, q in enumerate(questions, 1):
+        langs = re.findall(r'data-lang="([^"]+)"', q)
+        if not langs:
+            continue
+        for lang in set(langs):
+            opts = re.findall(
+                r'<button[^>]*class="[^"]*quiz-option[^"]*"[^>]*data-lang="' + lang + r'"', q
+            )
+            if len(opts) != 3:
+                issues.append(f"Quiz Q{i} ({lang}): {len(opts)} options (expected exactly 3)")
+    return issues
+
+
+def check_print_style(html):
+    """Must have @media print styles."""
+    if "@media print" not in html:
+        return ["Missing @media print stylesheet"]
+    return []
+
+
+def check_echarts_gl_geojson_compat(html, base_dir):
+    """ECharts GL GeoJSON must be loaded as .js for file:// compatibility."""
+    issues = []
+    if "bar3D" in html or "map3D" in html or "globe" in html:
+        geojson_js = re.findall(r'<script[^>]*src="([^"]+\.js)"', html)
+        has_geojson_js = any(
+            'guangdong' in src or 'china' in src or 'geojson' in src or 'map' in src.lower()
+            for src in geojson_js
+        )
+        # Check if any .json GeoJSON is loaded (which breaks on file://)
+        geojson_json = re.findall(r'<script[^>]*src="([^"]+\.json)"', html)
+        if geojson_json:
+            issues.append(f"GeoJSON loaded as .json: {geojson_json} (use .js files for file:// compatibility)")
+        # If ECharts GL is used but no GeoJSON at all, that's OK (user may use globe)
+    return issues
+
+
 def check_summary_cards(html):
     """3 summary cards should exist before quiz section."""
     issues = []
@@ -628,6 +685,11 @@ def run_all(path):
             ("Cover page structure (badge+h1+subtitle)", check_cover_structure(html)),
             ("Summary cards (3 before quiz)", check_summary_cards(html)),
             ("SPA integration (lesson-view section)", check_spa_integration(html, path)),
+            ("Meta description tag exists", check_meta_description_exists(html)),
+            ("Tag group #17 exists", check_tag_group_exists(html)),
+            ("Quiz: exactly 3 options per language", check_quiz_options_strict_three(html)),
+            ("@media print stylesheet", check_print_style(html)),
+            ("ECharts GL GeoJSON .js compat", check_echarts_gl_geojson_compat(html, base_dir)),
         ]
     else:
         if is_kg:

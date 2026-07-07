@@ -21,7 +21,7 @@ Use alongside the `teach` skill (已内嵌见 `.opencode/skills/teach/`)。The b
 ## 前置条件
 
 - 已内嵌：`fireworks-tech-graph`、`grill-me`、`teach`、`knowledge-graph` 四个 skill（见 `.opencode/skills/`）
-- 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、echarts-gl.min.js、three.min.js（UMD 回退）、three.module.js（ESM 主入口，r185 WebGPU）、d3.min.js、d3-sankey.min.js、magicui-effects.css，课程创建时完整复制到目标项目即可
+- 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、echarts-gl.min.js、three.min.js（UMD 回退）、three.module.js（ESM 主入口）、d3.min.js、d3-sankey.min.js、magicui-effects.css（13 种零依赖装饰效果），课程创建时完整复制到目标项目即可
 - Three.js WebGPU/TSL 需通过 `<script type="importmap">` 导入，详见 `25-Three.js 3D组件.md`
 
 - `cairosvg` (可选, `pip install cairosvg`) — for SVG → PNG export

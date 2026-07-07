@@ -49,7 +49,7 @@ This repo defines an OpenCode **skill** (`teach_more_pic`) for creating bilingua
 
 ```bash
 python scripts/validate-lesson.py lessons/NNNN-slug.html   # 21 checks
-python -m pytest tests/ -v                                   # 109 tests
+python -m pytest tests/ -v                                   # 62 tests
 python scripts/run-tests.ps1                                 # batch all examples
 python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 ```

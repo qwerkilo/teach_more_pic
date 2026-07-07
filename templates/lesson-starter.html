@@ -63,9 +63,9 @@
 }
 
 [data-theme="bmw-m"] {
-  --bg: #000000; --text: #ffffff; --accent: #ffffff;
-  --accent-text: #000000; --surface: #1a1a1a; --border: #3c3c3c;
-  --surface-raised: #262626; --muted: #7e7e7e;
+  --bg: #1a1a1a; --text: #ffffff; --accent: #ffffff;
+  --accent-text: #1a1a1a; --surface: #262626; --border: #3c3c3c;
+  --surface-raised: #333333; --muted: #7e7e7e;
   --link: #ffffff; --success: #0fa336; --warning: #f4b400; --error: #dc2626;
   --font: "BMWTypeNextLatin",sans-serif; --font-h: "BMWTypeNextLatin",sans-serif;
   --lh: 1.4;
@@ -90,9 +90,9 @@
 }
 
 [data-theme="dell-1996"] {
-  --bg: #ffffff; --text: #000000; --accent: #e91d2a;
+  --bg: #ffffff; --text: #1a1a1a; --accent: #e91d2a;
   --accent-text: #ffffff; --surface: #ffffff; --border: #e0e0e0;
-  --surface-raised: #ffffff; --muted: #666666;
+  --surface-raised: #f5f5f5; --muted: #666666;
   --link: #0000ee; --success: #16a34a; --warning: #d97706; --error: #dc2626;
   --font: "Times New Roman",sans-serif; --font-h: "Helvetica",sans-serif;
   --lh: 1.35;
@@ -164,7 +164,7 @@
 [data-theme="spotify"] {
   --bg: #121212; --text: #ffffff; --accent: #1ed760;
   --accent-text: #000000; --surface: #181818; --border: #4d4d4d;
-  --surface-raised: #1f1f1f; --muted: #b3b3b3;
+  --surface-raised: #282828; --muted: #b3b3b3;
   --link: #1ed760; --success: #1ed760; --warning: #ffa42b; --error: #f3727f;
   --font: "SpotifyMixUI",sans-serif; --font-h: "SpotifyMixUITitle",sans-serif;
   --lh: 1.5; --radius: 8px; --anim-dur: 0.3s; --anim-y: 0px; --h2-border: 1px solid #4d4d4d; --h1-size: 1.5rem;
@@ -320,9 +320,14 @@ button:active { transform: scale(0.98); }
 .sc-step.done .sc-label { color: var(--success); }
 
 /* 数值滚动动画 (#16) — 见 JS 部分 */
-/* 标签/徽章组 (#17) */
+/* 标签/徽章组 (#17) — 5 色语义：蓝=正常，红=危机，绿=救助，橙=监管，紫=理论 */
 .tag-group { display: flex; flex-wrap: wrap; gap: 6px; margin: 1rem 0; }
-.tag { display: inline-block; padding: 0.2em 0.8em; border-radius: 20px; font-size: 0.78rem; font-weight: 600; background: color-mix(in srgb, var(--accent) 15%, var(--bg)); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+.tag { display: inline-block; padding: 0.2em 0.8em; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+.tag-blue { background: color-mix(in srgb, var(--accent) 15%, var(--bg)); color: var(--accent); }
+.tag-red { background: color-mix(in srgb, var(--error) 15%, var(--bg)); color: var(--error); }
+.tag-green { background: color-mix(in srgb, var(--success) 15%, var(--bg)); color: var(--success); }
+.tag-orange { background: color-mix(in srgb, var(--warning) 15%, var(--bg)); color: var(--warning); }
+.tag-purple { background: color-mix(in srgb, var(--accent) 20%, var(--bg)); color: color-mix(in srgb, var(--accent) 80%, var(--text)); }
 
 /* 提示框/告警条 (#18) */
 .callout { margin: 1.2rem 0; padding: 0.8em 1em; border-radius: var(--radius); font-size: 0.88rem; display: flex; align-items: flex-start; gap: 10px; }
@@ -732,26 +737,14 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 </div>
 <nav class="tp-panel">
   <div class="tp-grid" role="listbox" aria-label="选择主题">
+    <!-- 7 个静态主题按钮（预览用）；其余由 JS 动态生成 -->
     <button class="tp-item active" data-theme="warm" style="--tp-color:#c0392b;">暖色</button>
     <button class="tp-item" data-theme="apple" style="--tp-color:#0066cc;">Apple</button>
-    <button class="tp-item" data-theme="minimax" style="--tp-color:#ff5530;">Minimax</button>
-    <button class="tp-item" data-theme="nvidia" style="--tp-color:#76b900;">NVIDIA</button>
     <button class="tp-item" data-theme="spotify" style="--tp-color:#1ed760;">Spotify</button>
-    <button class="tp-item" data-theme="tesla" style="--tp-color:#3e6ae1;">Tesla</button>
-    <button class="tp-item" data-theme="airbnb" style="--tp-color:#ff385c;">Airbnb</button>
-    <button class="tp-item" data-theme="airtable" style="--tp-color:#181d26;">Airtable</button>
-    <button class="tp-item" data-theme="binance" style="--tp-color:#fcd535;">Binance</button>
-    <button class="tp-item" data-theme="bmw-m" style="--tp-color:#3c3c3c;">BMW M</button>
-    <button class="tp-item" data-theme="claude" style="--tp-color:#cc785c;">Claude</button>
-    <button class="tp-item" data-theme="cursor" style="--tp-color:#f54e00;">Cursor</button>
-    <button class="tp-item" data-theme="dell-1996" style="--tp-color:#e91d2a;">Dell 1996</button>
-    <button class="tp-item" data-theme="figma" style="--tp-color:#000000;">Figma</button>
-    <button class="tp-item" data-theme="hp" style="--tp-color:#024ad8;">HP</button>
-    <button class="tp-item" data-theme="ibm" style="--tp-color:#0f62fe;">IBM</button>
-    <button class="tp-item" data-theme="nike" style="--tp-color:#111111;">Nike</button>
+    <button class="tp-item" data-theme="nvidia" style="--tp-color:#76b900;">NVIDIA</button>
     <button class="tp-item" data-theme="notion" style="--tp-color:#5645d4;">Notion</button>
     <button class="tp-item" data-theme="x.ai" style="--tp-color:#636363;">x.ai</button>
-    <button class="tp-item" data-theme="zapier" style="--tp-color:#ff4f00;">Zapier</button>
+    <button class="tp-item" data-theme="binance" style="--tp-color:#fcd535;">Binance</button>
   </div>
 </nav>
 <nav class="toc-panel"><ul class="toc-list"></ul></nav>
@@ -759,12 +752,15 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
 <!-- ===== PPT 质感增强 JS ===== -->
 <script>
 (function(){
-var t=['warm','apple','minimax','nvidia','spotify','tesla','airbnb','airtable','binance','bmw-m','claude','cursor','dell-1996','figma','hp','ibm','nike','notion','x.ai','zapier'];
+/* 单一数据源：20 个主题（单点修改，自动同步） */
+var themes=[{id:'warm',color:'#c0392b',label:'暖色'},{id:'apple',color:'#0066cc',label:'Apple'},{id:'minimax',color:'#ff5530',label:'Minimax'},{id:'nvidia',color:'#76b900',label:'NVIDIA'},{id:'spotify',color:'#1ed760',label:'Spotify'},{id:'tesla',color:'#3e6ae1',label:'Tesla'},{id:'airbnb',color:'#ff385c',label:'Airbnb'},{id:'airtable',color:'#181d26',label:'Airtable'},{id:'binance',color:'#fcd535',label:'Binance'},{id:'bmw-m',color:'#3c3c3c',label:'BMW M'},{id:'claude',color:'#cc785c',label:'Claude'},{id:'cursor',color:'#f54e00',label:'Cursor'},{id:'dell-1996',color:'#e91d2a',label:'Dell 1996'},{id:'figma',color:'#000000',label:'Figma'},{id:'hp',color:'#024ad8',label:'HP'},{id:'ibm',color:'#0f62fe',label:'IBM'},{id:'nike',color:'#111111',label:'Nike'},{id:'notion',color:'#5645d4',label:'Notion'},{id:'x.ai',color:'#636363',label:'x.ai'},{id:'zapier',color:'#ff4f00',label:'Zapier'}];
+/* 补齐缺失的 theme 按钮 */
+!function(){var g=document.querySelector('.tp-grid');if(!g)return;var e={};g.querySelectorAll('.tp-item').forEach(function(b){e[b.dataset.theme]=1;});themes.forEach(function(t){if(!e[t.id]){var b=document.createElement('button');b.className='tp-item';b.dataset.theme=t.id;b.style.setProperty('--tp-color',t.color);b.textContent=t.label;g.appendChild(b);}});}();
 var buildTOC=function(){var tl=document.querySelector('.toc-list');if(!tl)return;var lang='zh';try{var ls=localStorage.getItem('lang');if(ls)lang=ls;}catch(e){}var allH2s=document.querySelectorAll('h2');var h2s=[];allH2s.forEach(function(h){if(!h.hasAttribute('data-lang')||h.dataset.lang===lang)h2s.push(h);});tl.textContent='';h2s.forEach(function(h,i){var li=document.createElement('li');li.className='toc-item';li.textContent=h.textContent;li.addEventListener('click',function(){h.scrollIntoView({behavior:'smooth'});var p=document.querySelector('.toc-panel');if(p)p.classList.remove('open');});tl.appendChild(li);});if(window.__tocObserver)window.__tocObserver.disconnect();window.__tocObserver=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var idx=Array.from(h2s).indexOf(e.target);document.querySelectorAll('.toc-item').forEach(function(x,i){x.classList.toggle('active',i===idx);});}});},{rootMargin:'-80px 0px -60% 0px'});h2s.forEach(function(h){window.__tocObserver.observe(h);});};
-try{var s=localStorage.getItem('theme');if(s&&t.indexOf(s)>-1){document.documentElement.dataset.theme=s;}}catch(e){}
-var i=t.indexOf(document.documentElement.dataset.theme);if(i<0)i=0;var d=document.documentElement;
+try{var s=localStorage.getItem('theme');if(s){var fi=themes.findIndex(function(t){return t.id===s;});if(fi>-1)document.documentElement.dataset.theme=s;}}catch(e){}
+var ci=themes.findIndex(function(t){return t.id===document.documentElement.dataset.theme;});if(ci<0)ci=0;var d=document.documentElement;
 try{document.querySelectorAll('.tp-item').forEach(function(b){b.addEventListener('click',function(){
-var th=this.dataset.theme;d.dataset.theme=th;i=t.indexOf(th);try{localStorage.setItem('theme',th);}catch(e){}
+var th=this.dataset.theme;d.dataset.theme=th;ci=themes.findIndex(function(t){return t.id===th;});try{localStorage.setItem('theme',th);}catch(e){}
 document.querySelectorAll('.tp-item').forEach(function(x){x.classList.toggle('active',x.dataset.theme===th);});
 document.querySelector('.tp-panel').classList.remove('open');});});
 }catch(e){}
@@ -772,9 +768,9 @@ try{document.querySelector('.tp-btn-toggle').addEventListener('click',function()
 document.querySelector('.tp-panel').classList.toggle('open');});
 }catch(e){}
 try{var mc=document.querySelector('.meteors-container');if(mc){for(var mi=0;mi<15;mi++){var m=document.createElement('div');m.className='meteor';m.style.setProperty('--angle',-215+'deg');m.style.left=Math.random()*innerWidth+'px';m.style.animationDelay=(Math.random()*1+0.2)+'s';m.style.animationDuration=(Math.floor(Math.random()*8+2))+'s';mc.appendChild(m);}}}catch(e){}
-try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){i=(i+1)%t.length;d.dataset.theme=t[i];
-try{localStorage.setItem('theme',t[i]);}catch(e){}
-document.querySelectorAll('.tp-item').forEach(function(x){x.classList.toggle('active',x.dataset.theme===t[i]);});}});
+try{document.addEventListener('keydown',function(e){if(e.key==='t'&&!e.ctrlKey&&!e.metaKey){ci=(ci+1)%themes.length;d.dataset.theme=themes[ci].id;
+try{localStorage.setItem('theme',themes[ci].id);}catch(e){}
+document.querySelectorAll('.tp-item').forEach(function(x){x.classList.toggle('active',x.dataset.theme===themes[ci].id);});}});
 }catch(e){}
 try{document.addEventListener('click',function(e){if(!e.target.closest('.ui-toolbar')&&!e.target.closest('.tp-panel')){
 document.querySelector('.tp-panel').classList.remove('open');}});

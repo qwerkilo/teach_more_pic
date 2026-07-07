@@ -29,11 +29,11 @@ description: 可选页面类型、文件速查、失败模式和故障排除。
 | `templates/comparison-side-by-side.svg` | 左右对比 SVG | Step 2/5 |
 | `templates/timeline-horizontal.svg` | 水平时间线 | Step 2/5 |
 | `examples/*.html` | 28+ 组件独立示例 | Step 2 |
-| `components/NN-name.md` | 组件代码 + 降级说明（28 个） | Step 2/3 |
+| `components/NN-name.md` | 组件代码 + 降级说明（33 个） | Step 2/3 |
 | `references/decision-guide.md` | 组件选择矩阵 + 组合示例 | Step 2 |
 | `references/page-types.md` | 6 种页面类型完整代码 | 可选页面类型 |
-| `scripts/validate-lesson.py` | 课程验证脚本（18 项检查） | Step 4 |
-| `tests/test_validate.py` | 验证脚本 pytest 测试（99 项） | 开发 |
+| `scripts/validate-lesson.py` | 课程验证脚本（21 项检查） | Step 4 |
+| `tests/test_validate.py` | 验证脚本 pytest 测试（62 项） | 开发 |
 | `libs/magicui-effects.css` | Magic UI 装饰效果（13 种） | 模板自动加载 |
 | `libs/` | 离线包（echarts/three/d3） | Step 6 |
 
