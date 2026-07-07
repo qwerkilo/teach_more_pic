@@ -16,15 +16,15 @@ argument-hint: "What lesson to create or redesign?"
 
 # teach_more_pic — 视觉增强课程制作
 
-Use alongside the base `teach` skill. The base `teach` handles workspace structure, mission, and learning records; this skill handles **visual components** inside each lesson.
+Use alongside the `teach` skill (已内嵌见 `.opencode/skills/teach/`)。The base `teach` handles workspace structure, mission, and learning records; this skill handles **visual components** inside each lesson.
 
 ## 前置条件
 
-- `fireworks-tech-graph` skill available (for SVG diagram creation)
+- 已内嵌：`fireworks-tech-graph`、`grill-me`、`teach`、`knowledge-graph` 四个 skill（见 `.opencode/skills/`）
 - 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、echarts-gl.min.js、three.min.js（UMD 回退）、three.module.js（ESM 主入口，r185 WebGPU）、d3.min.js、d3-sankey.min.js、magicui-effects.css，课程创建时完整复制到目标项目即可
 - Three.js WebGPU/TSL 需通过 `<script type="importmap">` 导入，详见 `25-Three.js 3D组件.md`
 
-- `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
+- `cairosvg` (可选, `pip install cairosvg`) — for SVG → PNG export
 - Magic UI CSS 效果：`libs/magicui-effects.css` 共享 13 种零依赖装饰效果（shiny-text/noise/dot/grid/meteors/border-glow/glare-hover/gradient-text/blur/neon-card/spotlight-card/interactive-btn/typing-cursor），所有模板和示例均已引用
 
 ## 核心约定
@@ -55,7 +55,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 
 | # | 组件 | 文件 | 说明 |
 |---|---|---|---|
-| 1 | SVG 流程图 | `components/01-SVG 流程图.md` | 四色语义流程图，依赖 fireworks-tech-graph |
+| 1 | SVG 流程图 | `components/01-SVG 流程图.md` | 四色语义流程图，使用已内嵌的 fireworks-tech-graph |
 | 2 | 角色卡片 | `components/02-角色卡片.md` | 网格化角色介绍卡片 emoji + 名称 + 描述 |
 | 3 | CSS 时间线 | `components/03-CSS 时间线.md` | 垂直时间轴，5+ 事件使用 |
 | 4 | CSS 条形图 | `components/04-CSS 条形图.md` | 水平数据条，归一化百分比 |
@@ -182,7 +182,7 @@ c.addEventListener('transitionend',function h(){c.removeEventListener('transitio
 
 ```
 Step 0: 需求拷问
-  - 使用 `grill-me` skill 对用户进行需求拷问，澄清：
+  - 使用 `grill-me` skill（已内嵌 `.opencode/skills/grill-me/`）对用户进行需求拷问，澄清：
      · 课程主题与目标受众（谁学、为什么学）
      · 核心叙事矛盾（三幕中"冲突"是什么）
      · 预期数据/数字（有哪些可量化的内容可可视化）
@@ -259,7 +259,7 @@ Step 4: 验证
   - 🛑 STOP：全部验证通过后再进入 Step 5
 
 Step 5: 配套产出
-  - 调用 base `teach` skill 的 learning-record 模板，生成课程学习记录（含课程名、日期、关键概念列表）
+  - 调用 `teach` skill（已内嵌 `.opencode/skills/teach/`）的 learning-record 模板，生成课程学习记录（含课程名、日期、关键概念列表）
   - EPUB 重建：如本课程隶属于某个系列（已有 `.epub` 文件），用 `teach` skill 的 EPUB 工具重新打包
   - 🔴 课程间链接验证：打开所有 `<a href="NNNN-slug.html">` 确认目标文件存在
   - 🛑 STOP：用户确认配套产出无误后再进入 SPA 集成

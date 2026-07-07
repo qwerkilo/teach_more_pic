@@ -1,54 +1,6 @@
 # teach_more_pic — 视觉增强课程制作
 
-配合 [base `teach` skill](https://github.com/mattpocock/skills/tree/main/teach) 使用的视觉增强技能，为每节课程注入 PPT 级的视觉品质。
-
-> 需要先安装 base `teach` skill——本项目是它的视觉增强插件，两者缺一不可。
-
-## 安装
-
-### 前提
-
-本技能需要 [opencode](https://opencode.ai) 环境。已安装了以下 base skill：
-- [teach](https://github.com/mattpocock/skills/tree/main/teach) — 基础课程制作技能（必装）
-- [grill-me](https://github.com/mattpocock/skills/tree/main/grill-me) — 需求拷问技能（**必备**，制课前对用户进行需求澄清）
-- [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) — SVG 流程图创建（**必备**，所有 SVG 流程图依赖此 skill）
-- [knowledge-graph-map](https://github.com/AragornZJF/knowledge-graph-map) — 知识图谱可视化（**必备**，课程完成后创建知识点图谱）
-
-### 发给 agent 安装（推荐）
-
-将以下内容发送给 OpenCode / Claude / Cursor 等 AI 助手一次安装所有前置技能：
-
-```
-帮我安装以下技能：
-1. teach — https://github.com/mattpocock/skills/tree/main/teach
-2. grill-me — https://github.com/mattpocock/skills/tree/main/grill-me
-3. fireworks-tech-graph — https://github.com/yizhiyanhua-ai/fireworks-tech-graph
-4. knowledge-graph-map — https://github.com/AragornZJF/knowledge-graph-map
-5. teach_more_pic — https://github.com/qwerkilo/teach_more_pic
-都克隆到 ~/.agents/skills/ 目录下。
-```
-
-### 手动安装
-
-```bash
-# 克隆到 opencode 的 skills 目录
-cd ~/.agents/skills
-git clone https://github.com/qwerkilo/teach_more_pic
-git clone https://github.com/AragornZJF/knowledge-graph-map
-git clone https://github.com/yizhiyanhua-ai/fireworks-tech-graph
-
-# 同时安装 mattpocock 的 base skills（位于同一仓库中）
-git clone https://github.com/mattpocock/skills
-# 然后复制或链接 skills/teach 和 skills/grill-me 到 .agents/skills/ 下
-```
-
-### 通过 AGENTS.md 配置
-
-在项目根目录的 `AGENTS.md` 中引用这些 skill：
-
-```
-Skills: teach, grill-me, teach_more_pic, fireworks-tech-graph, knowledge-graph-map
-```
+**全技能内嵌，零外部依赖。** 本体已包含 `teach`、`grill-me`、`fireworks-tech-graph`、`knowledge-graph` 四个前置 skill（见 `.opencode/skills/`）。
 
 ## 能力
 
@@ -152,5 +104,5 @@ python -c "import xml.etree.ElementTree as ET; ET.parse('path.svg')"
 
 ## 前置依赖
 
-- [fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) skill（**必备**，所有 SVG 流程图依赖此 skill）
-- `cairosvg`（`pip install cairosvg`，SVG → PNG 导出，可选）
+- `fireworks-tech-graph` skill（已内嵌 `.opencode/skills/fireworks-tech-graph/`）
+- `cairosvg`（可选，`pip install cairosvg`，SVG → PNG 导出）
