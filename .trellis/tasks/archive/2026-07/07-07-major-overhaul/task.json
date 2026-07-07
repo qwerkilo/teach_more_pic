@@ -1,0 +1,32 @@
+{
+  "id": "major-overhaul",
+  "name": "major-overhaul",
+  "title": "大刀阔斧改进 teach_more_pic",
+  "description": "",
+  "status": "completed",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "qwerkilo",
+  "assignee": "qwerkilo",
+  "createdAt": "2026-07-07",
+  "completedAt": "2026-07-07",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "07-07-embed-deps",
+    "07-07-split-skills",
+    "07-07-adaptive-pace",
+    "07-07-micro-interactions",
+    "07-07-test-coverage"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}
