@@ -22,7 +22,7 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 
 - `fireworks-tech-graph` skill available (for SVG diagram creation)
 - 离线包：本 skill 的 `libs/` 下已包含 echarts.min.js、echarts-gl.min.js、three.min.js（UMD 回退）、three.module.js（ESM 主入口，r185 WebGPU）、d3.min.js、d3-sankey.min.js、magicui-effects.css，课程创建时完整复制到目标项目即可
-- Three.js WebGPU/TSL 需通过 `<script type="importmap">` 导入，详见 `27-Three.js 3D组件.md`
+- Three.js WebGPU/TSL 需通过 `<script type="importmap">` 导入，详见 `25-Three.js 3D组件.md`
 
 - `cairosvg` installed (`pip install cairosvg`) — for SVG → PNG export if needed
 - Magic UI CSS 效果：`libs/magicui-effects.css` 共享 13 种零依赖装饰效果（shiny-text/noise/dot/grid/meteors/border-glow/glare-hover/gradient-text/blur/neon-card/spotlight-card/interactive-btn/typing-cursor），所有模板和示例均已引用
@@ -88,11 +88,11 @@ Use alongside the base `teach` skill. The base `teach` handles workspace structu
 | 21 | 信息面板 | `components/21-信息面板.md` | 右侧滑入抽屉 |
 | 22 | 对比表增强版 | `components/22-对比表增强版.md` | 粘性表头 + 斑马纹 + 排序 |
 | 23 | 全屏模态/灯箱 | `components/23-全屏模态灯箱.md` | 点击放大全屏展示 |
-| 24 | ECharts 交互式图表集 | `components/26-ECharts 交互式图表集.md` | 柱状图/饼图/折线图/堆叠图，ECharts 引擎，交互式 (CDN: cdn.jsdelivr.net/npm/echarts)。GL 扩展 #28 需额外加载 `echarts-gl.min.js` |
-| 25 | Three.js 3D 组件 | `components/27-Three.js 3D组件.md` | 3D 场景/柱状图/地理可视化，Three.js r185。**WebGPU 优先**（`WebGPURenderer`），不支持则回退 WebGL。**TSL 优先**（着色器节点），无法实现再降级 WGSL |
-| 26 | 现代浏览器 API | `components/25-现代浏览器API组件.md` | 原生折叠/原生模态/CSS 幻灯片/Popover |
-| 27 | D3.js 数据可视化 | `components/28-D3.js 数据可视化.md` | 力导向图/旭日图/桑基图，D3.js 引擎 (CDN: d3js.org/d3.v7.min.js，桑基图需额外 d3-sankey) |
-| 28 | ECharts GL 3D 可视化 | `components/29-ECharts GL 3D可视化.md` | 3D柱状图/3D散点图/3D地球/3D曲面，WebGL 渲染 (CDN: cdn.jsdelivr.net/npm/echarts-gl) |
+| 24 | ECharts 交互式图表集 | `components/24-ECharts 交互式图表集.md` | 柱状图/饼图/折线图/堆叠图，ECharts 引擎，交互式 (CDN: cdn.jsdelivr.net/npm/echarts)。GL 扩展 #28 需额外加载 `echarts-gl.min.js` |
+| 25 | Three.js 3D 组件 | `components/25-Three.js 3D组件.md` | 3D 场景/柱状图/地理可视化，Three.js r185。**WebGPU 优先**（`WebGPURenderer`），不支持则回退 WebGL。**TSL 优先**（着色器节点），无法实现再降级 WGSL |
+| 26 | 现代浏览器 API | `components/26-现代浏览器API组件.md` | 原生折叠/原生模态/CSS 幻灯片/Popover |
+| 27 | D3.js 数据可视化 | `components/27-D3.js 数据可视化.md` | 力导向图/旭日图/桑基图，D3.js 引擎 (CDN: d3js.org/d3.v7.min.js，桑基图需额外 d3-sankey) |
+| 28 | ECharts GL 3D 可视化 | `components/28-ECharts GL 3D可视化.md` | 3D柱状图/3D散点图/3D地球/3D曲面，WebGL 渲染 (CDN: cdn.jsdelivr.net/npm/echarts-gl) |
 
 ### 使用规则
 
