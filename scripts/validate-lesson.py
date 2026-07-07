@@ -242,8 +242,8 @@ def check_inline_svg(html):
             try:
                 ET.fromstring(svg_block)
             except Exception as e:
+                issues.append(f"Inline <svg> has XML error: {e}")
     return issues
-
 
 
 def check_component_consistency(html):
