@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>课程知识图谱</title>
+<meta name="description" content="teach_more_pic 课程知识图谱 — 可视化节点关系">
+<meta property="og:title" content="teach_more_pic 知识图谱">
+<meta property="og:description" content="课程节点与关系的可视化探索">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23c0392b'/><text x='32' y='44' font-size='36' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>K</text></svg>">
+<title>teach_more_pic 知识图谱</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <link rel="stylesheet" href="../libs/magicui-effects.css">
@@ -199,6 +206,14 @@ button[data-lang].lang-btn.active, button[data-lang].layout-btn.active, button[d
   .toolbar h1 { font-size: 1rem; width: 100%; margin-bottom: 4px; }
   .toolbar .meta { display: none; }
   .legend { bottom: 12px; left: 12px; padding: 8px 12px; font-size: 0.75rem; }
+}
+/* ===== 打印 ===== */
+@media print {
+  body, #app, .toolbar, .legend, .tooltip, #chart { background: #fff !important; color: #000 !important; }
+  .toolbar, .legend, .tooltip, .noise-overlay, .meteor, .border-glow::before, .border-glow::after, .neon-card::before, .neon-card::after { display: none !important; }
+  [data-anim] { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
+  a { color: #000; text-decoration: underline; }
+  #chart { width: 100% !important; height: auto !important; break-inside: avoid; }
 }
 </style>
 </head>
@@ -463,10 +478,20 @@ var graphData = buildGraphData('zh');
   function renderLegend() {
     const el = document.getElementById('legend');
     if (!el) return;
+    el.textContent = '';
     const t = themes[currentThemeName];
-    el.innerHTML = graphData.categories.map((c, i) =>
-      '<div class="legend-item"><span class="legend-dot" style="background:' + t.colors[i % t.colors.length] + '"></span>' + c + '</div>'
-    ).join('');
+    graphData.categories.forEach((c, i) => {
+      const div = document.createElement('div');
+      div.className = 'legend-item';
+      const dot = document.createElement('span');
+      dot.className = 'legend-dot';
+      dot.style.background = t.colors[i % t.colors.length];
+      const text = document.createElement('span');
+      text.textContent = c;
+      div.appendChild(dot);
+      div.appendChild(text);
+      el.appendChild(div);
+    });
   }
 
   function updateMeta() {
@@ -490,8 +515,15 @@ var graphData = buildGraphData('zh');
       const tip = document.getElementById('tooltip');
       if (!tip) return;
       var isEn = false; try { var ls = localStorage.getItem('lang'); if (ls === 'en') isEn = true; } catch(e) {}
-      tip.innerHTML = '<div class="tt-name">' + p.data.name + '</div>' +
-                      '<div class="tt-meta">' + p.data.category + (isEn ? ' · weight ' : ' · 权重 ') + p.data.weight + '</div>';
+      tip.textContent = '';
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'tt-name';
+      nameDiv.textContent = p.data.name;
+      const metaDiv = document.createElement('div');
+      metaDiv.className = 'tt-meta';
+      metaDiv.textContent = p.data.category + (isEn ? ' · weight ' : ' · 权重 ') + p.data.weight;
+      tip.appendChild(nameDiv);
+      tip.appendChild(metaDiv);
       tip.classList.add('visible');
       positionTooltip(p.event.event);
     });
@@ -538,6 +570,7 @@ var graphData = buildGraphData('zh');
     document.querySelectorAll('[data-lang]').forEach(function(x) { x.classList.toggle('active', x.dataset.lang === l); });
     try { localStorage.setItem('lang', l); } catch(e) {}
     if (langBtn) langBtn.textContent = l === 'zh' ? '中' : 'EN';
+    document.documentElement.lang = (l === 'zh' ? 'zh-CN' : 'en');
     graphData = buildGraphData(l);
     graphData.nodes.forEach(function(node, idx) {
       var t = themes[currentThemeName];

@@ -3,8 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>课程系列</title>
+<meta name="description" content="teach_more_pic 课程系列 — 中英双语可视化课件">
+<meta property="og:title" content="teach_more_pic 课程系列">
+<meta property="og:description" content="中英双语可视化课件集线器">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23c0392b'/><text x='32' y='44' font-size='36' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>T</text></svg>">
 <link rel="stylesheet" href="../libs/magicui-effects.css">
+<title>teach_more_pic 课程系列</title>
 <style>
 /* ===== CSS 变量与主题 ===== */
 :root {
@@ -17,7 +24,7 @@
   --lh: 1.8; --h1-size: 2rem; --h2-size: 1.3rem;
   --body-size: 1rem; --small-size: 0.85rem;
   --radius: 8px; --anim-dur: 0.3s; --anim-y: 18px;
-  --h2-border: 1px solid #ddd; --h1-size: 2rem;
+  --h2-border: 1px solid #ddd;
 }
 [data-theme="airbnb"] {
   --bg: #ffffff; --text: #222222; --accent: #ff385c;
@@ -335,6 +342,14 @@ h1[data-lang].active, h2[data-lang].active, p[data-lang].active, div[data-lang].
 body { transition: background-color 0.35s ease-out, color 0.35s ease-out; }
 body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out, border-color 0.35s ease-out, box-shadow 0.35s ease-out; }
 @media (prefers-reduced-motion: reduce) { body, body * { transition: none !important; } }
+/* ===== 打印 ===== */
+@media print {
+  body, #app, .landing-hero, .lesson-grid, .lesson-card, .toolbar, .tp-panel, .toc-panel, .ui-toolbar { background: #fff !important; color: #000 !important; box-shadow: none !important; }
+  .ui-toolbar, .tp-panel, .toc-panel, .meteors-container, .noise-overlay, .meteor, .border-glow::before, .border-glow::after, .neon-card::before, .neon-card::after { display: none !important; }
+  [data-anim] { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
+  a { color: #000; text-decoration: underline; }
+  .lesson-card { break-inside: avoid; border: 1px solid #000; }
+}
 </style>
 </head>
 <body>
@@ -484,7 +499,7 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
   try {
     var la=['zh','en'];var li=la.indexOf(localStorage.getItem('lang'));if(li<0)li=0;
     var lb=document.querySelector('[data-lang-btn]');
-    function sw(l){document.querySelectorAll('[data-lang]').forEach(function(x){x.classList.toggle('active',x.dataset.lang===l);});try{localStorage.setItem('lang',l);}catch(e){}if(lb){lb.textContent=l==='zh'?'中':'EN';}updateMeta();buildCards();}
+    function sw(l){document.querySelectorAll('[data-lang]').forEach(function(x){x.classList.toggle('active',x.dataset.lang===l);});try{localStorage.setItem('lang',l);}catch(e){}if(lb){lb.textContent=l==='zh'?'中':'EN';}document.documentElement.lang=(l==='zh'?'zh-CN':'en');updateMeta();buildCards();}
     sw(la[li]);
     if(lb){lb.addEventListener('click',function(){li=(li+1)%la.length;sw(la[li]);});}
     document.addEventListener('keydown',function(e){if(e.key==='l'&&!e.ctrlKey&&!e.metaKey){li=(li+1)%la.length;sw(la[li]);}});
@@ -510,12 +525,16 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
     if (history.replaceState) history.replaceState(null, '', '#' + id);
 
     var anims = target.querySelectorAll('[data-anim]');
-    document.querySelectorAll('.spotlight-card').forEach(function(c){c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');});});
+    document.querySelectorAll('.spotlight-card').forEach(function(c){var pending=false,lr={};c.addEventListener('mousemove',function(e){lr.x=e.clientX;lr.y=e.clientY;if(pending)return;pending=true;requestAnimationFrame(function(){var r=c.getBoundingClientRect();c.style.setProperty('--mx',((lr.x-r.left)/r.width*100)+'%');c.style.setProperty('--my',((lr.y-r.top)/r.height*100)+'%');pending=false;});});});
     if (anims.length) {
-      var io = new IntersectionObserver(function(es) {
-        es.forEach(function(e) { if (e.isIntersecting) e.classList.add('in-view'); });
-      });
-      anims.forEach(function(el) { io.observe(el); });
+      try {
+        var io = new IntersectionObserver(function(es) {
+          es.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in-view'); });
+        });
+        anims.forEach(function(el) { io.observe(el); });
+      } catch (e) {
+        anims.forEach(function(el) { el.style.opacity = '1'; el.style.transform = 'none'; el.style.filter = 'none'; });
+      }
     }
   }
 
@@ -526,11 +545,11 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
     else showLanding();
   }
 
-  /* ===== 初始化卡片 ===== */
+  /* ===== 初始化卡片（事件委托） ===== */
   function buildCards() {
     if (!grid) return;
     var lang = 'zh'; try { var ls = localStorage.getItem('lang'); if (ls) lang = ls; } catch(e) {}
-    grid.innerHTML = '';
+    grid.textContent = '';
     views.forEach(function(v) {
       var m = v.id.match(/^lesson-(\d+)$/);
       if (!m) return;
@@ -544,9 +563,15 @@ body, body * { transition: background-color 0.35s ease-out, color 0.35s ease-out
       card.className = 'lesson-card';
       card.setAttribute('data-lesson', num);
       card.innerHTML = '<span class="card-num">' + cardNum + '</span><span class="card-title">' + title + '</span>' + (desc ? '<span class="card-desc">' + desc + '</span>' : '');
-      card.addEventListener('click', function() { showLesson('lesson-' + num); });
       grid.appendChild(card);
     });
+  }
+  if (!grid._delegated) {
+    grid.addEventListener('click', function(e) {
+      var card = e.target.closest('.lesson-card');
+      if (card) showLesson('lesson-' + card.getAttribute('data-lesson'));
+    });
+    grid._delegated = true;
   }
   buildCards();
 
