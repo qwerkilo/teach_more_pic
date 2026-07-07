@@ -183,6 +183,32 @@ def test_container_width_body_width_too_large_flags():
 
 # ==== check_svg_contrast ====
 def test_svg_contrast_no_svg_pass(): assert check_passes(v.check_svg_contrast, '<html><p>no svg</p></html>', '.')
+# ==== check_meta_tags ====
+def test_meta_tags_filled_pass():
+    assert check_passes(v.check_meta_tags, '<html><head><meta name="description" content="A lesson about MMT"><meta property="og:title" content="现代货币理论"><meta property="og:description" content="了解 MMT"></head></html>')
+def test_meta_todo_fails():
+    assert check_fails(v.check_meta_tags, '<html><head><meta name="description" content="【TODO 替换课程简介】"></head></html>')
+def test_meta_og_todo_fails():
+    assert check_fails(v.check_meta_tags, '<html><head><meta property="og:title" content="【TODO 替换课程标题】"></head></html>')
+
+# ==== check_cover_structure ====
+def test_cover_full_pass():
+    assert check_passes(v.check_cover_structure, '<article class="cover-page"><span class="badge">Lesson 1</span><h1>Title</h1><p class="subtitle">Subtitle</p></article>')
+def test_cover_no_badge_fails():
+    assert check_fails(v.check_cover_structure, '<article class="cover-page"><h1>Title</h1></article>')
+def test_cover_no_h1_fails():
+    assert check_fails(v.check_cover_structure, '<article class="cover-page"><span class="badge">L1</span><p class="subtitle">Sub</p></article>')
+def test_cover_no_article_fails():
+    assert check_fails(v.check_cover_structure, '<html><h1>Title</h1></html>')
+
+# ==== check_summary_cards ====
+def test_summary_3_pass():
+    assert check_passes(v.check_summary_cards, '<div class="summary-cards"><div class="summary-card">A</div><div class="summary-card">B</div><div class="summary-card">C</div></div><div class="quiz-section">Quiz</div>')
+def test_summary_2_fails():
+    assert check_fails(v.check_summary_cards, '<div class="summary-cards"><div class="summary-card">A</div><div class="summary-card">B</div></div><div class="quiz-section">Quiz</div>')
+def test_summary_after_quiz_fails():
+    assert check_fails(v.check_summary_cards, '<div class="quiz-section">Quiz</div><div class="summary-cards"><div class="summary-card">A</div><div class="summary-card">B</div><div class="summary-card">C</div></div>')
+
 def test_svg_contrast_dark_fill_pass():
     # Create a temp SVG with dark fill
     fd, tmpsvg = tempfile.mkstemp(suffix='.svg')

@@ -4,7 +4,7 @@
 
 ## 能力
 
-**28 个视觉组件**（完整索引见 SKILL.md）：
+**33 个视觉组件**（完整索引见 SKILL.md）：
 
 - **#1-7 核心**：SVG 流程图 / 角色卡片 / CSS 时间线 / CSS 条形图 / 对比表 / SVG 容器 / PPT 质感（主题切换 + 语言切换 + 滚动动画 + 键盘导航 + 目录）
 - **#8-14 交互式**：折叠分步详解 / Tab 切换面板 / 图片对比滑块 / 交互式时间线 / 数据卡片网格 / 引文卡片 / 标注式图片
@@ -18,9 +18,9 @@
 
 - **P0 必修**：测验错答高亮按语言过滤 / KG tooltip/legend XSS 风险消除 / `<html lang>` 随 L 键切换同步 / KG 嵌套大括号解析 (``\{(.+?)\}`` 正则改 `_extract_brace_blocks` brace-counting)
 - **P1 应修**：验证脚本 `check_inline_svg` 混合场景漏检、`check_container_width` 死代码、popover 检测无效 三处盲点全部修复 / `data-anim="blur"` 降级残影 / 模板标题占位符 / SD/tab 缺 `aria-*` 属性 / `dir()` 变量存在检查改 `locals().get()` / `is_kg` 与 `has_graphdata` 检测条件对齐
-- **P2 可选**：spotlight mousemove 改 RAF 节流 / `buildTOC` 跨 try 块作用域 / 重复 `--h1-size` 与 body 声明清理 / meta + og + favicon + 打印样式 / SPA 卡片改事件委托 / inline SVG XML 语法校验 / 99 pytest 测试覆盖
+- **P2 可选**：spotlight mousemove 改 RAF 节流 / `buildTOC` 跨 try 块作用域 / 重复 `--h1-size` 与 body 声明清理 / meta + og + favicon + 打印样式 / SPA 卡片改事件委托 / inline SVG XML 语法校验 / 109 pytest 测试覆盖
 
-详见 git history。`python -m pytest tests/ -q` 99 PASS，3 个核心模板验证零回归。
+详见 git history。`python -m pytest tests/ -q` 109 PASS，3 个核心模板验证零回归。
 
 ## 使用方法
 

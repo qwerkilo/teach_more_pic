@@ -543,6 +543,52 @@ def check_lib_deps(html, base_dir):
     return issues
 
 
+def check_meta_tags(html):
+    """Meta description and OG tags should be filled (not TODO)."""
+    issues = []
+    desc = re.search(r'<meta\s+name="description"\s+content="([^"]*)"', html)
+    if desc and desc.group(1).startswith("【TODO"):
+        issues.append("meta description still has TODO placeholder")
+    og_desc = re.search(r'<meta\s+property="og:description"\s+content="([^"]*)"', html)
+    if og_desc and og_desc.group(1).startswith("【TODO"):
+        issues.append("og:description still has TODO placeholder")
+    og_title = re.search(r'<meta\s+property="og:title"\s+content="([^"]*)"', html)
+    if og_title and og_title.group(1).startswith("【TODO"):
+        issues.append("og:title still has TODO placeholder")
+    return issues
+
+
+def check_cover_structure(html):
+    """Cover page must have badge + h1 + subtitle/hook."""
+    issues = []
+    cover = re.search(r'<article[^>]*class="[^"]*cover-page[^"]*"[^>]*>(.*?)</article>', html, re.DOTALL)
+    if not cover:
+        return ["No <article class='cover-page'> found"]
+    c = cover.group(1)
+    if 'class="badge"' not in c and 'class="topic-badge"' not in c:
+        issues.append("Cover page missing badge element")
+    if '<h1' not in c:
+        issues.append("Cover page missing <h1>")
+    if 'class="subtitle"' not in c and 'class="hook"' not in c:
+        issues.append("Cover page missing .subtitle or .hook")
+    return issues
+
+
+def check_summary_cards(html):
+    """3 summary cards should exist before quiz section."""
+    issues = []
+    cards = re.findall(r'class="[^"]*\bsummary-card\b[^"]*"', html)
+    if len(cards) < 3:
+        issues.append(f"Found {len(cards)} summary-card (expected at least 3)")
+    # Verify summary comes before quiz
+    quiz_pos = html.find('class="quiz-section"')
+    if quiz_pos != -1:
+        summary_pos = html.find('class="summary-cards"')
+        if summary_pos == -1 or summary_pos > quiz_pos:
+            issues.append("summary-cards should appear before quiz-section")
+    return issues
+
+
 def run_all(path):
     if not os.path.exists(path):
         print(f"{FAIL} File not found: {path}")
@@ -578,6 +624,9 @@ def run_all(path):
             ("Semantic HTML elements", check_semantic_html(html)),
             ("Library deps (ECharts/Three.js)", check_lib_deps(html, base_dir)),
             ("Bilingual (data-lang zh/en + toggle)", check_bilingual(html)),
+            ("Meta tags filled (no TODO)", check_meta_tags(html)),
+            ("Cover page structure (badge+h1+subtitle)", check_cover_structure(html)),
+            ("Summary cards (3 before quiz)", check_summary_cards(html)),
             ("SPA integration (lesson-view section)", check_spa_integration(html, path)),
         ]
     else:
